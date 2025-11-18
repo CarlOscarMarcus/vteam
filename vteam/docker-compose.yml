@@ -1,0 +1,52 @@
+version: "3.9"
+
+volumes:
+  postgres_data: {}
+
+services:
+
+  # React development server
+  react:
+    container_name: react_app
+    build:
+      context: .
+      dockerfile: .docker/react/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    tty: true
+
+  # Postgres database
+  postgres:
+    container_name: postgres_database
+    image: postgres:16
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: hoci1234
+      POSTGRES_DB: appdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - .docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # Nginx serving the build version of React (production)
+  nginx:
+    container_name: nginx_server
+    build:
+      context: .
+      dockerfile: .docker/nginx/Dockerfile
+    ports:
+      - "9080:80"
+      - "9443:443"
+    volumes:
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./build:/usr/share/nginx/html
+    depends_on:
+      - react

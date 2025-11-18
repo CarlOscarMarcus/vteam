@@ -1,0 +1,88 @@
+volumes:
+    mariadb_database: {}
+    mysql_database: {}
+    mongodata: {}
+
+services:
+
+  # Nginx with a static website
+  nginx:
+    build:
+      context: .
+      dockerfile: .docker/nginx/Dockerfile
+    ports:
+      - "9080:80"
+      - "9443:443"
+    volumes:
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d # This maps nginx config volume
+      - ./public:/public # This maps your local public directory volume
+
+  # Nginx with (js) applications behind it
+  nginx2:
+    build:
+      context: .
+      dockerfile: .docker/nginx2/Dockerfile
+    ports:
+      - "9081:80"
+      - "9441:443"
+    volumes:
+      - ./.docker/nginx2/conf.d:/etc/nginx/conf.d # This maps nginx config volume
+      - ./public:/public # This maps your local public directory volume
+
+  # Node example, with or without server
+  node:
+    container_name: node
+    build:
+      context: .
+      dockerfile: .docker/node/Dockerfile
+    ports:
+      - "9180:9180" # webserver
+      - "9190:9190" # json-server
+    volumes:
+      - .:/app
+      - .docker/node/data:/app/data
+      - .docker/node/public:/app/public
+      - /app/node_modules/
+
+  # Add support for mariadb
+  mariadb:
+    container_name: mariadb_database
+    image: mariadb:latest
+    restart: always
+    ports:
+        - "3306:3306"
+    environment:
+        MARIADB_ROOT_PASSWORD: pass
+    volumes:
+        - mariadb_database:/var/lib/mysql
+        - .docker/mariadb/sql.d:/docker-entrypoint-initdb.d
+        - .docker/mariadb/my.cnf:/root/.my.cnf
+        - .:/app
+
+  # Add support for mysql
+  mysql:
+    container_name: mysql_database
+    image: mysql:latest
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+        - "3306:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: pass
+    volumes:
+        - mysql_database:/var/lib/mysql
+        - .docker/mysql/sql.d:/docker-entrypoint-initdb.d
+        - .docker/mysql/my.cnf:/root/.my.cnf
+        - .:/app
+
+  # Add support for Mongo database
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    volumes:
+      - mongodata:/data/db

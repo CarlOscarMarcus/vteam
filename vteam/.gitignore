@@ -1,0 +1,42 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Logs
+logs
+*.log
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Build output
+dist/
+build/
+
+# Production
+.env
+.env.local
+.env.*.local
+
+# Docker
+docker/*.log
+docker/postgres/data/
+postgres_data/
+*.pid
+
+# React
+*.cache
+.cache/
+.next/
+
+# Editor junk
+.vscode/
+.idea/
+*.swp
+
+# OS junk
+.DS_Store
+Thumbs.db

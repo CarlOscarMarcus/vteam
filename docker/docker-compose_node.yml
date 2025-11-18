@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+
+  # Node example
+  node:
+    container_name: node
+    build:
+      context: .
+      dockerfile: .docker/node/Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules/
+
+  # Node webserver example
+  node_http:
+    container_name: node_http
+    build:
+      context: .
+      dockerfile: .docker/node_http/Dockerfile
+    ports:
+      - "9180:9180" # webserver
+    volumes:
+      - .:/app
+      - .docker/node_http/public:/app/public
+      - /app/node_modules/
+
+  # Node json server example
+  node_json:
+    container_name: node_json
+    build:
+      context: .
+      dockerfile: .docker/node_json/Dockerfile
+    ports:
+      - "9190:9190" # json server
+    volumes:
+      - .:/app
+      - .docker/node_json/data:/app/data
+      - /app/node_modules/
