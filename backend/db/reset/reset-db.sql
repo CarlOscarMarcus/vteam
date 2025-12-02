@@ -11,15 +11,15 @@ DROP TABLE IF EXISTS users CASCADE;
 -- ==================================
 -- CREATE TABLES
 -- ==================================
-\i ../tables/01-users.sql
-\i ../tables/02-scooter.sql
-\i ../tables/03-receipt.sql
-\i ../tables/04-repair.sql
+\i tables/01-users.sql
+\i tables/02-scooter.sql
+\i tables/03-receipt.sql
+\i tables/04-repair.sql
 
 -- ==================================
 -- INSERT MOCK DATA
 -- ==================================
-\i ../mock/01-users.sql
-\i ../mock/02-scooter.sql
-\i ../mock/03-receipt.sql
-\i ../mock/04-repair.sql
+\i mock/01-users.sql
+\i mock/02-scooter.sql
+\i mock/03-receipt.sql
+\i mock/04-repair.sql

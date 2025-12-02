@@ -4,9 +4,9 @@ CREATE TABLE IF NOT EXISTS scooter (
     position_lat VARCHAR(255),
     position_long VARCHAR(255),
     status INT DEFAULT 0,
-    user_id INT NOT NULL,
+    user_id INT,
     CONSTRAINT fk_scooter_user
         FOREIGN KEY (user_id)
         REFERENCES users (id)
-        ON DELETE SET CASCADE
+        ON DELETE CASCADE
 );
