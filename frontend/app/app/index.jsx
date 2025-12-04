@@ -2,16 +2,19 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import { Link } from 'expo-router'
 import Logo from '../assets/img/scooter.jpg'
 
+// themed components
+import ThemedView from '../components/ThemedView'
+
 const Home = () => {
     return (
-        <View style={styles.container}>
+        <ThemedView style={styles.container}>
             <Image source={Logo} style={styles.img} />
 
-            <Text style={styles.title}>Hem</Text>
+            <Text style={styles.title}>Hoci scooters</Text>
         
             <Link style={styles.link} href="/login">Logga in</Link>
             <Link style={styles.link} href="/signup">Skapa konto</Link>
-        </View>
+        </ThemedView>
     )
 }
 export default Home
