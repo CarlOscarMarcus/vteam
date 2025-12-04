@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Image } from 'react-native'
 import { Link } from 'expo-router'
+import Logo from '../assets/img/scooter.jpg'
+
 
 const SkapaKonto = () => {
     return (
-        <View styles={styles.container}>
+        <View style={styles.container}>
+            <Image source={Logo} style={styles.img} />
 
             <Text style={styles.title}>Skapa konto</Text>
         
@@ -26,5 +29,10 @@ const styles = StyleSheet.create({
     },
     link: {
         fontWeight: 'bold',
+    },
+    img: {
+        marginVertical: 20,
+        width: 130,
+        height: 130
     }
 })

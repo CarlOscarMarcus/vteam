@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Image } from 'react-native'
 import { Link } from 'expo-router'
+import Logo from '../assets/img/scooter.jpg'
 
 const Home = () => {
     return (
-        <View styles={styles.container}>
+        <View style={styles.container}>
+            <Image source={Logo} style={styles.img} />
 
             <Text style={styles.title}>Hem</Text>
         
@@ -13,6 +15,7 @@ const Home = () => {
     )
 }
 export default Home
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -26,5 +29,10 @@ const styles = StyleSheet.create({
     },
     link: {
         fontWeight: 'bold',
+    },
+    img: {
+        marginVertical: 20,
+        width: 130,
+        height: 130
     }
 })
