@@ -1,48 +1,51 @@
 import { StyleSheet, Text, TextInput, Button, Image } from 'react-native'
 import { Link } from 'expo-router'
 import Logo from '../assets/img/scooter.jpg'
+import { useState } from 'react'
 
-import ThemedView from '../components/ThemedView'
+
+// komponenter som fixar rätt style
+import ThemedView from '../components/ThemedView' // basic style
+import ThemedLogo from '../components/ThemedLogo' // logo style
+import ThemedInput from '../components/ThemedInput' // input style
+
 
 
 const SkapaKonto = () => {
+
+    // sparar variabler från formuläret.
     const [Name, setName] = useState("");
     const [Email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
     return (
         <ThemedView style={styles.container}>
-            <Image source={Logo} style={styles.img} />
+            <ThemedLogo source={Logo} />
 
             <Text style={styles.title}>Hoci scooters</Text>
             
-
             <Text style={styles.title}>Skapa konto</Text>
 
-            <TextInput
-            style={styles.input}
+            <ThemedInput
             placeholder="Namn"
             onChangeText = {setName}
             />
 
-            <TextInput
-            style={styles.input}
+            <ThemedInput
             placeholder="E-post"
             onChangeText = {setEmail}
-
             />
 
-            <TextInput 
-            style={styles.input}
+            <ThemedInput 
             secureTextEntry
             onChangeText = {setPassword}
-            placeholder="Password" 
+            placeholder="Lösenord" 
             textContentType='password'
-
             />
 
             <Button
             title="Skapa konto"
-            onPress={() => console.log("Konto skapat!")}/>
+            onPress={() => console.log(`Konto skapat åt ${Name} med e-post ${Email}`)}/>
         
             
             <Link style={styles.link} href="/login">Logga in</Link>
@@ -50,6 +53,8 @@ const SkapaKonto = () => {
         </ThemedView>
     )
 }
+
+
 export default SkapaKonto
 const styles = StyleSheet.create({
     container: {
@@ -64,17 +69,5 @@ const styles = StyleSheet.create({
     },
     link: {
         fontWeight: 'bold',
-    },
-    img: {
-        marginVertical: 20,
-        width: 130,
-        height: 130
-    },
-    input: {
-        borderWidth: 1,
-        height: 40,
-        width: 200,
-        margin: 12,
-        padding: 10
     }
 })
