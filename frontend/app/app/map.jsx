@@ -1,20 +1,19 @@
 import { StyleSheet, Text, Image } from 'react-native'
 import { Link } from 'expo-router'
-import Logo from '../assets/img/scooter.jpg'
 
 import ThemedView from '../components/ThemedView'
 
 // hyra cyklar, använda kartan
 // flera sidor eller bara en?
 
-const Login = () => {
+const Map = () => {
 
     return (
         <ThemedView style={styles.container}>
-            <Image source={Logo} style={styles.img} />
 
             <Text style={styles.title}>Hoci scooters</Text>
 
+            <Text>Hyra elsparkcykel</Text>
 
             {/* ta bort sen, user kan vara "förstasida" som inloggad? */}
             <Link style={styles.link} href="/">Hem</Link> 
@@ -22,7 +21,7 @@ const Login = () => {
         </ThemedView>
     )
 }
-export default Login
+export default Map
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -36,10 +35,5 @@ const styles = StyleSheet.create({
     },
     link: {
         fontWeight: 'bold',
-    },
-    img: {
-        marginVertical: 20,
-        width: 130,
-        height: 130
     }
 })

@@ -5,6 +5,7 @@ import Logo from '../assets/img/scooter.jpg'
 // komponenter som fixar rätt style
 import ThemedView from '../components/ThemedView' // basic style
 import ThemedLogo from '../components/ThemedLogo' // logo style
+import Spacer from '../components/Spacer' // space
 
 
 
@@ -16,9 +17,14 @@ const User = () => {
             <ThemedLogo source={Logo} />
 
             <Text style={styles.title}>Hoci scooters</Text>
-
+            <Spacer />
             <Text>Användare namn</Text> 
+            <Spacer />
+
             <Text>Användare e-post</Text>
+            <Spacer />
+            <Spacer />
+
 
             {/* ta bort sen, user kan vara "förstasida" som inloggad */}
             <Link style={styles.link} href="/">Hem</Link> 
