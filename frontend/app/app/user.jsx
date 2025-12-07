@@ -1,4 +1,4 @@
-import { StyleSheet, Text, Image } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { Link } from 'expo-router'
 import Logo from '../assets/img/scooter.jpg'
 
@@ -6,7 +6,6 @@ import Logo from '../assets/img/scooter.jpg'
 import ThemedView from '../components/ThemedView' // basic style
 import ThemedLogo from '../components/ThemedLogo' // logo style
 import Spacer from '../components/Spacer' // space
-
 
 
 const User = () => {
@@ -26,7 +25,7 @@ const User = () => {
             <Spacer />
 
 
-            {/* ta bort sen, user kan vara "förstasida" som inloggad */}
+            {/* ta bort sen, user kan vara "förstasida" som inloggad? */}
             <Link style={styles.link} href="/">Hem</Link> 
             
         </ThemedView>
