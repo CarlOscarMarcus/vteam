@@ -1,0 +1,49 @@
+.landing-page {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.96rem;
+  margin-bottom: 1.96rem;
+}
+
+.landing-page h1 {
+  grid-column: span 3;
+  justify-self: center;
+}
+
+.landing-page a {
+  grid-column: span 1;
+}
+
+.box {
+  border: 1px solid #fff;
+  padding: 1.96rem;
+}
+
+.technology {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.technology .article {
+  width: 60%;
+}
+
+.technology .menu {
+  width: 30%;
+}
+
+@media (max-width: 600px) {
+  .landing-page {
+    grid-template-columns: 1fr;
+  }
+
+  .technology .menu {
+    display: none;
+  }
+
+  .technology .article {
+    width: 100%;
+  }
+}
