@@ -1,7 +1,7 @@
 import { StyleSheet, Text, Image } from 'react-native'
 import { Link } from 'expo-router'
 
-import ThemedView from '../components/ThemedView'
+import ThemedView from '../../components/ThemedView'
 
 // hyra cyklar, använda kartan
 // flera sidor eller bara en?

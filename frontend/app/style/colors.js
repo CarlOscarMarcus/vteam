@@ -4,5 +4,7 @@ export const Colors = {
     header: "#393939ff",
     headerText: '#dededeff',
     title: '#252525ff',
-    text: '#484848ff'
+    text: '#484848ff',
+    navActive: '#be39caff',
+    navInactive: '#828282ff'
 }

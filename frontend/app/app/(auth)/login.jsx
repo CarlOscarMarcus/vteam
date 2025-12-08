@@ -40,6 +40,7 @@ const Login = () => {
             onPress={() => console.log(`Användare ${Email} loggas in.`)}/>
 
             <Link style={styles.link} href="/signup">Skapa konto</Link>
+            {/* Ta bort "HEM" här sen!! */}
             <Link style={styles.link} href="/">Hem</Link>
             
         </ThemedView>

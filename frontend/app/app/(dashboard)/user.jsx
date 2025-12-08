@@ -1,11 +1,11 @@
 import { StyleSheet, Text } from 'react-native'
 import { Link } from 'expo-router'
-import Logo from '../assets/img/scooter.jpg'
+import Logo from '../../assets/img/scooter.jpg'
 
 // komponenter som fixar rätt style
-import ThemedView from '../components/ThemedView' // basic style
-import ThemedLogo from '../components/ThemedLogo' // logo style
-import Spacer from '../components/Spacer' // space
+import ThemedView from '../../components/ThemedView' // basic style
+import ThemedLogo from '../../components/ThemedLogo' // logo style
+import Spacer from '../../components/Spacer' // space
 
 
 const User = () => {
@@ -23,6 +23,9 @@ const User = () => {
             <Text>Användare e-post</Text>
             <Spacer />
             <Text>Saldo</Text>
+
+            <Spacer />
+            <Text>Resor</Text>
 
             <Spacer />
 
