@@ -1,61 +1,53 @@
-import { StyleSheet, Text, TextInput, Button, Image } from 'react-native'
+import { StyleSheet, Text, Button } from 'react-native'
 import { Link } from 'expo-router'
-import Logo from '../assets/img/scooter.jpg'
+import Logo from '../../assets/img/scooter.jpg'
 import { useState } from 'react'
 
-
 // komponenter som fixar rätt style
-import ThemedView from '../components/ThemedView' // basic style
-import ThemedLogo from '../components/ThemedLogo' // logo style
-import ThemedInput from '../components/ThemedInput' // input style
+import ThemedView from '../../components/ThemedView' // basic style
+import ThemedLogo from '../../components/ThemedLogo' // logo style
+import ThemedInput from '../../components/ThemedInput' // input style
 
 
 
-const SkapaKonto = () => {
-
-    // sparar variabler från formuläret.
-    const [Name, setName] = useState("");
+const Login = () => {
     const [Email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
     return (
         <ThemedView style={styles.container}>
             <ThemedLogo source={Logo} />
 
             <Text style={styles.title}>Hoci scooters</Text>
             
-            <Text style={styles.title}>Skapa konto</Text>
 
-            <ThemedInput
-            placeholder="Namn"
-            onChangeText = {setName}
-            />
+            <Text style={styles.title}>Logga in</Text>
 
             <ThemedInput
             placeholder="E-post"
+            textContentType="Email"
+            keyboardType="email-address"
             onChangeText = {setEmail}
-            />
 
+            />
             <ThemedInput 
             secureTextEntry
-            onChangeText = {setPassword}
             placeholder="Lösenord" 
             textContentType='password'
-            />
+            onChangeText = {setPassword}
 
+            />
             <Button
-            title="Skapa konto"
-            onPress={() => console.log(`Konto skapat åt ${Name} med e-post ${Email}`)}/>
-        
-            
-            <Link style={styles.link} href="/login">Logga in</Link>
+            title="Logga in"
+            onPress={() => console.log(`Användare ${Email} loggas in.`)}/>
+
+            <Link style={styles.link} href="/signup">Skapa konto</Link>
+            {/* Ta bort "HEM" här sen!! */}
             <Link style={styles.link} href="/">Hem</Link>
+            
         </ThemedView>
     )
 }
-
-
-export default SkapaKonto
+export default Login
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -64,7 +56,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: 'bold',
-        fontSize: 18,
+        fontSize: 20,
         margin: 10
     },
     link: {
