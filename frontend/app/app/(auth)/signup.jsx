@@ -1,13 +1,13 @@
-import { StyleSheet, Text, TextInput, Button, Image } from 'react-native'
+import { StyleSheet, Text, Button, Image } from 'react-native'
 import { Link } from 'expo-router'
-import Logo from '../assets/img/scooter.jpg'
+import Logo from '../../assets/img/scooter.jpg'
 import { useState } from 'react'
 
 
 // komponenter som fixar rätt style
-import ThemedView from '../components/ThemedView' // basic style
-import ThemedLogo from '../components/ThemedLogo' // logo style
-import ThemedInput from '../components/ThemedInput' // input style
+import ThemedView from '../../components/ThemedView' // basic style
+import ThemedLogo from '../../components/ThemedLogo' // logo style
+import ThemedInput from '../../components/ThemedInput' // input style
 
 
 
@@ -49,6 +49,8 @@ const SkapaKonto = () => {
         
             
             <Link style={styles.link} href="/login">Logga in</Link>
+
+            {/* Ta bort "HEM" här sen!! */}
             <Link style={styles.link} href="/">Hem</Link>
         </ThemedView>
     )

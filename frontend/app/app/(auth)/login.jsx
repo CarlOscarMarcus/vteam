@@ -1,12 +1,12 @@
-import { StyleSheet, Text, Button, Image, TextInput } from 'react-native'
+import { StyleSheet, Text, Button } from 'react-native'
 import { Link } from 'expo-router'
-import Logo from '../assets/img/scooter.jpg'
+import Logo from '../../assets/img/scooter.jpg'
 import { useState } from 'react'
 
 // komponenter som fixar rätt style
-import ThemedView from '../components/ThemedView' // basic style
-import ThemedLogo from '../components/ThemedLogo' // logo style
-import ThemedInput from '../components/ThemedInput' // input style
+import ThemedView from '../../components/ThemedView' // basic style
+import ThemedLogo from '../../components/ThemedLogo' // logo style
+import ThemedInput from '../../components/ThemedInput' // input style
 
 
 

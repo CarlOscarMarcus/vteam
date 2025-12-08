@@ -22,6 +22,8 @@ const User = () => {
 
             <Text>Användare e-post</Text>
             <Spacer />
+            <Text>Saldo</Text>
+
             <Spacer />
 
 
