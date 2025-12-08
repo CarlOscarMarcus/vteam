@@ -34,6 +34,7 @@ const SkapaKonto = () => {
             <ThemedInput
             placeholder="E-post"
             onChangeText = {setEmail}
+            keyboardType="email-address"
             />
 
             <ThemedInput 

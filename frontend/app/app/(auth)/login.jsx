@@ -25,6 +25,7 @@ const Login = () => {
             <ThemedInput
             placeholder="E-post"
             textContentType="Email"
+            keyboardType="email-address"
             onChangeText = {setEmail}
 
             />
