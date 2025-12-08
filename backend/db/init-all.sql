@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS repair CASCADE;
+DROP TABLE IF EXISTS receipt CASCADE;
+DROP TABLE IF EXISTS scooter CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
 \i /docker-entrypoint-initdb.d/tables/01-users.sql
 \i /docker-entrypoint-initdb.d/tables/02-scooter.sql
 \i /docker-entrypoint-initdb.d/tables/03-receipt.sql
