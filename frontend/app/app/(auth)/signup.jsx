@@ -1,4 +1,4 @@
-import { StyleSheet, Text, Button, Image } from 'react-native'
+import { StyleSheet, Text, Button, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import { Link } from 'expo-router'
 import Logo from '../../assets/img/scooter.jpg'
 import { useState } from 'react'
@@ -19,6 +19,7 @@ const SkapaKonto = () => {
     const [password, setPassword] = useState("");
 
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ThemedView style={styles.container}>
             <ThemedLogo source={Logo} />
 
@@ -51,9 +52,8 @@ const SkapaKonto = () => {
             
             <Link style={styles.link} href="/login">Logga in</Link>
 
-            {/* Ta bort "HEM" här sen!! */}
-            <Link style={styles.link} href="/">Hem</Link>
         </ThemedView>
+        </TouchableWithoutFeedback>
     )
 }
 
