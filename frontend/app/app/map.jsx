@@ -9,22 +9,44 @@ import ThemedView from '../components/ThemedView';
 export default function Map() {
   const webviewRef = useRef(null);
   const [errorMsg, setErrorMsg] = useState(null);
-
-  // --- Exempeldata ---
-  const scooters = [
-    { id: 1, lat: 59.334, lng: 18.063 },
-    { id: 2, lat: 59.336, lng: 18.070 },
-  ];
-
-  const chargers = [
+  const [scooters, setScooters] = useState([]);
+  const [chargers, setChargers] = useState([
     { id: 1, lat: 59.335, lng: 18.065 },
     { id: 2, lat: 59.332, lng: 18.062 },
-  ];
-
-  const parkings = [
+  ]);
+  const [parkings, setParkings] = useState([
     { id: 1, lat: 59.333, lng: 18.061 },
     { id: 2, lat: 59.337, lng: 18.068 },
-  ];
+  ]);
+
+  // --- Hämta scootrar från API ---
+  useEffect(() => {
+    const fetchScooters = async () => {
+      try {
+        const res = await fetch('http://192.168.32.7:3000/api/scooters');
+        const data = await res.json();
+
+        // Konvertera positioner till float
+        const formatted = data.map(s => ({
+          id: s.id,
+          lat: parseFloat(s.position_lat),
+          lng: parseFloat(s.position_long),
+        }));
+        setScooters(formatted);
+      } catch (err) {
+        console.error('Error fetching scooters:', err);
+      }
+    };
+
+    fetchScooters();
+  }, []);
+
+  // --- Skicka scootrar till WebView när de ändras ---
+  useEffect(() => {
+    if (webviewRef.current && scooters.length > 0) {
+      webviewRef.current.postMessage(JSON.stringify({ type: 'scooters', items: scooters }));
+    }
+  }, [scooters]);
 
   // --- Starta GPS & skicka position till WebView ---
   useEffect(() => {
@@ -48,16 +70,15 @@ export default function Map() {
     })();
   }, []);
 
-  // --- Skicka alla markers när WebView är laddad ---
+  // --- Skicka chargers och parkings när WebView laddas ---
   const onWebViewLoad = () => {
     if (!webviewRef.current) return;
-
     webviewRef.current.postMessage(JSON.stringify({ type: "scooters", items: scooters }));
     webviewRef.current.postMessage(JSON.stringify({ type: "chargers", items: chargers }));
     webviewRef.current.postMessage(JSON.stringify({ type: "parkings", items: parkings }));
   };
 
-  // --- Eventuella meddelanden från WebView (debug) ---
+  // --- Eventuella meddelanden från WebView ---
   const onMessage = (event) => {
     console.log("FROM WEBVIEW:", event.nativeEvent.data);
   };
