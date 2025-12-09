@@ -18,11 +18,11 @@ const Home = () => {
             <Spacer />
         
             <Link style={styles.link} href="/login">Logga in</Link>
+            <Spacer style={{ height: 10 }} />
             <Link style={styles.link} href="/signup">Skapa konto</Link>
+            <Link style={styles.link} href="/map">map</Link>
 
-            {/* ta bort sen, visas inte om du inte är inloggad */}
-            <Link style={styles.link} href="/user">Användare</Link>
-            <Link style={styles.link} href="/map">Karta</Link>
+
 
 
         </ThemedView>

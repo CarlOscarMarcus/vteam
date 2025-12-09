@@ -52,8 +52,6 @@ const SkapaKonto = () => {
             
             <Link style={styles.link} href="/login">Logga in</Link>
 
-            {/* Ta bort "HEM" här sen!! */}
-            <Link style={styles.link} href="/">Hem</Link>
         </ThemedView>
         </TouchableWithoutFeedback>
     )

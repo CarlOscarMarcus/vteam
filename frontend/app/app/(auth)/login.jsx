@@ -72,8 +72,6 @@ const Login = () => {
             onPress={loginUser}/>
 
             <Link style={styles.link} href="/signup">Skapa konto</Link>
-            {/* Ta bort "HEM" här sen!! */}
-            <Link style={styles.link} href="/">Hem</Link>
             
         </ThemedView>
         </TouchableWithoutFeedback>
