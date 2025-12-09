@@ -1,4 +1,4 @@
-import { StyleSheet, Text, Button } from 'react-native'
+import { StyleSheet, Text, Button, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import { Link } from 'expo-router'
 import Logo from '../../assets/img/scooter.jpg'
 import { useState } from 'react'
@@ -14,6 +14,7 @@ const Login = () => {
     const [Email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ThemedView style={styles.container}>
             <ThemedLogo source={Logo} />
 
@@ -45,6 +46,7 @@ const Login = () => {
             <Link style={styles.link} href="/">Hem</Link>
             
         </ThemedView>
+        </TouchableWithoutFeedback>
     )
 }
 export default Login
