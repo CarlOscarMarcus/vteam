@@ -25,6 +25,22 @@
     maxZoom: 19,
   }).addTo(map);
 
+  // --- Ikoner ---
+  const scooterIcon = L.icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/4357/4357585.png',
+    iconSize: [40, 40],
+  });
+
+  const chargerIcon = L.icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/4430/4430952.png',
+    iconSize: [40, 40],
+  });
+
+  const parkingIcon = L.icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/608/608690.png',
+    iconSize: [40, 40],
+  });
+
   function handleMessage(event) {
     let data;
     try { data = JSON.parse(event.data); } 
@@ -45,15 +61,34 @@
       window.scooterMarkers.forEach(m=>map.removeLayer(m));
       window.scooterMarkers=[];
       data.items.forEach(s=>{
-        const m = L.marker([s.lat, s.lng]).addTo(map);
+        const m = L.marker([s.lat, s.lng], {icon: scooterIcon}).addTo(map);
         window.scooterMarkers.push(m);
+      });
+    }
+
+    if(data.type === "chargers"){
+      if(!window.chargerMarkers) window.chargerMarkers = [];
+      window.chargerMarkers.forEach(m=>map.removeLayer(m));
+      window.chargerMarkers=[];
+      data.items.forEach(c=>{
+        const m = L.marker([c.lat, c.lng], {icon: chargerIcon}).addTo(map);
+        window.chargerMarkers.push(m);
+      });
+    }
+
+    if(data.type === "parkings"){
+      if(!window.parkingMarkers) window.parkingMarkers = [];
+      window.parkingMarkers.forEach(m=>map.removeLayer(m));
+      window.parkingMarkers=[];
+      data.items.forEach(p=>{
+        const m = L.marker([p.lat, p.lng], {icon: parkingIcon}).addTo(map);
+        window.parkingMarkers.push(m);
       });
     }
   }
 
-  // Lyssna på WebView-meddelanden
-  document.addEventListener("message", handleMessage); // Android
-  window.addEventListener("message", handleMessage);   // iOS
+  document.addEventListener("message", handleMessage);
+  window.addEventListener("message", handleMessage);
 </script>
 </body>
 </html>
