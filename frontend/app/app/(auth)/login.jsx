@@ -1,5 +1,5 @@
 import { StyleSheet, Text, Button, TouchableWithoutFeedback, Keyboard } from 'react-native'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import Logo from '../../assets/img/scooter.jpg'
 import { useState } from 'react'
 import { saveToken } from '../../components/Token'
@@ -22,12 +22,14 @@ async function loginData(email, password) {
     const data = await result.json()
 
     if (result.ok) {
-        console.log(data)
+        console.log(`${data} = data`)
         console.log(`${email} is logged in`)
+        router.replace("/user")
         return data.token
     } else {
         throw new Error(data.error)
     }
+
 
 }
 
