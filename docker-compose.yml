@@ -1,0 +1,21 @@
+services:
+  api:
+    build: ./backend/api
+    container_name: api
+    ports:
+      - "3000:3000"
+    env_file: ./backend/api/.env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    container_name: db
+    environment:
+      POSTGRES_USER: vteam_user
+      POSTGRES_PASSWORD: osay21
+      POSTGRES_DB: vteam_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./backend/db:/docker-entrypoint-initdb.d

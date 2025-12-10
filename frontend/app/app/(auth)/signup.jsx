@@ -1,13 +1,13 @@
-import { StyleSheet, Text, TextInput, Button, Image } from 'react-native'
+import { StyleSheet, Text, Button, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import { Link } from 'expo-router'
-import Logo from '../assets/img/scooter.jpg'
+import Logo from '../../assets/img/scooter.jpg'
 import { useState } from 'react'
 
 
 // komponenter som fixar rätt style
-import ThemedView from '../components/ThemedView' // basic style
-import ThemedLogo from '../components/ThemedLogo' // logo style
-import ThemedInput from '../components/ThemedInput' // input style
+import ThemedView from '../../components/ThemedView' // basic style
+import ThemedLogo from '../../components/ThemedLogo' // logo style
+import ThemedInput from '../../components/ThemedInput' // input style
 
 
 
@@ -19,6 +19,7 @@ const SkapaKonto = () => {
     const [password, setPassword] = useState("");
 
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ThemedView style={styles.container}>
             <ThemedLogo source={Logo} />
 
@@ -34,6 +35,7 @@ const SkapaKonto = () => {
             <ThemedInput
             placeholder="E-post"
             onChangeText = {setEmail}
+            keyboardType="email-address"
             />
 
             <ThemedInput 
@@ -49,8 +51,9 @@ const SkapaKonto = () => {
         
             
             <Link style={styles.link} href="/login">Logga in</Link>
-            <Link style={styles.link} href="/">Hem</Link>
+
         </ThemedView>
+        </TouchableWithoutFeedback>
     )
 }
 

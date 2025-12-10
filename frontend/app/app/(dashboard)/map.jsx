@@ -1,12 +1,25 @@
 import { StyleSheet, Text, Image } from 'react-native'
-import { Link } from 'expo-router'
+import { useEffect } from 'react'
+import { Link, router } from 'expo-router'
+import { getToken } from '../../components/Token.jsx'
 
-import ThemedView from '../components/ThemedView'
+import ThemedView from '../../components/ThemedView'
 
 // hyra cyklar, använda kartan
 // flera sidor eller bara en?
 
+
 const Map = () => {
+    // kollar om användaren är inloggad, om inte redirect till inloggning.
+    useEffect (() => {
+        async function checkToken() {
+            const token = await getToken()
+            if (!token) {
+                router.replace("/login")
+            }
+        }
+        checkToken()
+    }, [])
 
     return (
         <ThemedView style={styles.container}>
