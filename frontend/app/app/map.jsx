@@ -70,7 +70,7 @@ export default function Map() {
     })();
   }, []);
 
-  // --- Skicka chargers och parkings när WebView laddas ---
+  // --- Skicka när WebView laddas ---
   const onWebViewLoad = () => {
     if (!webviewRef.current) return;
     webviewRef.current.postMessage(JSON.stringify({ type: "scooters", items: scooters }));
