@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom"
-import Home from "./pages/Home";
+import Home from "./pages/Home1";
 import Login from "./pages/Login";
 import Signup from "./pages/signup";
 import Profile from "./pages/profile";
@@ -14,14 +14,18 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
 
-        {/* Sidor */}
+        {/* Huvudsidor */}
+        <Route index element={<Home />} />    {/* Home som index */}
         <Route path="home" element={<Home />} />
+
+        <Route path="map" element={<MapPage />} /> {/* Kart-sidan */}
+
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="profile" element={<Profile />} />
         <Route path="history" element={<History />} />
         <Route path="saldo" element={<Saldo />} />
-        <Route path="map" element={<MapPage />} />
+        
       </Route>
     </Routes>
   );

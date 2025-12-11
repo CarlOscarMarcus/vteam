@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer>
-      <p>footer-innehåll</p>
+      <p>Copyright © 2025 HOCI Scooters AB.</p>
     </footer>
   );
 }

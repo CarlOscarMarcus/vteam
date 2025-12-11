@@ -1,3 +1,15 @@
+@use '../variables';
+
 footer {
-    border: 1px solid blue; // bara för test
+  background: variables.$main-color-header-footer;
+  font-family: variables.$main-font-family;
+  color: white;
+  margin: auto;
+  max-width: 800px;
+  text-align: center;
+  border: 1px solid white;
+}
+
+footer p {
+  color: white;
 }
