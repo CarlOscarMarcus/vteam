@@ -9,44 +9,65 @@ import ThemedView from '../components/ThemedView';
 export default function Map() {
   const webviewRef = useRef(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [scooters, setScooters] = useState([]);
-  const [chargers, setChargers] = useState([
-    { id: 1, lat: 59.335, lng: 18.065 },
-    { id: 2, lat: 59.332, lng: 18.062 },
-  ]);
-  const [parkings, setParkings] = useState([
-    { id: 1, lat: 59.333, lng: 18.061 },
-    { id: 2, lat: 59.337, lng: 18.068 },
-  ]);
 
-  // --- Hämta scootrar från API ---
+  const [scooters, setScooters] = useState([]);
+  const [chargers, setChargers] = useState([]);
+  const [parkings, setParkings] = useState([]);
+
+  // --- Hämta data från API ---
   useEffect(() => {
-    const fetchScooters = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch('http://192.168.32.7:3000/api/scooters');
-        const data = await res.json();
+        const [scooterRes, chargersRes, parkingRes] = await Promise.all([
+          fetch('http://192.168.32.7:3000/api/scooters'),
+          fetch('http://192.168.32.7:3000/api/charging'),
+          fetch('http://192.168.32.7:3000/api/parking'),
+        ]);
+
+        const [scooterData, chargersData, parkingData] = await Promise.all([
+          scooterRes.json(),
+          chargersRes.json(),
+          parkingRes.json(),
+        ]);
 
         // Konvertera positioner till float
-        const formatted = data.map(s => ({
-          id: s.id,
-          lat: parseFloat(s.position_lat),
-          lng: parseFloat(s.position_long),
-        }));
-        setScooters(formatted);
+        setScooters(
+          scooterData.map(s => ({ id: s.id, lat: parseFloat(s.position_lat), lng: parseFloat(s.position_long) }))
+        );
+
+        setChargers(
+          chargersData.map(c => ({ id: c.id, lat: parseFloat(c.position_lat), lng: parseFloat(c.position_long) }))
+        );
+
+        setParkings(
+          parkingData.map(p => ({ id: p.id, lat: parseFloat(p.position_lat), lng: parseFloat(p.position_long) }))
+        );
+
       } catch (err) {
-        console.error('Error fetching scooters:', err);
+        console.error('Error fetching data:', err);
       }
     };
 
-    fetchScooters();
+    fetchData();
   }, []);
 
-  // --- Skicka scootrar till WebView när de ändras ---
+  // --- Skicka uppdaterad data till WebView när den ändras ---
   useEffect(() => {
-    if (webviewRef.current && scooters.length > 0) {
+    if (!webviewRef.current) return;
+
+    if (scooters.length > 0) {
+      console.log("Sending scooters:", scooters);
       webviewRef.current.postMessage(JSON.stringify({ type: 'scooters', items: scooters }));
     }
-  }, [scooters]);
+    if (chargers.length > 0) {
+      console.log("Sending chargers:", chargers);
+      webviewRef.current.postMessage(JSON.stringify({ type: "chargers", items: chargers }));
+    }
+    if (parkings.length > 0) {
+      console.log("Sending parkings:", parkings);
+      webviewRef.current.postMessage(JSON.stringify({ type: 'parkings', items: parkings }));
+    }
+  }, [scooters, chargers, parkings]);
 
   // --- Starta GPS & skicka position till WebView ---
   useEffect(() => {
@@ -70,7 +91,6 @@ export default function Map() {
     })();
   }, []);
 
-  // --- Skicka när WebView laddas ---
   const onWebViewLoad = () => {
     if (!webviewRef.current) return;
     webviewRef.current.postMessage(JSON.stringify({ type: "scooters", items: scooters }));
@@ -78,7 +98,6 @@ export default function Map() {
     webviewRef.current.postMessage(JSON.stringify({ type: "parkings", items: parkings }));
   };
 
-  // --- Eventuella meddelanden från WebView ---
   const onMessage = (event) => {
     console.log("FROM WEBVIEW:", event.nativeEvent.data);
   };
