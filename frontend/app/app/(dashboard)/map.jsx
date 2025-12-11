@@ -1,52 +1,136 @@
-import { StyleSheet, Text, Image } from 'react-native'
-import { useEffect } from 'react'
-import { Link, router } from 'expo-router'
-import { getToken } from '../../components/Token.jsx'
+import { StyleSheet, Text, View } from 'react-native';
+import { Link, router } from 'expo-router';
+import { WebView } from 'react-native-webview';
+import * as Location from 'expo-location';
+import { useEffect, useRef, useState } from 'react';
+import { getToken } from '../../components/Token.jsx';
+import ThemedView from '../../components/ThemedView';
 
-import ThemedView from '../../components/ThemedView'
+export default function Map() {
+  const webviewRef = useRef(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
-// hyra cyklar, använda kartan
-// flera sidor eller bara en?
+  const [scooters, setScooters] = useState([]);
+  const [chargers, setChargers] = useState([]);
+  const [parkings, setParkings] = useState([]);
 
-
-const Map = () => {
-    // kollar om användaren är inloggad, om inte redirect till inloggning.
-    useEffect (() => {
-        async function checkToken() {
-            const token = await getToken()
-            if (!token) {
-                router.replace("/login")
-            }
-        }
-        checkToken()
-    }, [])
-
-    return (
-        <ThemedView style={styles.container}>
-
-            <Text style={styles.title}>Hoci scooters</Text>
-
-            <Text>Hyra elsparkcykel</Text>
-
-            {/* ta bort sen, user kan vara "förstasida" som inloggad? */}
-            <Link style={styles.link} href="/">Hem</Link> 
-            
-        </ThemedView>
-    )
-}
-export default Map
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    title: {
-        fontWeight: 'bold',
-        fontSize: 20,
-        margin: 10
-    },
-    link: {
-        fontWeight: 'bold',
+  // --- Kontrollera inloggning ---
+  useEffect(() => {
+    async function checkToken() {
+      const token = await getToken();
+      if (!token) {
+        router.replace("/login");
+      }
     }
-})
+    checkToken();
+  }, []);
+
+  // --- Hämta data från API ---
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [scooterRes, chargersRes, parkingRes] = await Promise.all([
+          fetch('http://192.168.32.7:3000/api/scooters'),
+          fetch('http://192.168.32.7:3000/api/charging'),
+          fetch('http://192.168.32.7:3000/api/parking'),
+        ]);
+
+        const [scooterData, chargersData, parkingData] = await Promise.all([
+          scooterRes.json(),
+          chargersRes.json(),
+          parkingRes.json(),
+        ]);
+
+        setScooters(
+          scooterData.map(s => ({ id: s.id, lat: parseFloat(s.position_lat), lng: parseFloat(s.position_long) }))
+        );
+
+        setChargers(
+          chargersData.map(c => ({ id: c.id, lat: parseFloat(c.position_lat), lng: parseFloat(c.position_long) }))
+        );
+
+        setParkings(
+          parkingData.map(p => ({ id: p.id, lat: parseFloat(p.position_lat), lng: parseFloat(p.position_long) }))
+        );
+
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // --- Skicka uppdaterad data till WebView ---
+  useEffect(() => {
+    if (!webviewRef.current) return;
+
+    if (scooters.length > 0) webviewRef.current.postMessage(JSON.stringify({ type: 'scooters', items: scooters }));
+    if (chargers.length > 0) webviewRef.current.postMessage(JSON.stringify({ type: "chargers", items: chargers }));
+    if (parkings.length > 0) webviewRef.current.postMessage(JSON.stringify({ type: 'parkings', items: parkings }));
+  }, [scooters, chargers, parkings]);
+
+  // --- Starta GPS & skicka position till WebView ---
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      await Location.watchPositionAsync(
+        { accuracy: Location.Accuracy.High, distanceInterval: 5 },
+        (loc) => {
+          if (webviewRef.current) {
+            webviewRef.current.postMessage(JSON.stringify({ type: "position", coords: loc.coords }));
+          }
+        }
+      );
+    })();
+  }, []);
+
+  const onWebViewLoad = () => {
+    if (!webviewRef.current) return;
+    webviewRef.current.postMessage(JSON.stringify({ type: "scooters", items: scooters }));
+    webviewRef.current.postMessage(JSON.stringify({ type: "chargers", items: chargers }));
+    webviewRef.current.postMessage(JSON.stringify({ type: "parkings", items: parkings }));
+  };
+
+  const onMessage = (event) => {
+    console.log("FROM WEBVIEW:", event.nativeEvent.data);
+  };
+
+  return (
+    <ThemedView style={styles.container}>
+      <Text style={styles.title}>Hoci scooters</Text>
+      <Text>Hyra elsparkcykel</Text>
+
+      <Link style={styles.link} href="/">Hem</Link>
+
+      <View style={styles.mapContainer}>
+        <View style={{ flex: 1, width: '100%' }}>
+          <WebView
+            ref={webviewRef}
+            source={require('../assets/html/leaflet.html')}
+            onLoad={onWebViewLoad}
+            onMessage={onMessage}
+            originWhitelist={['*']}
+            allowFileAccess={true}
+            allowUniversalAccessFromFileURLs={true}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+            style={{ flex: 1 }}
+          />
+        </View>
+      </View>
+    </ThemedView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, paddingTop: 10 },
+  title: { fontWeight: 'bold', fontSize: 20, margin: 10 },
+  link: { fontWeight: 'bold', marginBottom: 10 },
+  mapContainer: { flex: 1, alignItems: 'center' },
+});
