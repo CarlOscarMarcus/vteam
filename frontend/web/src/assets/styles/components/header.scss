@@ -3,9 +3,17 @@
 header {
   background: variables.$main-color-header-footer;
   font-family: variables.$main-font-family;
-  color: variables.$main-font-color;
+  color: white;
   margin: auto;
   max-width: 800px;
-  text-align: center;
-  border: 1px solid black;
+  //border: 1px solid black;
+
+  display: flex;                
+  justify-content: space-between; 
+  align-items: center;           
+  padding: 10px 20px;           
+}
+
+.icon {
+  font-size: 4rem;
 }

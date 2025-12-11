@@ -1,7 +1,9 @@
+@use '../variables';
+
 nav {
-  background: white;
-  font-family: 'Times New Roman', Times, serif;
-  color: black;
+  background: variables.$main-color-header-footer;
+  font-family: "Sora", sans-serif;
+  color: white;
   margin: auto;
   max-width: 800px;
   text-align: center;
@@ -11,12 +13,12 @@ nav {
 nav a {
   display: inline-block;
   transition: transform 0.3s, background-color 0.3s;
-  color: black;
+  color: white;
   padding: 8px 16px;        
   background-color: transparent;
   text-align: center;
   font-size: 14px;          
-  border: 2px solid black;
+  border: 2px solid white;
   border-radius: 4px;
   margin: 0 5px;
 }
