@@ -1,18 +1,21 @@
-import { Routes, Route } from 'react-router-dom';
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
-import Layout from './components/Layout';
-import Index from './pages/Index';
-import About from './pages/About';
-
-function App() {
+export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Index />} />
-        <Route path="about" element={<About />} />
-      </Route>
-    </Routes>
-  );
-}
+    <>
+      <Header />
 
-export default App;
+      <main className="main">
+        <article className="article">
+          <header>
+            <h1>Titel för body/main</h1>
+          </header>
+          <p>TEXT</p>
+        </article>
+      </main>
+
+      <Footer />
+    </>
+  );
+} 
