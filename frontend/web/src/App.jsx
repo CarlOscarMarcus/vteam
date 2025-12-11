@@ -1,21 +1,29 @@
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import { Routes, Route } from "react-router-dom"
+import Home from "./pages/home";
+import Login from "./pages/Login";
+import Signup from "./pages/signup";
+import Profile from "./pages/profile";
+import History from "./pages/history";
+import Saldo from "./pages/saldo";
+import Layout from "./components/Layout";
+
 
 export default function App() {
   return (
     <>
-      <Header />
 
-      <main className="main">
-        <article className="article">
-          <header>
-            <h1>Titel för body/main</h1>
-          </header>
-          <p>TEXT</p>
-        </article>
-      </main>
+      <Routes>
+        <Route path="/" element={<Layout />} >
+        <Route index element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/saldo" element={<Saldo />} />
+        </Route>
 
-      <Footer />
+      </Routes>
+
     </>
   );
 } 

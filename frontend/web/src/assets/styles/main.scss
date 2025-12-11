@@ -1,5 +1,13 @@
 // Components
 @use 'components/App.scss';
+@use 'components/header.scss';
+@use 'components/footer.scss';
+
+
 
 // Pages
 @use 'pages/Index.scss';
+
+main {
+    border: 1px solid green;
+}
