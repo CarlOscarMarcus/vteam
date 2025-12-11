@@ -2,6 +2,8 @@ import { StyleSheet, Text } from 'react-native'
 import { Link } from 'expo-router'
 import Logo from '../../assets/img/scooter.jpg'
 import { getToken } from '../../components/Token.jsx'
+import { useEffect } from 'react'
+
 
 
 // komponenter som fixar rätt style

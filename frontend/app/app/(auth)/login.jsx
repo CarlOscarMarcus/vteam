@@ -22,7 +22,6 @@ async function loginData(email, password) {
     const data = await result.json()
 
     if (result.ok) {
-        console.log(`${data} = data`)
         console.log(`${email} is logged in`)
         router.replace("/user")
         return data.token
