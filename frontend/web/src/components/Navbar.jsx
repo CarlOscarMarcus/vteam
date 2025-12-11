@@ -17,6 +17,8 @@ export default function Navbar() {
       {" | "}
       <Link to="/saldo">Saldo</Link>
       {" | "}
+      <Link to="/Map">Karta</Link>
+      {" | "}
       <Link to="/signout">Logga ut</Link>
 
     {/* Glöm inte att när man logga in som admin så ska en annan meny synas, kolla kravspec/SDS. 
