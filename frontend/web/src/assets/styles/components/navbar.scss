@@ -1,0 +1,28 @@
+nav {
+  background: white;
+  font-family: 'Times New Roman', Times, serif;
+  color: black;
+  margin: auto;
+  max-width: 800px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+nav a {
+  display: inline-block;
+  transition: transform 0.3s, background-color 0.3s;
+  color: black;
+  padding: 8px 16px;        
+  background-color: transparent;
+  text-align: center;
+  font-size: 14px;          
+  border: 2px solid black;
+  border-radius: 4px;
+  margin: 0 5px;
+}
+
+nav a:hover {
+  transform: scale(1.2); 
+  background-color: #c7e9c0;
+  cursor: pointer;
+}
