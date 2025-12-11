@@ -4,12 +4,18 @@
 @use 'components/footer.scss';
 @use 'components/navbar.scss';
 
-
-
+// Variables
+@use './variables';
 
 // Pages
 @use 'pages/Index.scss';
 
 main {
-    border: 1px solid green;
+    background: variables.$main-background-color;
+    font-family: variables.$main-font-family;
+    color: variables.$main-font-color;
+    margin: auto;
+    max-width: 800px;
+    text-align: center;
+    border: 1px solid white;
 }
