@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+
 export default function Navbar() {
   return (
     <nav>
@@ -15,7 +16,7 @@ export default function Navbar() {
       {" | "}
       <Link to="/map">Karta</Link> {/* Kart-länken */}
       {" | "}
-      <Link to="/signout">Logga ut</Link>
+      <Link to="/logout">Logga ut</Link>
 
       {/* Glöm inte att när man loggar in som admin så ska en annan meny synas, kolla kravspec/SDS. 
           Kanske göra en if-sats för att visa rätt meny. */}
