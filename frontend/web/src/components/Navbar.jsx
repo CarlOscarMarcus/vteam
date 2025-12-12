@@ -12,9 +12,7 @@ export default function Navbar() {
       <Link to="/profile">Profil</Link>
       <Link to="/history">Historik</Link>
       <Link to="/saldo">Saldo</Link>
-      {" | "}
       <Link to="/map">Karta</Link> {/* Kart-länken */}
-      {" | "}
       <Link to="/signout">Logga ut</Link>
 
       {/* Glöm inte att när man loggar in som admin så ska en annan meny synas, kolla kravspec/SDS. 
