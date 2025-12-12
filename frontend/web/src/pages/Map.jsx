@@ -2,8 +2,18 @@
 import { useEffect, useState, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+// import { useNavigate } from "react-router-dom";
+
 
 export default function MapPage() {
+  // const navigate = useNavigate();
+  // useEffect(() => {
+  //     const token = sessionStorage.getItem('token');
+  //     if (!token) {
+  //       navigate("/login");
+  //     }
+  // }, [navigate]);
+
   const mapRef = useRef(null);
   const [scooters, setScooters] = useState([]);
   const [chargers, setChargers] = useState([]);
