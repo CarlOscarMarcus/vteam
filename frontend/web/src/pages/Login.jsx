@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../context/UserContext';
 // Skapa formulär för att logga in
 
 
@@ -28,12 +29,15 @@ async function LoginBackend(email, password) {
 
 export default function Login() {
     const navigate = useNavigate();
+    const { LogIn } = useAuth()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+  
     const LoginUser = async () => {
         try {
             const token = await LoginBackend(email, password)
-            sessionStorage.setItem("token", token);
+            // sessionStorage.setItem("token", token);
+            LogIn(token)
             navigate("/profile")
         } catch (err) {
             console.error(err)

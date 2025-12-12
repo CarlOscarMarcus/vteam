@@ -20,14 +20,15 @@ export default function App() {
         <Route index element={<Home />} />    {/* Home som index */}
         <Route path="home" element={<Home />} />
 
-        <Route path="map" element={<Authentication><MapPage /></Authentication>} /> {/* Kart-sidan */}
-
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
+
+
         <Route path="profile" element={<Authentication><Profile /></Authentication>} />
         <Route path="history" element={<Authentication><History /></Authentication>} />
         <Route path="saldo" element={<Authentication><Saldo /></Authentication>} />
-        <Route path="logout" element={<Logout />} />
+        <Route path="map" element={<Authentication><MapPage /></Authentication>} /> {/* Kart-sidan */}
+        {/* <Route path="logout" element={<Logout />} /> */}
 
         
       </Route>
