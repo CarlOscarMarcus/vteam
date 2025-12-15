@@ -2,27 +2,43 @@ import { StyleSheet, Text } from 'react-native'
 import { Link } from 'expo-router'
 import Logo from '../../assets/img/scooter.jpg'
 import { getToken } from '../../components/Token.jsx'
-import { useEffect } from 'react'
-
+import { useEffect, useState } from 'react'
 
 // komponenter som fixar rätt style
 import ThemedView from '../../components/ThemedView' // basic style
 import ThemedLogo from '../../components/ThemedLogo' // logo style
 import Spacer from '../../components/Spacer' // space
 
+const backendURL = "192.168.68.103"
 
-const User = () => {
+export default function User() {
+    const [user, setUser] = useState(null)
     // kollar om användaren är inloggad, om inte redirect till inloggning.
     useEffect (() => {
         async function checkToken() {
             const token = await getToken()
             if (!token) {
                 router.replace("/login")
+            } else {
+                
+                const res = await fetch(`http://${backendURL}:3000/api/auth/login`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                })
+
+                if (!res.ok) throw new Error('Kunde inte hämta användaren.')
+                const data = await res.json()
+                setUser(data)
             }
         }
         checkToken()
     }, [])
     // hämta namn och epost om användare
+    
+
     return (
         <ThemedView style={styles.container}>
             <ThemedLogo source={Logo} />
@@ -48,7 +64,7 @@ const User = () => {
         </ThemedView>
     )
 }
-export default User
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
