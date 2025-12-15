@@ -31,13 +31,21 @@ export default function User() {
 
                 if (!res.ok) throw new Error('Kunde inte hämta användaren.')
                 const data = await res.json()
+                console.log(data)
                 setUser(data)
+                
             }
         }
         checkToken()
     }, [])
     // hämta namn och epost om användare
-    
+    if (!user) {
+    return (
+        <ThemedView style={styles.container}>
+        <Text>Laddar användare...</Text>
+        </ThemedView>
+    );
+    }
 
     return (
         <ThemedView style={styles.container}>
