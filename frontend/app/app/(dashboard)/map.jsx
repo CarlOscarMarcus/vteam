@@ -200,7 +200,7 @@ export default function Map() {
 
   return (
     <ThemedView style={styles.container} safe={true}>
-      <Text style={styles.title}>Hoci scooters</Text>
+      <Text style={styles.title}>🛴 Hoci scooters </Text>
       <Text>Hyra elsparkcykel</Text>
 
       <View style={styles.mapContainer}>

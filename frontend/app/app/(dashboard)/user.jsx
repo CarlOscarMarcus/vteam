@@ -53,17 +53,17 @@ export default function User() {
 
             <Text style={styles.title}>Hoci scooters</Text>
             <Spacer />
-            <Text>Användare:</Text> 
+            <Text>🛴 Användare:</Text> 
             <Text>{user.name}</Text>
             <Spacer />
 
-            <Text>E-post:</Text>
+            <Text>🛴 E-post:</Text>
             <Text>{user.email}</Text>
             <Spacer />
-            <Text>Saldo</Text>
+            <Text>🛴 Saldo</Text>
 
             <Spacer />
-            <Text>Resor</Text>
+            <Text>🛴 Resor</Text>
 
             <Spacer />
 
