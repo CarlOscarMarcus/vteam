@@ -5,8 +5,10 @@ import { useAuth } from '../context/UserContext';
 
 const backendURL = "192.168.68.103"
 
+
+// backend ej klar
 async function SignupBackend(name, email, password) {
-      const result = await fetch(`http://${backendURL}:3000/api/auth/register`, {
+      const result = await fetch(`http://${backendURL}:3000/api/auth/signup`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({name, email, password}),
@@ -35,7 +37,7 @@ export default function Signup() {
         try {
             const token = await SignupBackend(name, email, password)
             // sessionStorage.setItem("token", token);
-            SignUp(token)
+            // SignUp(token) // behövs detta?
             navigate("/login")
         } catch (err) {
             console.error(err)
@@ -54,7 +56,7 @@ export default function Signup() {
         placeholder="Namn"
         value={name} 
         type="text" 
-        onChange={(e) => setName(e.target.value)}></input><br></br>
+        onChange={(e) => setName(e.target.value)} required></input><br></br>
 
         <label>E-post: </label>
         <br></br>
@@ -62,7 +64,7 @@ export default function Signup() {
         placeholder="E-post" 
         type="email" 
         value={email} 
-        onChange={(e) => setEmail(e.target.value)}></input>
+        onChange={(e) => setEmail(e.target.value)} required></input>
 
         <br></br>
         <label>Lösenord: </label>
@@ -71,7 +73,7 @@ export default function Signup() {
         placeholder="Lösenord" 
         type="password" 
         value={password} 
-        onChange={(e) => setPassword(e.target.value)}></input>
+        onChange={(e) => setPassword(e.target.value)} required></input>
         
         <br></br>
         <input type="submit" value="Skapa konto"></input>
