@@ -5,6 +5,6 @@ export const Colors = {
     headerText: '#dededeff',
     title: '#252525ff',
     text: '#484848ff',
-    navActive: '#be39caff',
+    navActive: '#a1d998',
     navInactive: '#828282ff'
 }

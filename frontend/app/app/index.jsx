@@ -13,7 +13,7 @@ const Home = () => {
     return (
         <ThemedView style={styles.container}>
             <ThemedLogo source={Logo} />
-
+            
             <Text style={styles.title}>Hoci scooters</Text>
             <Spacer />
         
