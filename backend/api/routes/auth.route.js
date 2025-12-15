@@ -67,8 +67,7 @@ router.post("/signup", async (req, res) => {
         });
 
     } catch (err) {
-        console.error("något gick fel i backend: ", err)
-        res.status(500).json({ error: "backend-error", message: err.message});
+        res.status(500).json({ error: 'Server error' });
     }
     
 });
