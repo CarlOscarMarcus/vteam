@@ -199,11 +199,9 @@ export default function Map() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.container} safe={true}>
       <Text style={styles.title}>Hoci scooters</Text>
       <Text>Hyra elsparkcykel</Text>
-
-      <Link style={styles.link} href="/">Hem</Link>
 
       <View style={styles.mapContainer}>
         <View style={{ flex: 1, width: '100%' }}>

@@ -17,10 +17,10 @@ const ThemedView = ({ style, safe = false, ...props }) => {
     const insets = useSafeAreaInsets()
 
     return (
-        <View 
+        <SafeAreaView 
         style={[{ backgroundColor: theme.background,
             paddingTop: insets.top,
-            paddingBottom: insets.bottom,
+            paddingBottom: insets.bottom - 70,
         }, style]}{...props} />
     )
 }
