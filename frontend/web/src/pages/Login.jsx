@@ -70,6 +70,9 @@ export default function Login() {
         <br></br>
         <input type="submit" value="Logga in"></input>
         </form>
+        <br></br>
+        <br></br>
+
       </div>
     </>
   )
