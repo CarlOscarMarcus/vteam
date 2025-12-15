@@ -52,4 +52,24 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
+router.post("/signup", async (req, res) => {
+    try {
+        const { name, email, password } = req.body
+
+        const hashpassword = await bcrypt.hash(password, 10)
+
+        await db.query(`INSERT into users (email, name, password_hash, salt)
+           VALUES ($1, $2, $3, $4)`, [email, name, hashpassword, 10]);
+
+        console.log("registrering ok från backend!")
+        return res.status(201).json({
+        message: "Lyckad registrering",
+        });
+
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+    
+});
+
 export default router;
