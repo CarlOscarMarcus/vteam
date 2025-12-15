@@ -1,5 +1,5 @@
 import { StyleSheet, Text } from 'react-native'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import Logo from '../../assets/img/scooter.jpg'
 import { getToken } from '../../components/Token.jsx'
 import { useEffect, useState } from 'react'
@@ -21,7 +21,7 @@ export default function User() {
                 router.replace("/login")
             } else {
                 
-                const res = await fetch(`http://${backendURL}:3000/api/auth/login`, {
+                const res = await fetch(`http://${backendURL}:3000/api/auth/me`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -45,10 +45,12 @@ export default function User() {
 
             <Text style={styles.title}>Hoci scooters</Text>
             <Spacer />
-            <Text>Användare namn</Text> 
+            <Text>Användare:</Text> 
+            <Text>{user.name}</Text>
             <Spacer />
 
-            <Text>Användare e-post</Text>
+            <Text>E-post:</Text>
+            <Text>{user.email}</Text>
             <Spacer />
             <Text>Saldo</Text>
 
