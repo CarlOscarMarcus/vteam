@@ -76,18 +76,35 @@ export default function Map() {
   useEffect(() => {
     (async () => {
       try {
+        const token = await getToken();
+
+        const headers = {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+
         const [s, c, p] = await Promise.all([
-          fetch("http://192.168.32.7:3000/api/scooters"),
-          fetch("http://192.168.32.7:3000/api/charging"),
-          fetch("http://192.168.32.7:3000/api/parking"),
+          fetch("http://192.168.32.7:3000/api/scooters", { headers }),
+          fetch("http://192.168.32.7:3000/api/charging", { headers }),
+          fetch("http://192.168.32.7:3000/api/parking", { headers }),
         ]);
+
+        if (!s.ok || !c.ok || !p.ok) {
+          console.error("API response error", s.status, c.status, p.status);
+          return;
+        }
+
         const [sd, cd, pd] = await Promise.all([s.json(), c.json(), p.json()]);
-        setScooters(sd.map(x=>({id:x.id,lat:+x.position_lat,lng:+x.position_long})));
-        setChargers(cd.map(x=>({id:x.id,lat:+x.position_lat,lng:+x.position_long})));
-        setParkings(pd.map(x=>({id:x.id,lat:+x.position_lat,lng:+x.position_long})));
-      } catch(e){ console.error("API error:", e); }
+
+        setScooters(sd.map(x => ({ id: x.id, lat: +x.position_lat, lng: +x.position_long })));
+        setChargers(cd.map(x => ({ id: x.id, lat: +x.position_lat, lng: +x.position_long })));
+        setParkings(pd.map(x => ({ id: x.id, lat: +x.position_lat, lng: +x.position_long })));
+      } catch (e) {
+        console.error("API error:", e);
+      }
     })();
   }, []);
+
 
   // --- Push data to WebView ---
   useEffect(() => {
