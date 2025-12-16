@@ -1,17 +1,21 @@
 @use '../variables';
 
 header {
+  width: 100%;
   background: variables.$main-color-header-footer;
-  font-family: variables.$main-font-family;
   color: white;
-  margin: auto;
-  max-width: 800px;
-  //border: 1px solid black;
+  font-family: variables.$main-font-family;
+}
 
-  display: flex;                
-  justify-content: space-between; 
-  align-items: center;           
-  padding: 10px 20px;           
+.header-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;  
+  align-items: center;
+  gap: 200px;                
+  padding: 5px 5px;
 }
 
 .icon {
