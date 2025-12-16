@@ -10,7 +10,7 @@ import ThemedLogo from '../../components/ThemedLogo' // logo style
 import ThemedInput from '../../components/ThemedInput' // input style
 
 
-const backendURL = "192.168.68.103"
+const backendURL = "192.168.32.7"
 
 async function loginData(email, password) {
     const result = await fetch(`http://${backendURL}:3000/api/auth/login`, {

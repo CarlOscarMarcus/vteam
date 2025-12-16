@@ -9,7 +9,7 @@ import ThemedView from '../../components/ThemedView' // basic style
 import ThemedLogo from '../../components/ThemedLogo' // logo style
 import Spacer from '../../components/Spacer' // space
 
-const backendURL = "192.168.68.103"
+const backendURL = "192.168.32.7"
 
 export default function User() {
     const [user, setUser] = useState(null)
@@ -64,6 +64,13 @@ export default function User() {
 
             <Spacer />
             <Text>🛴 Resor</Text>
+            
+            <Link
+            style={styles.link}
+            href="/receipts"
+            >
+            📄 Mina kvitton
+            </Link>
 
             <Spacer />
 
