@@ -2,15 +2,18 @@ import { StyleSheet, Text, Button, TouchableWithoutFeedback, Keyboard } from 're
 import { Link, router } from 'expo-router'
 import Logo from '../../assets/img/scooter.jpg'
 import { useState } from 'react'
-import { saveToken } from '../../components/Token'
+import { deleteToken, saveToken } from '../../components/Token'
 
 // komponenter som fixar rätt style
 import ThemedView from '../../components/ThemedView' // basic style
 import ThemedLogo from '../../components/ThemedLogo' // logo style
 import ThemedInput from '../../components/ThemedInput' // input style
 
+// min dator, hemma
+// const backendURL = "192.168.32.7"
 
-const backendURL = "192.168.32.7"
+// min dator, hos mamma och pappa
+const backendURL = "192.168.1.103"
 
 async function loginData(email, password) {
     const result = await fetch(`http://${backendURL}:3000/api/auth/login`, {
@@ -24,7 +27,7 @@ async function loginData(email, password) {
     if (result.ok) {
         console.log(`${data} = data`)
         console.log(`${email} is logged in`)
-        router.replace("/user")
+        // router.replace("/user")
         return data.token
     } else {
         throw new Error(data.error)
@@ -40,8 +43,10 @@ const Login = () => {
         try {
             const token = await loginData(email, password)
             await saveToken(token)
+            router.replace("/user")
         } catch (err) {
             console.error(err)
+            await deleteToken()
         }
     }
     return (

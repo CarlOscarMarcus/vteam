@@ -113,7 +113,11 @@ export default function Map() {
           "Content-Type": "application/json",
         };
 
-        const backendURL = "192.168.32.7";
+        // min dator, hemma
+        // const backendURL = "192.168.32.7"
+
+        // min dator, hos mamma och pappa
+        const backendURL = "192.168.1.103"
 
         const [s, c, p] = await Promise.all([
           fetch(`http://${backendURL}:3000/api/scooters`, { headers }),

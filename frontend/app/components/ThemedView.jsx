@@ -19,7 +19,7 @@ const ThemedView = ({ style, safe = false, ...props }) => {
     return (
         <SafeAreaView 
         style={[{ backgroundColor: theme.background,
-            paddingTop: insets.top,
+            paddingTop: insets.top - 20,
             paddingBottom: insets.bottom - 70,
         }, style]}{...props} />
     )
