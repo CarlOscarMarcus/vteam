@@ -1,3 +1,9 @@
+// routes/scooters.route.js
+import express from 'express';
+const router = express.Router();
+import pool from '../db.js';
+
+// GET all scooters
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
@@ -8,11 +14,13 @@ router.get('/', async (req, res) => {
     const result = await pool.query('SELECT * FROM scooter');
     res.json(result.rows);
   } catch (err) {
+    console.error('Error fetching scooters:', err.message);
     console.error(err.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
+// GET selected scooter
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params; // get id from URL
@@ -24,6 +32,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// GET selected scooter repairs
 router.get('/:id/repairs', async (req, res) => {
   try {
     const { id } = req.params; // get id from URL
@@ -35,4 +44,5 @@ router.get('/:id/repairs', async (req, res) => {
   }
 });
 
+export default router;
 module.exports = router;

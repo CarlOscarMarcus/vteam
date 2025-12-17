@@ -1,0 +1,83 @@
+//@use '../../shared/fontawesome/scss/fontawesome';
+//$fa-font-path: '../../shared/fontawesome/webfonts';
+//@use '../../shared/fontawesome/scss/brands';
+//@use '../../shared/fontawesome/scss/solid';
+//@use '../../shared/fontawesome/scss/regular';
+
+@use '../../node_modules/normalize.css/normalize';
+
+//@use 'variables' as * with (
+//    $main-background-color: #333,
+//    $main-font-color: #fff
+//);
+
+@use 'blockquotes';
+@use 'code';
+@use 'mobile';
+@use 'typography';
+@use 'technology';
+@use 'gallery';
+
+// Note: @import for URLs is still valid in CSS
+@import url('{{URL}},wght@0,300..800;1,300..800&display=swap');
+
+* {
+  font-family: "Times New Roman", Times, serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Times New Roman", Times, serif;
+}
+
+body {
+  background-color: #000;
+  margin: auto;
+  max-width: 800px;
+  text-align: center;
+}
+
+//background-color: variables.$background-color;
+
+* {
+  color: #fff;
+}
+
+//color: variables.$font-color;
+
+img {
+  border-style: none;
+  width: 200px;
+  height: 200px;
+}
+
+//.main {
+//    background-color: linear-gradient(to right, lightgray, gray, lightgray);
+//}
+
+.button-link {
+  transition: transform 0.3s;
+  color: white;
+  padding: 15px 32px;
+  background-color: transparent;
+  text-align: center;
+  font-size: 16px;
+  border: 2px solid white;
+  outline: none;
+}
+
+.button-link:hover {
+  transform: scale(1.3);
+}
+
+.social a {
+  display: flex;
+  justify-content: center; /* Center the icons horizontally */
+  align-items: center; /* Align the icon and text vertically */
+  margin-bottom: 10px; /* Add some space between the links */
+  text-decoration:none; 
+}

@@ -1,0 +1,22 @@
+// Components
+@use 'components/app.scss';
+@use 'components/header.scss';
+@use 'components/footer.scss';
+@use 'components/navbar.scss';
+@use 'components/home.scss';
+
+// Variables
+@use './variables';
+
+// Pages
+@use 'pages/Index.scss';
+
+main {
+    background: variables.$main-background-color;
+    font-family: variables.$main-font-family;
+    color: variables.$main-font-color;
+    margin: auto;
+    max-width: 800px;
+    text-align: center;
+    border: 1px solid white;
+}

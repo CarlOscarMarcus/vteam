@@ -1,18 +1,37 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom"
+import Home from "./pages/Home1";
+import Login from "./pages/Login";
+import Signup from "./pages/signup";
+import Profile from "./pages/profile";
+import History from "./pages/history";
+import Saldo from "./pages/saldo";
+import Layout from "./components/Layout";
+import { Authentication } from "./components/Auth";
 
-import Layout from './components/Layout';
-import Index from './pages/Index';
-import About from './pages/About';
+import MapPage from './pages/Map'; 
+import { Logout } from "./pages/Logout";
 
-function App() {
+export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<Index />} />
-        <Route path="about" element={<About />} />
+
+        {/* Huvudsidor */}
+        <Route index element={<Home />} />    {/* Home som index */}
+        <Route path="home" element={<Home />} />
+
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
+
+
+        <Route path="profile" element={<Authentication><Profile /></Authentication>} />
+        <Route path="history" element={<Authentication><History /></Authentication>} />
+        <Route path="saldo" element={<Authentication><Saldo /></Authentication>} />
+        <Route path="map" element={<Authentication><MapPage /></Authentication>} /> {/* Kart-sidan */}
+        {/* <Route path="logout" element={<Logout />} /> */}
+
+        
       </Route>
     </Routes>
   );
 }
-
-export default App;
