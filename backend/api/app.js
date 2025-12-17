@@ -12,6 +12,10 @@ import chargingRouter from './routes/charging.route.js';
 dotenv.config();
 
 const app = express();
+const port = process.env.PORT || 3000;
+const usersRouter = require('./routes/users.route');
+const scootersRouter = require("./routes/scooters.route");
+const authRoutes = require("./routes/auth.route");
 
 // --- Middleware ---
 app.use(cors());
@@ -23,6 +27,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/scooters', scootersRouter);
 app.use('/api/parking', parkingRouter);
 app.use('/api/charging', chargingRouter);
+app.use("/api/scooters", scootersRouter);
+app.use("/api/auth", authRoutes);
 
 // --- Starta server ---
 const PORT = process.env.PORT || 3000;
