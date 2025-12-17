@@ -6,7 +6,6 @@ import { useAuth } from '../context/UserContext';
 const backendURL = "192.168.68.103"
 
 
-// backend ej klar
 async function SignupBackend(name, email, password) {
       const result = await fetch(`http://${backendURL}:3000/api/auth/signup`, {
         method: "POST",
