@@ -13,9 +13,6 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const usersRouter = require('./routes/users.route');
-const scootersRouter = require("./routes/scooters.route");
-const authRoutes = require("./routes/auth.route");
 
 // --- Middleware ---
 app.use(cors());
