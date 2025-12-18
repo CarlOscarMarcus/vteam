@@ -10,10 +10,10 @@ import parkingRouter from './routes/parking.route.js';
 import chargingRouter from './routes/charging.route.js';
 import receiptRouter from './routes/receipt.route.js';
 
-
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // --- Middleware ---
 app.use(cors());
@@ -28,8 +28,6 @@ app.use('/api/charging', chargingRouter);
 app.use('/api/receipts', receiptRouter);
 
 // --- Starta server ---
-const PORT = process.env.PORT || 3000;
-
 // 0.0.0.0 gör att servern lyssnar på alla nätverksadresser
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);
