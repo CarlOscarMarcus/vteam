@@ -7,9 +7,6 @@ import { useEffect, useState } from "react"
 // min dator, hos mamma och pappa
 const backendURL = "192.168.1.103"
 
-
-
-
 export default function AdminBikes() {
 const [bikes, setBikes] = useState([])
   useEffect(() => {
@@ -28,8 +25,6 @@ const [bikes, setBikes] = useState([])
     console.error(err)
   }
 
-
-
   }
   getBikes()
   })
@@ -44,7 +39,7 @@ const [bikes, setBikes] = useState([])
           {bikes.map((bike) => (
             <div className="bikeList" key={bike.id}>
             <p><strong>
-              CykelID: {bike.id}
+              Cykel-ID: {bike.id}
             </strong></p>
             <p>Batteri: {bike.battery}%<br></br>
             Position:  {bike.position_lat}, {bike.position_long}<br></br>
