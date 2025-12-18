@@ -8,6 +8,8 @@ import authRoutes from './routes/auth.route.js';
 import scootersRouter from './routes/scooters.route.js';
 import parkingRouter from './routes/parking.route.js';
 import chargingRouter from './routes/charging.route.js';
+import receiptRouter from './routes/receipt.route.js';
+
 
 dotenv.config();
 
@@ -23,6 +25,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/scooters', scootersRouter);
 app.use('/api/parking', parkingRouter);
 app.use('/api/charging', chargingRouter);
+app.use('/api/receipts', receiptRouter);
 
 // --- Starta server ---
 const PORT = process.env.PORT || 3000;

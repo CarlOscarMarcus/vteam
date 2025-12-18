@@ -21,8 +21,9 @@ export default function DashboardLayout() {
         
         <Tabs.Screen name="user" options={{ title: "Profil"}} />
         <Tabs.Screen name="map" options={{ title: "Karta"}} />
+        <Tabs.Screen name="balance" options={{ title: "Saldo"}} />
+        <Tabs.Screen name="receipts" options={{ title: "Betala"}} />
         <Tabs.Screen name="logout" options={{ title: "Logga ut"}} />
-
         </Tabs>
 
     )
