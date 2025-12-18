@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/UserContext';
-// Skapa formulär för att logga in
-
 
 // min dator, hemma
 // const backendURL = "192.168.32.7"

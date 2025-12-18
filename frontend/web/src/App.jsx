@@ -5,7 +5,15 @@ import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import History from "./pages/history";
 import Saldo from "./pages/saldo";
+
+//ADMIN
+import AdminBikes from "./pages/admin-cyklar";
+import AdminChargers from "./pages/admin-laddare";
+import AdminParkings from "./pages/admin-parkering";
 import AdminCustomers from "./pages/admin-kunder";
+import AdminRoute from "./components/Admin";
+
+//
 
 import Layout from "./components/Layout";
 import { Authentication } from "./components/Auth";
@@ -32,8 +40,12 @@ export default function App() {
         <Route path="map" element={<Authentication><MapPage /></Authentication>} /> {/* Kart-sidan */}
 
         {/* ADMIN */}
-        <Route path="admin-kunder" element={<Authentication><AdminCustomers /></Authentication>} />
-
+        <Route element={<AdminRoute />} >
+          <Route path="admin-kunder" element={<Authentication><AdminCustomers /></Authentication>} />
+          <Route path="admin-parkering" element={<Authentication><AdminParkings /></Authentication>} />
+          <Route path="admin-laddare" element={<Authentication><AdminChargers /></Authentication>} />
+          <Route path="admin-cyklar" element={<Authentication><AdminBikes /></Authentication>} />
+        </Route>
         
       </Route>
     </Routes>
