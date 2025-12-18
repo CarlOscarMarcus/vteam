@@ -5,6 +5,16 @@ import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import History from "./pages/history";
 import Saldo from "./pages/saldo";
+
+//ADMIN
+import AdminBikes from "./pages/admin-cyklar";
+import AdminChargers from "./pages/admin-laddare";
+import AdminParkings from "./pages/admin-parkering";
+import AdminCustomers from "./pages/admin-kunder";
+import AdminRoute from "./components/Admin";
+
+//
+
 import Layout from "./components/Layout";
 import { Authentication } from "./components/Auth";
 
@@ -23,13 +33,19 @@ export default function App() {
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
 
-
+        {/* VANLIG */}
         <Route path="profile" element={<Authentication><Profile /></Authentication>} />
         <Route path="history" element={<Authentication><History /></Authentication>} />
         <Route path="saldo" element={<Authentication><Saldo /></Authentication>} />
         <Route path="map" element={<Authentication><MapPage /></Authentication>} /> {/* Kart-sidan */}
-        {/* <Route path="logout" element={<Logout />} /> */}
 
+        {/* ADMIN */}
+        <Route element={<AdminRoute />} >
+          <Route path="admin-kunder" element={<Authentication><AdminCustomers /></Authentication>} />
+          <Route path="admin-parkering" element={<Authentication><AdminParkings /></Authentication>} />
+          <Route path="admin-laddare" element={<Authentication><AdminChargers /></Authentication>} />
+          <Route path="admin-cyklar" element={<Authentication><AdminBikes /></Authentication>} />
+        </Route>
         
       </Route>
     </Routes>
