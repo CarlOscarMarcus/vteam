@@ -9,6 +9,8 @@ const backendURL = "192.168.1.103"
 
 export default function CustomerList() {
 const [customers, setCustomers] = useState([])
+const [visibleCount, setVisibleCount] = useState(5)
+
   useEffect(() => {
     async function getCustomers() {
   try {
@@ -29,11 +31,18 @@ const [customers, setCustomers] = useState([])
   getCustomers()
   })
 
+  // Om det finns många användare så kommer bara några i taget visas.
+  const visibleCustomers = customers.slice(0, visibleCount)
+
+  const loadMore = () => {
+    setVisibleCount((prev) => prev + 5)
+  }
+
   return (
     <>
       <div>
         <h1> Kundöversikt</h1>
-        {customers.map((customer)=>(
+        {visibleCustomers.map((customer)=>(
           <div className="customer-list" key={customer.id}>
             <p><strong>
               Användar-ID: {customer.id}
@@ -47,6 +56,9 @@ const [customers, setCustomers] = useState([])
 
           </div>
         )) }
+        {visibleCount < customers.length && (
+          <button onClick={loadMore}>Ladda fler...</button>
+        )}
       </div>
     </>
   )

@@ -8,7 +8,8 @@ import { useEffect, useState } from "react"
 const backendURL = "192.168.1.103"
 
 export default function AdminBikes() {
-const [bikes, setBikes] = useState([])
+  const [visibleCount, setVisibleCount] = useState(5)
+  const [bikes, setBikes] = useState([])
   useEffect(() => {
     async function getBikes() {
   try {
@@ -29,6 +30,12 @@ const [bikes, setBikes] = useState([])
   getBikes()
   })
 
+  // Om det finns många cyklar så kommer bara några i taget visas.
+  const visibleBikes = bikes.slice(0, visibleCount)
+
+  const loadMore = () => {
+    setVisibleCount((prev) => prev + 5)
+  }
 
   return (
     <>
@@ -36,7 +43,7 @@ const [bikes, setBikes] = useState([])
         <h1> Cykelöversikt</h1>
         <h3> Alla cyklar i systemet</h3>
         
-          {bikes.map((bike) => (
+          {visibleBikes.map((bike) => (
             <div className="bikeList" key={bike.id}>
             <p><strong>
               Cykel-ID: {bike.id}
@@ -49,7 +56,9 @@ const [bikes, setBikes] = useState([])
             </div>
             
           ))}
-          
+          {visibleCount < bikes.length && (
+          <button onClick={loadMore}>Ladda fler...</button>
+        )}
       </div>
     </>
   )
