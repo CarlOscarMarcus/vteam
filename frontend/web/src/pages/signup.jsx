@@ -3,10 +3,13 @@ import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/UserContext';
 
-const backendURL = "192.168.68.103"
+// min dator, hemma
+// const backendURL = "192.168.32.7"
+
+// min dator, hos mamma och pappa
+const backendURL = "192.168.1.103"
 
 
-// backend ej klar
 async function SignupBackend(name, email, password) {
       const result = await fetch(`http://${backendURL}:3000/api/auth/signup`, {
         method: "POST",

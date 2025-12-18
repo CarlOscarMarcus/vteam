@@ -4,11 +4,6 @@ const router = express.Router();
 import pool from '../db.js';
 
 // GET all scooters
-const express = require('express');
-const router = express.Router();
-const pool = require('../db');
-
-// GET all users
 router.get('/', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM scooter');
@@ -45,4 +40,3 @@ router.get('/:id/repairs', async (req, res) => {
 });
 
 export default router;
-module.exports = router;

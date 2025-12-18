@@ -20,11 +20,6 @@ const Home = () => {
             <Link style={styles.link} href="/login">Logga in</Link>
             <Spacer style={{ height: 10 }} />
             <Link style={styles.link} href="/signup">Skapa konto</Link>
-            <Link style={styles.link} href="/map">map</Link>
-
-
-
-
         </ThemedView>
     )
 }

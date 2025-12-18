@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(255) NOT NULL,
     salt VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status INT DEFAULT 0
+    status INT DEFAULT 0,
+    balance DECIMAL(10,2) DEFAULT 0
 );
