@@ -5,6 +5,8 @@ import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import History from "./pages/history";
 import Saldo from "./pages/saldo";
+import AdminCustomers from "./pages/admin-kunder";
+
 import Layout from "./components/Layout";
 import { Authentication } from "./components/Auth";
 
@@ -23,12 +25,14 @@ export default function App() {
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
 
-
+        {/* VANLIG */}
         <Route path="profile" element={<Authentication><Profile /></Authentication>} />
         <Route path="history" element={<Authentication><History /></Authentication>} />
         <Route path="saldo" element={<Authentication><Saldo /></Authentication>} />
         <Route path="map" element={<Authentication><MapPage /></Authentication>} /> {/* Kart-sidan */}
-        {/* <Route path="logout" element={<Logout />} /> */}
+
+        {/* ADMIN */}
+        <Route path="admin-kunder" element={<Authentication><AdminCustomers /></Authentication>} />
 
         
       </Route>

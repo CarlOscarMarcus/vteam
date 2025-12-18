@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/UserContext';
 // Skapa formulär för att logga in
 
 
-const backendURL = "192.168.68.103"
+// min dator, hemma
+// const backendURL = "192.168.32.7"
+
+// min dator, hos mamma och pappa
+const backendURL = "192.168.1.103"
 
 
 async function LoginBackend(email, password) {
@@ -29,7 +33,7 @@ async function LoginBackend(email, password) {
 
 export default function Login() {
     const navigate = useNavigate();
-    const { LogIn } = useAuth()
+    const { LogIn, isAdmin, loggedIn, loadingUser } = useAuth()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
   
@@ -38,11 +42,20 @@ export default function Login() {
             const token = await LoginBackend(email, password)
             // sessionStorage.setItem("token", token);
             LogIn(token)
-            navigate("/profile")
+            
         } catch (err) {
             console.error(err)
         }
     }
+  useEffect(() => {
+    if (!loggedIn || loadingUser) return;
+
+    if (isAdmin) {
+      navigate("/admin-kunder");
+    } else {
+      navigate("/profile");
+    }
+  }, [loggedIn, loadingUser, isAdmin, navigate]);
 
   return (
     <>
