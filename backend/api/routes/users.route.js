@@ -14,4 +14,25 @@ router.get('/', async (req, res) => {
   }
 });
 
+//DELETE
+router.delete('/delete/:id', async (req, res) => {
+  try {
+    const { id } = req.params; // get id from URL
+    
+    const result = await pool.query('DELETE FROM users WHERE id = $1', [id]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      message: 'User deleted',
+      user: result.rows[0],
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;
