@@ -42,7 +42,7 @@ export default function AdminParkings() {
   return (
     <>
       <div>
-        <h1> Parkeringsöversikt</h1>
+        <h1>Alla parkeringar</h1>
             {visibleParkings.map((parking) => (
             <div className="parkingList" key={parking.id}>
             <p><strong>
