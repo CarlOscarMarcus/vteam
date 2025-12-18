@@ -1,12 +1,12 @@
 -- Mock charging stations
 INSERT INTO charging (position_lat, position_long, status)
 VALUES
-('59.3322', '18.0617', 1),   -- charging spot 1 (sthlm)
-('59.3210', '18.0621', 1),   -- charging spot 2 (sthlm)
-('59.3294', '18.0688', 0);   -- charging spot 3 (sthlm)
-('54.8990', '12.2165', 1),   -- charging spot 1 (malmö)
-('55.4365', '12.8760', 1),   -- charging spot 2 (malmö)
-('55.8876', '12.2134', 0);   -- charging spot 3 (malmö)
-('57.7610', '11.3211', 1),   -- charging spot 1 (gtb)
-('57.6370', '11.6013', 1),   -- charging spot 2 (gtb)
-('57.5367', '11.1599', 0);   -- charging spot 3 (gtb)
+('59.3328', '18.0660', 1),  -- Stockholm
+('59.3312', '18.0655', 1),
+('59.3335', '18.0675', 0),
+('55.6065', '12.9970', 1),  -- Malmö
+('55.6050', '13.0010', 1),
+('55.6070', '12.9955', 0),
+('57.7080', '11.9715', 1),  -- Göteborg
+('57.7070', '11.9735', 1),
+('57.7065', '11.9705', 0);
