@@ -19,6 +19,7 @@ export function UserProvider({ children }) {
     function LogIn(token2) {
         sessionStorage.setItem("token", token2)
         setToken(token2)
+        setLoadingUser(true)
     }
 
 
