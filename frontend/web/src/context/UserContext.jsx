@@ -5,7 +5,11 @@ const AuthContext = createContext()
 // const backendURL = "192.168.32.7"
 
 // min dator, hos mamma och pappa
-const backendURL = "192.168.1.103"
+//const backendURL = "192.168.1.103"
+
+//Cornelias dator
+const backendURL = "192.168.32.7";
+
 export function UserProvider({ children }) {
     const [token, setToken] = useState(sessionStorage.getItem("token"))
     const [loadingUser, setLoadingUser] = useState(true)
