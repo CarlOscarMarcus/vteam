@@ -7,7 +7,10 @@ import { useNavigate } from "react-router-dom";
 // const backendURL = "192.168.32.7"
 
 // min dator, hos mamma och pappa
-const backendURL = "192.168.1.103"
+//const backendURL = "192.168.1.103"
+
+//Cornelias dator
+const backendURL = "192.168.32.7";
 
 export default function Navbar() {
   const { loggedIn, LogOut, isAdmin, loadingUser } = useAuth();
@@ -39,9 +42,9 @@ export default function Navbar() {
           {/* VANLIG */}
           <Link to="/profile">Profil</Link>
           <Link to="/history">Historik</Link>
-          <Link to="/saldo">Saldo</Link>
-          {" | "}
-          <Link to="/map">Karta</Link> {/* Kart-länken */}
+          <Link to="/balance">Saldo</Link>
+          <Link to="/receipt">Kvitton</Link>
+          <Link to="/map">Karta</Link>
           </>
         )}
         

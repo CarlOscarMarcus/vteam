@@ -4,7 +4,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import History from "./pages/history";
-import Saldo from "./pages/saldo";
+import Balance from "./pages/balance";
+import Receipts from "./pages/receipt";
 
 //ADMIN
 import AdminBikes from "./pages/admin-cyklar";
@@ -36,8 +37,11 @@ export default function App() {
         {/* VANLIG */}
         <Route path="profile" element={<Authentication><Profile /></Authentication>} />
         <Route path="history" element={<Authentication><History /></Authentication>} />
-        <Route path="saldo" element={<Authentication><Saldo /></Authentication>} />
-        <Route path="map" element={<Authentication><MapPage /></Authentication>} /> {/* Kart-sidan */}
+        <Route path="map" element={<Authentication><MapPage /></Authentication>} />
+        <Route path="balance" element={<Authentication><Balance /></Authentication>} />
+        <Route path="receipt" element={<Authentication><Receipts /></Authentication>} />
+
+
 
         {/* ADMIN */}
         <Route element={<AdminRoute />} >
