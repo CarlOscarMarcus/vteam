@@ -4,6 +4,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 // import { useNavigate } from "react-router-dom";
 
+const backendURL = "localhost";
+
 
 export default function MapPage() {
   // const navigate = useNavigate();
@@ -53,9 +55,9 @@ export default function MapPage() {
     const fetchData = async () => {
       try {
         const [sRes, cRes, pRes] = await Promise.all([
-          fetch("http://192.168.32.7:3000/api/scooters"),
-          fetch("http://192.168.32.7:3000/api/charging"),
-          fetch("http://192.168.32.7:3000/api/parking"),
+          fetch("http://localhost:3000/api/scooters"),
+          fetch("http://localhost:3000/api/charging"),
+          fetch("http://localhost:3000/api/parking"),
         ]);
 
         const scootersData = await sRes.json();

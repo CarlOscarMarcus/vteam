@@ -7,9 +7,9 @@ import { useNavigate } from "react-router-dom";
 // const backendURL = "192.168.32.7"
 
 // min dator, hos mamma och pappa
-const backendURL = "192.168.1.103"
+// const backendURL = "192.168.1.103"
 
-
+const backendURL = "localhost"
 
 export default function CustomerList() {
 const [customers, setCustomers] = useState([])
@@ -46,8 +46,8 @@ const navigate = useNavigate()
   }
 
 function editUser(id) {
-  // navigate("/edit")
-  console.log(`uppdatera ${id}`)
+  navigate(`/admin-edit/${id}`)
+  // console.log(`uppdatera ${id}`)
 }
 
 async function deleteUser(id) {

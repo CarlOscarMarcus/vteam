@@ -6,7 +6,9 @@ import { useEffect, useState } from "react"
 // const backendURL = "192.168.32.7"
 
 // min dator, hos mamma och pappa
-const backendURL = "192.168.1.103"
+// const backendURL = "192.168.1.103"
+
+const backendURL = "localhost"
 
 export default function AdminChargers() {
   const [visibleCount, setVisibleCount] = useState(5)

@@ -6,7 +6,9 @@ import { useAuth } from '../context/UserContext';
 // const backendURL = "192.168.32.7"
 
 // min dator, hos mamma och pappa
-const backendURL = "192.168.1.103"
+// const backendURL = "192.168.1.103"
+
+const backendURL = "localhost"
 
 
 async function LoginBackend(email, password) {

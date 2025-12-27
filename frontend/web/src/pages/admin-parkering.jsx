@@ -1,12 +1,13 @@
 // Parkeringsöversikt
 import { useEffect, useState } from "react"
 // Cykelöversikt
-
 // min dator, hemma
 // const backendURL = "192.168.32.7"
 
 // min dator, hos mamma och pappa
-const backendURL = "192.168.1.103"
+// const backendURL = "192.168.1.103"
+
+const backendURL = "localhost"
 
 
 export default function AdminParkings() {
