@@ -36,6 +36,7 @@ export default function Navbar() {
           <Link to="/admin-parkering">Parkeringsöversikt</Link>
           <Link to="/admin-laddare">Laddare</Link>
 
+
           </>
         ) : (
           <>
@@ -44,12 +45,12 @@ export default function Navbar() {
           <Link to="/history">Historik</Link>
           <Link to="/balance">Saldo</Link>
           <Link to="/receipt">Kvitton</Link>
-          <Link to="/map">Karta</Link>
           </>
         )}
         
 
           {" | "}
+          <Link to="/map">Karta</Link> {/* Kart-länken */}
           <button onClick={logoutUser}>Logga ut</button>
         </>
       ) : (
