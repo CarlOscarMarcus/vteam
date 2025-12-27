@@ -8,11 +8,12 @@ import authRoutes from './routes/auth.route.js';
 import scootersRouter from './routes/scooters.route.js';
 import parkingRouter from './routes/parking.route.js';
 import chargingRouter from './routes/charging.route.js';
+import receiptRouter from './routes/receipt.route.js';
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 // --- Middleware ---
 app.use(cors());
@@ -24,12 +25,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/scooters', scootersRouter);
 app.use('/api/parking', parkingRouter);
 app.use('/api/charging', chargingRouter);
-app.use("/api/scooters", scootersRouter);
-app.use("/api/auth", authRoutes);
+app.use('/api/receipts', receiptRouter);
 
 // --- Starta server ---
-const PORT = process.env.PORT || 3000;
-
 // 0.0.0.0 gör att servern lyssnar på alla nätverksadresser
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);

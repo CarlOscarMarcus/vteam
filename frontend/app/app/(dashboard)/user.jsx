@@ -10,10 +10,11 @@ import ThemedLogo from '../../components/ThemedLogo' // logo style
 import Spacer from '../../components/Spacer' // space
 
 // min dator, hemma
-// const backendURL = "192.168.32.7"
+const backendURL = "192.168.32.7"
 
 // min dator, hos mamma och pappa
-const backendURL = "192.168.1.103"
+// const backendURL = "192.168.1.103"
+
 
 export default function User() {
     const [user, setUser] = useState(null)
@@ -25,7 +26,7 @@ export default function User() {
                 router.replace("/login")
             } else {
                 
-                const res = await fetch(`http://${backendURL}:3000/api/auth/me`, {
+                const res = await fetch(`http://${backendURL}:3000/api/users/me`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -64,13 +65,15 @@ export default function User() {
             <Text>🛴 E-post:</Text>
             <Text>{user.email}</Text>
             <Spacer />
-            <Text>🛴 Saldo</Text>
 
-            <Spacer />
             <Text>🛴 Resor</Text>
-
             <Spacer />
 
+            <Text>💰 Saldo</Text>
+            <Spacer />
+
+            <Text>💸 Betala</Text>
+            <Spacer />
 
             {/* ta bort sen, user kan vara "förstasida" som inloggad? */}
             <Link style={styles.link} href="/">Hem</Link> 

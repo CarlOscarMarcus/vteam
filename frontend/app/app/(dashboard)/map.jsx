@@ -11,82 +11,63 @@ const leafletHTML = `
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Leaflet Map</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <style>
-    html, body, #map { margin:0; padding:0; height:100%; width:100%; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Leaflet Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  html, body, #map { margin:0; padding:0; height:100%; width:100%; }
+</style>
 </head>
 <body>
-  <div id="map"></div>
+<div id="map"></div>
+<script>
+  const map = L.map('map').setView([59.334591, 18.063240], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
 
-  <script>
-    const map = L.map('map').setView([59.334591, 18.063240], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19
-    }).addTo(map);
+  const scooterIcon = L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/4357/4357585.png', iconSize: [40, 40] });
+  const chargerIcon = L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/4430/4430952.png', iconSize: [40, 40] });
+  const parkingIcon = L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/608/608690.png', iconSize: [40, 40] });
 
-    // 🔔 SIGNALERA TILL REACT NATIVE ATT KARTAN ÄR KLAR
-    window.ReactNativeWebView.postMessage(
-      JSON.stringify({ type: "map-ready" })
-    );
-
-    const scooterIcon = L.icon({
-      iconUrl: 'https://cdn-icons-png.flaticon.com/512/4357/4357585.png',
-      iconSize: [40, 40]
+  function updateMarkers(key, items, icon) {
+    if (!window[key]) window[key] = [];
+    window[key].forEach(m => map.removeLayer(m));
+    window[key] = [];
+    items.forEach(item => {
+      const m = L.marker([item.lat, item.lng], { icon }).addTo(map);
+      window[key].push(m);
     });
+  }
 
-    const chargerIcon = L.icon({
-      iconUrl: 'https://cdn-icons-png.flaticon.com/512/4430/4430952.png',
-      iconSize: [40, 40]
-    });
+  function handleMessage(event) {
+    let data;
+    try { data = JSON.parse(event.data); } catch { return; }
 
-    const parkingIcon = L.icon({
-      iconUrl: 'https://cdn-icons-png.flaticon.com/512/608/608690.png',
-      iconSize: [40, 40]
-    });
-
-    function handleMessage(event) {
-      let data;
-      try { data = JSON.parse(event.data); } catch { return; }
-
-      if (data.type === "position") {
-        const { latitude, longitude } = data.coords;
-        if (!window.userMarker) {
-          window.userMarker = L.marker([latitude, longitude]).addTo(map);
-          map.setView([latitude, longitude], 15);
-        } else {
-          window.userMarker.setLatLng([latitude, longitude]);
-        }
+    if (data.type === "position") {
+      const { latitude, longitude } = data.coords;
+      if (!window.userMarker) {
+        window.userMarker = L.marker([latitude, longitude]).addTo(map);
+        map.setView([latitude, longitude], 15);
+      } else {
+        window.userMarker.setLatLng([latitude, longitude]);
       }
-
-      function updateMarkers(key, icon) {
-        if (!window[key]) window[key] = [];
-        window[key].forEach(m => map.removeLayer(m));
-        window[key] = [];
-
-        data.items.forEach(item => {
-          const m = L.marker([item.lat, item.lng], { icon }).addTo(map);
-          window[key].push(m);
-        });
-      }
-
-      if (data.type === "scooters") updateMarkers("scooterMarkers", scooterIcon);
-      if (data.type === "chargers") updateMarkers("chargerMarkers", chargerIcon);
-      if (data.type === "parkings") updateMarkers("parkingMarkers", parkingIcon);
     }
 
-    document.addEventListener("message", handleMessage);
-    window.addEventListener("message", handleMessage);
-  </script>
+    if (data.type === "scooters") updateMarkers("scooterMarkers", data.items, scooterIcon);
+    if (data.type === "chargers") updateMarkers("chargerMarkers", data.items, chargerIcon);
+    if (data.type === "parkings") updateMarkers("parkingMarkers", data.items, parkingIcon);
+  }
+
+  window.addEventListener("message", handleMessage);
+
+  // Signalera till React Native att kartan är redo
+  window.ReactNativeWebView.postMessage(JSON.stringify({ type: "map-ready" }));
+</script>
 </body>
 </html>
 `;
 
-/* ---------------- REACT NATIVE ---------------- */
 export default function Map() {
   const webviewRef = useRef(null);
   const [mapReady, setMapReady] = useState(false);
@@ -108,16 +89,9 @@ export default function Map() {
     (async () => {
       try {
         const token = await getToken();
-        const headers = {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        };
+        const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
 
-        // min dator, hemma
-        // const backendURL = "192.168.32.7"
-
-        // min dator, hos mamma och pappa
-        const backendURL = "192.168.1.103"
+        const backendURL = "192.168.32.7"; // ändra vid behov
 
         const [s, c, p] = await Promise.all([
           fetch(`http://${backendURL}:3000/api/scooters`, { headers }),
@@ -125,9 +99,7 @@ export default function Map() {
           fetch(`http://${backendURL}:3000/api/parking`, { headers }),
         ]);
 
-        const [sd, cd, pd] = await Promise.all([
-          s.json(), c.json(), p.json()
-        ]);
+        const [sd, cd, pd] = await Promise.all([s.json(), c.json(), p.json()]);
 
         setScooters(sd.map(x => ({ id: x.id, lat: +x.position_lat, lng: +x.position_long })));
         setChargers(cd.map(x => ({ id: x.id, lat: +x.position_lat, lng: +x.position_long })));
@@ -142,9 +114,15 @@ export default function Map() {
   useEffect(() => {
     if (!mapReady || !webviewRef.current) return;
 
-    webviewRef.current.postMessage(JSON.stringify({ type: "scooters", items: scooters }));
-    webviewRef.current.postMessage(JSON.stringify({ type: "chargers", items: chargers }));
-    webviewRef.current.postMessage(JSON.stringify({ type: "parkings", items: parkings }));
+    const sendMarkers = () => {
+      webviewRef.current.postMessage(JSON.stringify({ type: "scooters", items: scooters }));
+      webviewRef.current.postMessage(JSON.stringify({ type: "chargers", items: chargers }));
+      webviewRef.current.postMessage(JSON.stringify({ type: "parkings", items: parkings }));
+    };
+
+    // liten timeout för säker leverans
+    const timer = setTimeout(sendMarkers, 200);
+    return () => clearTimeout(timer);
   }, [mapReady, scooters, chargers, parkings]);
 
   /* ---------- GPS ---------- */
@@ -156,9 +134,7 @@ export default function Map() {
       Location.watchPositionAsync(
         { accuracy: Location.Accuracy.High, distanceInterval: 5 },
         loc => {
-          webviewRef.current?.postMessage(
-            JSON.stringify({ type: "position", coords: loc.coords })
-          );
+          webviewRef.current?.postMessage(JSON.stringify({ type: "position", coords: loc.coords }));
         }
       );
     })();
@@ -179,7 +155,7 @@ export default function Map() {
           onMessage={(event) => {
             const msg = JSON.parse(event.nativeEvent.data);
             if (msg.type === "map-ready") {
-              console.log("🗺️ Map ready");
+              console.log("Map ready");
               setMapReady(true);
             }
           }}
