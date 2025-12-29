@@ -19,3 +19,16 @@ services:
       - "5432:5432"
     volumes:
       - ./backend/db:/docker-entrypoint-initdb.d
+
+  frontend:
+    build:
+      context: ./frontend/web
+      dockerfile: Dockerfile
+    container_name: frontend-web
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend/web:/app
+      - /app/node_modules
+    depends_on:
+      - api
