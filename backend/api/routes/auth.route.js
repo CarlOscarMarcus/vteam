@@ -47,6 +47,7 @@ router.post('/login', async (req, res) => {
 // logga in med google/oauth
 router.post("/oauth", async (req,res) => {
   const { credential } = req.body;
+   console.log("Credential received:", credential);
 
   try {
     const ticket = await client.verifyIdToken({
@@ -55,6 +56,7 @@ router.post("/oauth", async (req,res) => {
     })
 
     const payload = ticket.getPayload();
+    console.log("Payload:", payload);
     const email = payload.email;
     const name = payload.name;
 
@@ -64,7 +66,7 @@ router.post("/oauth", async (req,res) => {
     if (result.rows.length === 0) {
       const password = crypto.randomBytes(15).toString("hex");
       const password_hash = await bcrypt.hash(password, 10)
-      const newUser = await db.query("INSERT INTO users (email, name, password_hash) VALUES ($1, $2, $3) RETURNING id, email" , [email, name, password_hash])
+      const newUser = await db.query("INSERT INTO users (email, name, password_hash, salt) VALUES ($1, $2, $3, $4) RETURNING id, email" , [email, name, password_hash, 10])
       user = newUser.rows[0]
     } else {
       user = result.rows[0]
