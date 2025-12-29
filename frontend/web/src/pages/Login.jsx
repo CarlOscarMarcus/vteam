@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/UserContext';
+import { GoogleLogin } from '@react-oauth/google';
 
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+// logga in med "vanligt" konto
 async function loginBackend(email, password) {
   const res = await fetch(`${API_URL}/api/auth/login`, {
     method: "POST",
@@ -22,12 +24,30 @@ async function loginBackend(email, password) {
   return data.token;
 }
 
+// logga in med google-konto
+async function googleBackend(idToken) {
+  const res = await fetch(`${API_URL}/api/auth/oauth`, {
+    method: "POST",
+    headers: {"content-type": "application/json"},
+    body: JSON.stringify({ credential: idToken }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || "Inloggning misslyckades")
+  }
+
+  return data.token
+}
+
 export default function Login() {
   const navigate = useNavigate();
   const { LogIn, isAdmin, loggedIn, loadingUser } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const loginUser = async () => {
     try {
       const token = await loginBackend(email, password);
@@ -86,6 +106,16 @@ export default function Login() {
 
         <input type="submit" value="Logga in" />
       </form>
+
+    <GoogleLogin
+      onSuccess={credentialResponse => {
+        console.log(credentialResponse);
+        googleBackend(credentialResponse.credential);
+      }}
+      onError={() => {
+        console.log('Login Failed');
+      }}
+    />
     </div>
   );
 }
