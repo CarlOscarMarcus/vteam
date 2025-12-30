@@ -49,24 +49,6 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // const loginGoogle = useGoogleLogin({
-  //   flow: "implicit",
-  //   onSuccess: async (tokenResponse) => {
-  //     console.log("TokenResponse:", tokenResponse.credential)
-  //     try {
-  //       const token = await googleBackend(
-  //         tokenResponse.credential
-  //       );
-  //       LogIn(token);
-  //     } catch (err) {
-  //       console.error(err)
-  //       alert(err.message)
-  //     }
-  //   },
-  //   onError: () => {
-  //     alert("Google funkade inte.")
-  //   }
-  // })
   const loginUser = async () => {
     try {
       const token = await loginBackend(email, password);
@@ -125,25 +107,25 @@ export default function Login() {
 
         <input type="submit" value="Logga in" />
       </form>
-
-      {/* <button onClick={() => loginGoogle()}>
-        Logga in med Google
-      </button> */}
-<GoogleLogin
-  onSuccess={async credentialResponse => {
-    console.log("Credential:", credentialResponse.credential);
-    try {
-      const token = await googleBackend(credentialResponse.credential); // skickar till backend
-      LogIn(token); // Logga in i frontend context
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-    }
-  }}
-  onError={() => {
-    console.log('Login Failed');
-  }}
-/>
+        
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
+        <GoogleLogin // Google-knapp
+          onSuccess={async credentialResponse => {
+            // console.log("Credential:", credentialResponse.credential);
+            try {
+              const token = await googleBackend(credentialResponse.credential);
+              LogIn(token);
+            } catch (err) {
+              console.error(err);
+              alert(err.message);
+            }
+          }}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+        />
+      </div><br></br>
+      <br></br>
     </div>
   );
 }
