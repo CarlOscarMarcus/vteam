@@ -3,13 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/UserContext";
 // Hantera användare
 
-// min dator, hemma
-// const backendURL = "192.168.32.7"
+const API_URL = import.meta.env.VITE_API_URL;
 
-// min dator, hos mamma och pappa
-// const backendURL = "192.168.1.103"
-
-const backendURL = "localhost"
 
 export default function AdminEdit() {
     const { id } = useParams()
@@ -25,7 +20,7 @@ export default function AdminEdit() {
       async function getUser() {
         try {
 
-          const res = await fetch(`http://${backendURL}:3000/api/users/${id}` 
+          const res = await fetch(`${API_URL}/api/users/${id}` 
           );
 
           if (!res.ok) throw new Error("kunde inte hämta användaren.")

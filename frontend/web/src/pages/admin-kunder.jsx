@@ -3,13 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 // kundöversikt
 
-// min dator, hemma
-// const backendURL = "192.168.32.7"
+const API_URL = import.meta.env.VITE_API_URL;
 
-// min dator, hos mamma och pappa
-// const backendURL = "192.168.1.103"
-
-const backendURL = "localhost"
 
 export default function CustomerList() {
 const [customers, setCustomers] = useState([])
@@ -21,7 +16,7 @@ const navigate = useNavigate()
   useEffect(() => {
     async function getCustomers() {
   try {
-    const result = await fetch(`http://${backendURL}:3000/api/users`, {
+    const result = await fetch(`${API_URL}/api/users`, {
     method: "GET",
     headers: {"content-type": "application/json"}
     })

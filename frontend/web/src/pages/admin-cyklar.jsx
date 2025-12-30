@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react"
 // Cykelöversikt
 
-// min dator, hemma
-// const backendURL = "192.168.32.7"
+const API_URL = import.meta.env.VITE_API_URL;
 
-// min dator, hos mamma och pappa
-// const backendURL = "192.168.1.103"
-
-const backendURL = "localhost"
 
 export default function AdminBikes() {
   const [visibleCount, setVisibleCount] = useState(5)
@@ -15,7 +10,7 @@ export default function AdminBikes() {
   useEffect(() => {
     async function getBikes() {
   try {
-    const result = await fetch(`http://${backendURL}:3000/api/scooters`, {
+    const result = await fetch(`${API_URL}/api/scooters`, {
     method: "GET",
     headers: {"content-type": "application/json"}
     })
