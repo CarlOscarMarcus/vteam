@@ -14,6 +14,8 @@ import AdminParkings from "./pages/admin-parkering";
 import AdminCustomers from "./pages/admin-kunder";
 import AdminRoute from "./components/Admin";
 import AdminEdit from "./pages/admin-edit";
+import BikeParking from "./pages/parkera-cykel";
+
 
 
 //
@@ -52,6 +54,8 @@ export default function App() {
           <Route path="admin-laddare" element={<Authentication><AdminChargers /></Authentication>} />
           <Route path="admin-cyklar" element={<Authentication><AdminBikes /></Authentication>} />
           <Route path="admin-edit/:id" element={<Authentication><AdminEdit /></Authentication>} />
+          <Route path="parkera-cykel/:id" element={<Authentication><BikeParking /></Authentication>} />
+
 
           <Route path="map" element={<Authentication><MapPage /></Authentication>} /> {/* Kart-sidan */}
 

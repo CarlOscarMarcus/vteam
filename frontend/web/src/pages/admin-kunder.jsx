@@ -50,7 +50,7 @@ async function deleteUser(id) {
     if (!ok) return;
 
     try {
-    await fetch(`http://${backendURL}:3000/api/users/delete/${id}`, {
+    await fetch(`${API_URL}/api/users/delete/${id}`, {
     method: "DELETE",
     headers: {"content-type": "application/json"}
     })

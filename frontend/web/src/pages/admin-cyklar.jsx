@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
+
 // Cykelöversikt
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -7,6 +9,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 export default function AdminBikes() {
   const [visibleCount, setVisibleCount] = useState(5)
   const [bikes, setBikes] = useState([])
+  const navigate = useNavigate()
+  
   useEffect(() => {
     async function getBikes() {
   try {
@@ -34,6 +38,10 @@ export default function AdminBikes() {
     setVisibleCount((prev) => prev + 5)
   }
 
+  function parking(id) {
+      navigate(`/parkera-cykel/${id}`)
+  }
+
   return (
     <>
       <div>
@@ -50,6 +58,8 @@ export default function AdminBikes() {
             Status: {bike.status}<br></br>
             AnvändarID: {bike.user_id}</p>
             <br></br>
+            <button onClick={() => parking(bike.id)}>Parkera</button><br></br>
+
             </div>
             
           ))}
