@@ -14,12 +14,9 @@ export default function parkScooter() {
     const [status, setStatus] = useState("")
     const [user, setUser] = useState("")
     const [loading, setLoading] = useState(true)
+    const [parkings, setParkings] = useState([])
 
-
-    // hämta parkeringsplatser och spara i variabel/objekt. Gör sedan scroll-lista av dessa att välja
-    // hämta cykelinformation?
     // spara ny position (parkering) i cykeln
-
 
     // hämta information om cykeln som ska flyttas
     useEffect(() => {
@@ -28,11 +25,12 @@ export default function parkScooter() {
                 const res = await fetch(`${API_URL}/api/scooters/${id}`);
                 if (!res.ok) throw new Error ("Kunde inte hämta cykeln.")
                 const scooter = await res.json()
-                setBattery(scooter.battery)
-                setPositionLat(scooter.position_lat)
-                setPositionLong(scooter.position_long)
-                setStatus(scooter.status)
-                setUser(scooter.user_id)
+                setBattery(scooter[0].battery)
+                setPositionLat(scooter[0].position_lat)
+                setPositionLong(scooter[0].position_long)
+                setStatus(scooter[0].status)
+                setUser(scooter[0].user_id)
+                // console.log(scooter[0].battery)
             } catch (err) {
                 console.error(err)
             } finally {
@@ -42,10 +40,49 @@ export default function parkScooter() {
     getScooter()
     }, [id])
 
+    // hämta alla parkeringsplatser
+      
+    useEffect(() => {
+        async function getParkings() {
+            try {
+                const result = await fetch(`${API_URL}/api/parking`, {
+                method: "GET",
+                headers: {"content-type": "application/json"}
+            })
+
+            const data = await result.json()
+            // console.log(data)
+            setParkings(data)
+
+            } catch (err) {
+                console.error(err)
+            }
+
+        }
+    getParkings()
+    })
+
+    async function moveBike(e) {
+      e.preventDefault();
+
+        console.log(parkings)
+    }
+
   return (
     <>
       <div>
         <h1> Flytta cykel till parkering.</h1>
+        <form onSubmit={moveBike}>
+            <p>Scooter-id: {id}<br></br>
+            Batteri: {battery}<br></br>
+            Status: {status}<br></br>
+            Position: {position_lat}, {position_long}<br></br>
+            Användar-id: {user}</p>
+
+
+            <button type="submit">Spara</button>
+            </form><br></br>
+            <br></br>
       </div>
     </>
   )
