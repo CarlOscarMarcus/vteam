@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
-// flytta cykel till valfri parkering.
+// flytta cykel till valfri laddare.
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -14,8 +14,8 @@ export default function parkScooter() {
     const [status, setStatus] = useState("")
     const [user, setUser] = useState("")
     const [loading, setLoading] = useState(true)
-    const [parkings, setParkings] = useState([])
-    const [parkingspace, setParkingspace] = useState(null)
+    const [chargers, setChargers] = useState([])
+    const [chargingspot, setChargingspot] = useState(null)
 
     // spara ny position (parkering) i cykeln
 
@@ -44,44 +44,55 @@ export default function parkScooter() {
     // hämta alla parkeringsplatser
       
     useEffect(() => {
-        async function getParkings() {
+        async function getChargers() {
             try {
-                const result = await fetch(`${API_URL}/api/parking`, {
+                const result = await fetch(`${API_URL}/api/charging`, {
                 method: "GET",
                 headers: {"content-type": "application/json"}
             })
 
             const data = await result.json()
             // console.log(data)
-            setParkings(data)
+            setChargers(data)
 
             } catch (err) {
                 console.error(err)
             }
 
         }
-    getParkings()
+    getChargers()
     })
 
     async function moveBike(e) {
       e.preventDefault();
       const body = {
-        position_lat: parkingspace.position_lat,
-        position_long: parkingspace.position_long
+        position_lat: chargingspot.position_lat,
+        position_long: chargingspot.position_long
       }
-      console.log(body)
-      console.log(id)
+    //   console.log(body)
+    //   console.log(id)
         // skicka till backend, uppdatera position på cykeln
+        // ladda batteriet
         try {
-            const res = await fetch(`${API_URL}/api/scooters/update/${id}`,
+            const move = await fetch(`${API_URL}/api/scooters/update/${id}`,
                 { 
                     method: "PUT",
                     headers: { "content-type": "application/json"},
                     body: JSON.stringify( body )
                 }
                 )
-                if (!res.ok) throw new Error ("kunda inte flytta cykeln.")
-                 navigate("/admin-cyklar")
+                if (!move.ok) throw new Error ("kunda inte flytta cykeln.")
+
+                const value = 100
+                const charge = await fetch(`${API_URL}/api/scooters/${id}/battery/${value}`,
+                    {
+                        method: "PUT",
+                    }
+                )
+                if (!charge.ok) throw new Error ("kunda inte ladda cykeln.")
+
+                navigate("/admin-cyklar")
+
             
         } catch (err) {
             console.error(err)
@@ -91,14 +102,14 @@ export default function parkScooter() {
 
     function handleChange(e) {
         const parkingId = e.target.value
-        const chosenparking = parkings.find(p => p.id.toString() === parkingId)
-        setParkingspace(chosenparking)
+        const chosenCharger = chargers.find(p => p.id.toString() === parkingId)
+        setChargingspot(chosenCharger)
     }
 
   return (
     <>
       <div>
-        <h1> Flytta cykel till parkering.</h1>
+        <h1> Flytta cykel till laddare.</h1>
         <form onSubmit={moveBike}>
             <p>Scooter-id: {id}<br></br>
             Batteri: {battery}%<br></br>
@@ -106,10 +117,10 @@ export default function parkScooter() {
             Position: {position_lat}, {position_long}<br></br>
             Användar-id: {user}</p>
             <br></br>
-            <label>Välj parkering:</label><br></br>
-            <select name="parkering" onChange={handleChange}>
-                {parkings.map((parking) => (
-                    <option value={parking.id} key={parking.id}>Parkerings-ID: {parking.id} Position: {parking.position_lat}, {parking.position_long} </option>
+            <label>Välj laddare:</label><br></br>
+            <select name="laddare" onChange={handleChange}>
+                {chargers.map((charger) => (
+                    <option value={charger.id} key={charger.id}>Ladd-ID: {charger.id} Position: {charger.position_lat}, {charger.position_long} </option>
                 ))}
             </select><br></br>
             <br></br>

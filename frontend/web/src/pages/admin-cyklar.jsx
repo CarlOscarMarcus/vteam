@@ -38,8 +38,14 @@ export default function AdminBikes() {
     setVisibleCount((prev) => prev + 5)
   }
 
+  // flytta cykel till parkeringsplats
   function parking(id) {
       navigate(`/parkera-cykel/${id}`)
+  }
+
+  //flytta cykel till laddare
+  function charge(id) {
+    navigate(`/ladda-cykel/${id}`)
   }
 
   return (
@@ -61,6 +67,8 @@ export default function AdminBikes() {
             ? (
               <>
               <button onClick={() => parking(bike.id)} style={{color: "green"}}>Parkera</button><br></br>
+              <button onClick={() => charge(bike.id)} style={{color: "green"}}>Ladda</button><br></br>
+
               </>
             ) : (
               <p style={{color: "red"}}>Cykeln är i användning.</p>
