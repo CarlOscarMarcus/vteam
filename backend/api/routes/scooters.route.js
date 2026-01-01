@@ -75,4 +75,22 @@ router.put('/:id/battery/:value', async (req, res) => {
   }
 });
 
+//UPDATE
+router.put('/update/:id', async (req, res) => {
+  try {
+    const { position_lat, position_long } = req.body;
+    const { id } = req.params;
+
+    const result = await pool.query(`UPDATE scooter set position_long = $1, position_lat = $2 WHERE id = $3 RETURNING *`, [position_lat, position_long, id]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "scooter not found" });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;

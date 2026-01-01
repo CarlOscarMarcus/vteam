@@ -15,6 +15,7 @@ export default function parkScooter() {
     const [user, setUser] = useState("")
     const [loading, setLoading] = useState(true)
     const [parkings, setParkings] = useState([])
+    const [parkingspace, setParkingspace] = useState(null)
 
     // spara ny position (parkering) i cykeln
 
@@ -64,8 +65,34 @@ export default function parkScooter() {
 
     async function moveBike(e) {
       e.preventDefault();
+      const body = {
+        position_lat: parkingspace.position_lat,
+        position_long: parkingspace.position_long
+      }
+      console.log(body)
+      console.log(id)
+        // skicka till backend, uppdatera position på cykeln
+        try {
+            const res = await fetch(`${API_URL}/api/scooters/update/${id}`,
+                { 
+                    method: "PUT",
+                    headers: { "content-type": "application/json"},
+                    body: JSON.stringify( body )
+                }
+                )
+                if (!res.ok) throw new Error ("kunda inte flytta cykeln.")
+                 navigate("/admin-cyklar")
+            
+        } catch (err) {
+            console.error(err)
+        }
 
-        console.log(parkings)
+    }
+
+    function handleChange(e) {
+        const parkingId = e.target.value
+        const chosenparking = parkings.find(p => p.id.toString() === parkingId)
+        setParkingspace(chosenparking)
     }
 
   return (
@@ -74,12 +101,18 @@ export default function parkScooter() {
         <h1> Flytta cykel till parkering.</h1>
         <form onSubmit={moveBike}>
             <p>Scooter-id: {id}<br></br>
-            Batteri: {battery}<br></br>
+            Batteri: {battery}%<br></br>
             Status: {status}<br></br>
             Position: {position_lat}, {position_long}<br></br>
             Användar-id: {user}</p>
-
-
+            <br></br>
+            <label>Välj parkering:</label><br></br>
+            <select name="parkering" onChange={handleChange}>
+                {parkings.map((parking) => (
+                    <option value={parking.id} key={parking.id}>Id: {parking.id} Position: {parking.position_lat}, {parking.position_long} </option>
+                ))}
+            </select><br></br>
+            <br></br>
             <button type="submit">Spara</button>
             </form><br></br>
             <br></br>
