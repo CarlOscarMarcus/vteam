@@ -14,6 +14,9 @@ import AdminParkings from "./pages/admin-parkering";
 import AdminCustomers from "./pages/admin-kunder";
 import AdminRoute from "./components/Admin";
 import AdminEdit from "./pages/admin-edit";
+import BikeParking from "./pages/parkera-cykel";
+import BikeCharging from "./pages/ladda-cykel";
+import ServiceBike from "./pages/service-cykel";
 
 
 //
@@ -22,7 +25,6 @@ import Layout from "./components/Layout";
 import { Authentication } from "./components/Auth";
 
 import MapPage from './pages/Map'; 
-import { Logout } from "./pages/Logout";
 
 export default function App() {
   return (
@@ -52,6 +54,11 @@ export default function App() {
           <Route path="admin-laddare" element={<Authentication><AdminChargers /></Authentication>} />
           <Route path="admin-cyklar" element={<Authentication><AdminBikes /></Authentication>} />
           <Route path="admin-edit/:id" element={<Authentication><AdminEdit /></Authentication>} />
+          <Route path="parkera-cykel/:id" element={<Authentication><BikeParking /></Authentication>} />
+          <Route path="ladda-cykel/:id" element={<Authentication><BikeCharging /></Authentication>} />
+          <Route path="service-cykel/:id" element={<Authentication><ServiceBike /></Authentication>} />
+
+
 
           <Route path="map" element={<Authentication><MapPage /></Authentication>} /> {/* Kart-sidan */}
 
