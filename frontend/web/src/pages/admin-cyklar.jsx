@@ -57,8 +57,15 @@ export default function AdminBikes() {
             Position:  {bike.position_lat}, {bike.position_long}<br></br>
             Status: {bike.status}<br></br>
             AnvändarID: {bike.user_id}</p>
-            <br></br>
-            <button onClick={() => parking(bike.id)}>Parkera</button><br></br>
+            {!bike.user_id
+            ? (
+              <>
+              <button onClick={() => parking(bike.id)} style={{color: "green"}}>Parkera</button><br></br>
+              </>
+            ) : (
+              <p style={{color: "red"}}>Cykeln är i användning.</p>
+            )}
+            
 
             </div>
             
