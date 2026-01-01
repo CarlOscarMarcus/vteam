@@ -16,7 +16,7 @@ import AdminRoute from "./components/Admin";
 import AdminEdit from "./pages/admin-edit";
 import BikeParking from "./pages/parkera-cykel";
 import BikeCharging from "./pages/ladda-cykel";
-
+import ServiceBike from "./pages/service-cykel";
 
 
 //
@@ -56,6 +56,7 @@ export default function App() {
           <Route path="admin-edit/:id" element={<Authentication><AdminEdit /></Authentication>} />
           <Route path="parkera-cykel/:id" element={<Authentication><BikeParking /></Authentication>} />
           <Route path="ladda-cykel/:id" element={<Authentication><BikeCharging /></Authentication>} />
+          <Route path="service-cykel/:id" element={<Authentication><ServiceBike /></Authentication>} />
 
 
 

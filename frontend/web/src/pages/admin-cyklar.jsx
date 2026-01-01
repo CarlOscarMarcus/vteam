@@ -48,6 +48,11 @@ export default function AdminBikes() {
     navigate(`/ladda-cykel/${id}`)
   }
 
+  //cykel på service
+  function service(id) {
+    navigate(`/service-cykel/${id}`)
+  }
+
   return (
     <>
       <div>
@@ -68,6 +73,8 @@ export default function AdminBikes() {
               <>
               <button onClick={() => parking(bike.id)} style={{color: "green"}}>Parkera</button><br></br>
               <button onClick={() => charge(bike.id)} style={{color: "green"}}>Ladda</button><br></br>
+              <button onClick={() => service(bike.id)} style={{color: "green"}}>Service</button><br></br>
+
 
               </>
             ) : (
