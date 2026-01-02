@@ -45,7 +45,8 @@ export default function AdminParkings() {
               Parkerings-ID: {parking.id}
             </strong></p>
             <p>Position:  {parking.position_lat}, {parking.position_long}<br></br>
-            Status: {parking.status}<br></br></p>
+            Status: {parking.status}<br></br>
+            Parkerade cyklar: {parking.scooter_id}</p>
             <br></br>
             </div>
             

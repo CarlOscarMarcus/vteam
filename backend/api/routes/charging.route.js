@@ -14,4 +14,22 @@ router.get('/', async (req, res) => {
   }
 });
 
+//UPDATE
+router.put('/update/:id/:scooter_id', async (req, res) => {
+  try {
+    // const { scooter_id } = req.body;
+    const { id, scooter_id } = req.params;
+
+    const result = await pool.query(`UPDATE charging set scooter_id = $1 WHERE id = $2 RETURNING *`, [scooter_id, id]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Could not park scooter at charging station." });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;

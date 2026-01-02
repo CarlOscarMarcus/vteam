@@ -45,7 +45,8 @@ export default function AdminChargers() {
               Ladd-ID: {charger.id}
             </strong></p>
             <p>Position:  {charger.position_lat}, {charger.position_long}<br></br>
-            Status: {charger.status}<br></br></p>
+            Status: {charger.status}<br></br>
+            Laddande cykel-id: {charger.scooter_id}</p>
             <br></br>
             </div>
             

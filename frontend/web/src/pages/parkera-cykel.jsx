@@ -108,6 +108,7 @@ export default function parkScooter() {
             <br></br>
             <label>Välj parkering:</label><br></br>
             <select name="parkering" onChange={handleChange}>
+                <option>Välj...</option>
                 {parkings.map((parking) => (
                     <option value={parking.id} key={parking.id}>Parkerings-ID: {parking.id} Position: {parking.position_lat}, {parking.position_long} </option>
                 ))}

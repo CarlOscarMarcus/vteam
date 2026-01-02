@@ -69,8 +69,7 @@ export default function parkScooter() {
         position_lat: chargingspot.position_lat,
         position_long: chargingspot.position_long
       }
-    //   console.log(body)
-    //   console.log(id)
+
         // skicka till backend, uppdatera position på cykeln
         // ladda batteriet
         try {
@@ -90,6 +89,13 @@ export default function parkScooter() {
                     }
                 )
                 if (!charge.ok) throw new Error ("kunda inte ladda cykeln.")
+
+                const result = await fetch(`${API_URL}/api/charging/update/${chargingspot.id}/${id}`,
+                    {
+                        method: "PUT",
+                    }
+                )
+                if (!result.ok) throw new Error ("kunda inte uppdatera laddare med scooter_id.")
 
                 navigate("/admin-cyklar")
 
@@ -119,7 +125,10 @@ export default function parkScooter() {
             <br></br>
             <label>Välj laddare:</label><br></br>
             <select name="laddare" onChange={handleChange}>
-                {chargers.map((charger) => (
+                <option>Välj...</option>
+                {chargers
+                .filter(charger => charger.scooter_id === null)
+                .map((charger) => (
                     <option value={charger.id} key={charger.id}>Ladd-ID: {charger.id} Position: {charger.position_lat}, {charger.position_long} </option>
                 ))}
             </select><br></br>
