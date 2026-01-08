@@ -9,6 +9,7 @@ import scootersRouter from './routes/scooters.route.js';
 import parkingRouter from './routes/parking.route.js';
 import chargingRouter from './routes/charging.route.js';
 import receiptRouter from './routes/receipt.route.js';
+import historyRoute from './routes/history.route.js'
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use('/api/scooters', scootersRouter);
 app.use('/api/parking', parkingRouter);
 app.use('/api/charging', chargingRouter);
 app.use('/api/receipts', receiptRouter);
+app.use('/api/history', historyRoute)
 
 // --- Starta server ---
 // 0.0.0.0 gör att servern lyssnar på alla nätverksadresser
