@@ -1,10 +1,14 @@
--- Mock scooters
-INSERT INTO scooter (battery, position_lat, position_long, status, user_id)
+INSERT INTO scooter (battery, position_lat, position_long, status, is_available)
 VALUES
-(85, '59.33258', '18.0649', 1, 1),   -- Joe (Stockholm)
-(40, '59.3311', '18.0662', 0, 2),    -- Jane (Stockholm)
-(50, '55.6050', '13.0000', 1, 1),    -- Joe (Malmö)
-(35, '55.6070', '12.9950', 0, 2),    -- Jane (Malmö)
-(90, '57.7089', '11.9746', 1, 1),    -- Joe (Göteborg)
-(70, '57.7060', '11.9700', 0, null),    -- Jane (Göteborg)
-(100, '59.3340', '18.0650', 1, null); -- unassigned (Stockholm)
+-- Stockholm
+(85, 59.332580, 18.064900, 'ok', true),
+(40, 59.331100, 18.066200, 'ok', false),
+(100, 59.334000, 18.065000, 'ok', true),
+
+-- Malmö
+(50, 55.605000, 13.000000, 'ok', true),
+(35, 55.607000, 12.995000, 'ok', false),
+
+-- Göteborg
+(90, 57.708900, 11.974600, 'ok', true),
+(70, 57.706000, 11.970000, 'ok', false);
