@@ -35,6 +35,8 @@ export default function Navbar() {
           <Link to="/admin-cyklar">Cykelöversikt</Link>
           <Link to="/admin-parkering">Parkeringsöversikt</Link>
           <Link to="/admin-laddare">Laddare</Link>
+          <Link to="/map">Karta</Link> {/* Kart-länken */}
+
 
 
           </>

@@ -2,13 +2,8 @@
 import { useEffect, useState } from "react"
 // Cykelöversikt
 
-// min dator, hemma
-// const backendURL = "192.168.32.7"
+const API_URL = import.meta.env.VITE_API_URL;
 
-// min dator, hos mamma och pappa
-// const backendURL = "192.168.1.103"
-
-const backendURL = "localhost"
 
 export default function AdminChargers() {
   const [visibleCount, setVisibleCount] = useState(5)
@@ -16,7 +11,7 @@ export default function AdminChargers() {
   useEffect(() => {
     async function getChargers() {
   try {
-    const result = await fetch(`http://${backendURL}:3000/api/charging`, {
+    const result = await fetch(`${API_URL}/api/charging`, {
     method: "GET",
     headers: {"content-type": "application/json"}
     })
@@ -50,7 +45,8 @@ export default function AdminChargers() {
               Ladd-ID: {charger.id}
             </strong></p>
             <p>Position:  {charger.position_lat}, {charger.position_long}<br></br>
-            Status: {charger.status}<br></br></p>
+            Status: {charger.status}<br></br>
+            Laddande cykel-id: {charger.scooter_id}</p>
             <br></br>
             </div>
             

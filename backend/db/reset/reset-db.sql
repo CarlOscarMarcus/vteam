@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS scooter CASCADE;
 DROP TABLE IF EXISTS parking CASCADE;
 DROP TABLE IF EXISTS charging CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS history CASCADE;
 
 -- ==================================
 -- CREATE TABLES
@@ -20,6 +21,7 @@ DROP TABLE IF EXISTS users CASCADE;
 \i tables/05-parking.sql
 \i tables/06-charging.sql
 \i tables/08-rental.sql
+\i tables/07-history.sql
 
 -- ==================================
 -- INSERT MOCK DATA
@@ -30,3 +32,4 @@ DROP TABLE IF EXISTS users CASCADE;
 \i mock/04-repair.sql
 \i mock/05-parking.sql
 \i mock/06-charging.sql
+\i mock/07-history.sql

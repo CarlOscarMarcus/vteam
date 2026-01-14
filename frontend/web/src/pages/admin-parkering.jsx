@@ -1,13 +1,8 @@
 // Parkeringsöversikt
 import { useEffect, useState } from "react"
 // Cykelöversikt
-// min dator, hemma
-// const backendURL = "192.168.32.7"
+const API_URL = import.meta.env.VITE_API_URL;
 
-// min dator, hos mamma och pappa
-// const backendURL = "192.168.1.103"
-
-const backendURL = "localhost"
 
 
 export default function AdminParkings() {
@@ -16,7 +11,7 @@ export default function AdminParkings() {
   useEffect(() => {
     async function getParkings() {
   try {
-    const result = await fetch(`http://${backendURL}:3000/api/parking`, {
+    const result = await fetch(`${API_URL}/api/parking`, {
     method: "GET",
     headers: {"content-type": "application/json"}
     })
@@ -50,7 +45,8 @@ export default function AdminParkings() {
               Parkerings-ID: {parking.id}
             </strong></p>
             <p>Position:  {parking.position_lat}, {parking.position_long}<br></br>
-            Status: {parking.status}<br></br></p>
+            Status: {parking.status}<br></br>
+            Parkerade cyklar: {parking.scooter_id}</p>
             <br></br>
             </div>
             

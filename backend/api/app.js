@@ -10,6 +10,7 @@ import parkingRouter from './routes/parking.route.js';
 import chargingRouter from './routes/charging.route.js';
 import receiptRouter from './routes/receipt.route.js';
 import rentRoutes from './routes/rent.route.js';
+import historyRoute from './routes/history.route.js'
 
 dotenv.config();
 
@@ -17,7 +18,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // --- Middleware ---
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:5173", "http://frontend-web:5173"],
+  credentials: true,
+}));
 app.use(express.json());
 
 // --- Routes ---
@@ -28,6 +32,7 @@ app.use('/api/parking', parkingRouter);
 app.use('/api/charging', chargingRouter);
 app.use('/api/receipts', receiptRouter);
 app.use('/api/rent', rentRoutes);
+app.use('/api/history', historyRoute)
 
 // --- Starta server ---
 // 0.0.0.0 gör att servern lyssnar på alla nätverksadresser

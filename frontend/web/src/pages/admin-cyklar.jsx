@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
+
 // Cykelöversikt
 
-// min dator, hemma
-// const backendURL = "192.168.32.7"
+const API_URL = import.meta.env.VITE_API_URL;
 
-// min dator, hos mamma och pappa
-// const backendURL = "192.168.1.103"
-
-const backendURL = "localhost"
 
 export default function AdminBikes() {
   const [visibleCount, setVisibleCount] = useState(5)
   const [bikes, setBikes] = useState([])
+  const navigate = useNavigate()
+  
   useEffect(() => {
     async function getBikes() {
   try {
-    const result = await fetch(`http://${backendURL}:3000/api/scooters`, {
+    const result = await fetch(`${API_URL}/api/scooters`, {
     method: "GET",
     headers: {"content-type": "application/json"}
     })
@@ -39,6 +38,21 @@ export default function AdminBikes() {
     setVisibleCount((prev) => prev + 5)
   }
 
+  // flytta cykel till parkeringsplats
+  function parking(id) {
+      navigate(`/parkera-cykel/${id}`)
+  }
+
+  //flytta cykel till laddare
+  function charge(id) {
+    navigate(`/ladda-cykel/${id}`)
+  }
+
+  //cykel på service
+  function service(id) {
+    navigate(`/service-cykel/${id}`)
+  }
+
   return (
     <>
       <div>
@@ -54,7 +68,20 @@ export default function AdminBikes() {
             Position:  {bike.position_lat}, {bike.position_long}<br></br>
             Status: {bike.status}<br></br>
             AnvändarID: {bike.user_id}</p>
-            <br></br>
+            {!bike.user_id
+            ? (
+              <>
+              <button onClick={() => parking(bike.id)} style={{color: "green"}}>Parkera</button><br></br>
+              <button onClick={() => charge(bike.id)} style={{color: "green"}}>Ladda</button><br></br>
+              <button onClick={() => service(bike.id)} style={{color: "green"}}>Service</button><br></br>
+
+
+              </>
+            ) : (
+              <p style={{color: "red"}}>Cykeln är i användning.</p>
+            )}
+            
+
             </div>
             
           ))}
