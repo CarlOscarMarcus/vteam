@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Link, router } from "expo-router";
+import { Link, router, useFocusEffect } from "expo-router";
 import { WebView } from "react-native-webview";
 import * as Location from "expo-location";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { getToken } from "../../components/Token.jsx";
 import ThemedView from "../../components/ThemedView";
 
@@ -34,8 +34,18 @@ const leafletHTML = `
     if (!window[key]) window[key] = [];
     window[key].forEach(m => map.removeLayer(m));
     window[key] = [];
+
     items.forEach(item => {
       const m = L.marker([item.lat, item.lng], { icon }).addTo(map);
+
+      // Klick på scooter
+      m.on("click", () => {
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: "scooter-selected",
+          scooter: item
+        }));
+      });
+
       window[key].push(m);
     });
   }
@@ -54,11 +64,15 @@ const leafletHTML = `
       }
     }
 
-    if (data.type === "scooters") updateMarkers("scooterMarkers", data.items, scooterIcon);
-    if (data.type === "chargers") updateMarkers("chargerMarkers", data.items, chargerIcon);
-    if (data.type === "parkings") updateMarkers("parkingMarkers", data.items, parkingIcon);
-  }
+    if (data.type === "scooters")
+      updateMarkers("scooterMarkers", data.items, scooterIcon);
 
+    if (data.type === "chargers")
+      updateMarkers("chargerMarkers", data.items, chargerIcon);
+
+    if (data.type === "parkings")
+      updateMarkers("parkingMarkers", data.items, parkingIcon);
+  }
   window.addEventListener("message", handleMessage);
 
   // Signalera till React Native att kartan är redo
@@ -73,8 +87,40 @@ export default function Map() {
   const [mapReady, setMapReady] = useState(false);
 
   const [scooters, setScooters] = useState([]);
+  const [selectedScooter, setSelectedScooter] = useState(null);
   const [chargers, setChargers] = useState([]);
   const [parkings, setParkings] = useState([]);
+  //Cornelias dator
+  const backendURL = "192.168.32.7";
+
+  const loadScooters = async () => {
+    try {
+      const token = await getToken();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const res = await fetch(
+        `http://${backendURL}:3000/api/scooters`,
+        { headers }
+      );
+
+      const data = await res.json();
+
+      setScooters(
+        data.map(x => ({
+          id: x.id,
+          lat: +x.position_lat,
+          lng: +x.position_long,
+          battery: x.battery,
+          available: x.is_available,
+        }))
+      );
+    } catch (e) {
+      console.error("Scooter reload failed:", e);
+    }
+  };
 
   /* ---------- AUTH ---------- */
   useEffect(() => {
@@ -84,31 +130,45 @@ export default function Map() {
     })();
   }, []);
 
-  /* ---------- API ---------- */
+/* ---------- API ---------- */
   useEffect(() => {
     (async () => {
       try {
         const token = await getToken();
-        const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
 
-        const backendURL = "192.168.32.7"; // ändra vid behov
-
-        const [s, c, p] = await Promise.all([
-          fetch(`http://${backendURL}:3000/api/scooters`, { headers }),
+        const [c, p] = await Promise.all([
           fetch(`http://${backendURL}:3000/api/charging`, { headers }),
           fetch(`http://${backendURL}:3000/api/parking`, { headers }),
         ]);
 
-        const [sd, cd, pd] = await Promise.all([s.json(), c.json(), p.json()]);
+        const [cd, pd] = await Promise.all([c.json(), p.json()]);
 
-        setScooters(sd.map(x => ({ id: x.id, lat: +x.position_lat, lng: +x.position_long })));
-        setChargers(cd.map(x => ({ id: x.id, lat: +x.position_lat, lng: +x.position_long })));
-        setParkings(pd.map(x => ({ id: x.id, lat: +x.position_lat, lng: +x.position_long })));
+        setChargers(cd.map(x => ({
+          id: x.id,
+          lat: +x.position_lat,
+          lng: +x.position_long,
+        })));
+
+        setParkings(pd.map(x => ({
+          id: x.id,
+          lat: +x.position_lat,
+          lng: +x.position_long,
+        })));
       } catch (e) {
         console.error("API error:", e);
       }
     })();
   }, []);
+
+    useFocusEffect(
+    useCallback(() => {
+      loadScooters();
+    }, [])
+  );
 
   /* ---------- SEND MARKERS ---------- */
   useEffect(() => {
@@ -120,7 +180,6 @@ export default function Map() {
       webviewRef.current.postMessage(JSON.stringify({ type: "parkings", items: parkings }));
     };
 
-    // liten timeout för säker leverans
     const timer = setTimeout(sendMarkers, 200);
     return () => clearTimeout(timer);
   }, [mapReady, scooters, chargers, parkings]);
@@ -140,11 +199,39 @@ export default function Map() {
     })();
   }, []);
 
+  const startRent = async () => {
+    try {
+      const token = await getToken();
+
+      await fetch(`http://${backendURL}:3000/api/rent/start`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          scooterId: selectedScooter.id,
+        }),
+      });
+
+      setSelectedScooter(null);
+      router.push({
+        pathname: "/ride",
+        params: { scooterId: selectedScooter.id }
+      });
+    } catch (e) {
+      console.error("Rent error:", e);
+    }
+  };
+
   return (
     <ThemedView style={styles.container}>
-      <Text style={styles.title}>🛴 Hoci scooters</Text>
-      <Link style={styles.link} href="/">Hem</Link>
+      {/* Diskret header */}
+      <View style={styles.header}>
+        <Text style={styles.title}>🛴 Hoci scooters</Text>
+      </View>
 
+      {/* Karta */}
       <View style={styles.mapContainer}>
         <WebView
           ref={webviewRef}
@@ -154,22 +241,101 @@ export default function Map() {
           domStorageEnabled
           onMessage={(event) => {
             const msg = JSON.parse(event.nativeEvent.data);
+
             if (msg.type === "map-ready") {
-              console.log("Map ready");
               setMapReady(true);
+            }
+
+            if (msg.type === "scooter-selected") {
+              setSelectedScooter(msg.scooter);
             }
           }}
           style={{ flex: 1 }}
         />
       </View>
+
+      {/* Hyr-panel */}
+      {selectedScooter && (
+        <View style={styles.rentPanel}>
+          <Text style={styles.rentTitle}>
+            🛴 Scooter #{selectedScooter.id}
+          </Text>
+
+          <Text>Batteri: {selectedScooter.battery}%</Text>
+
+          {!selectedScooter.available && (
+            <Text style={{ color: "red" }}>Ej tillgänglig</Text>
+          )}
+
+          {selectedScooter.available && (
+            <Text style={styles.rentButton} onPress={startRent}>
+              Hyr
+            </Text>
+          )}
+
+          <Text style={styles.cancel} onPress={() => setSelectedScooter(null)}>
+            Avbryt
+          </Text>
+        </View>
+      )}
     </ThemedView>
   );
 }
-
 /* ---------------- STYLES ---------------- */
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  title: { fontSize: 20, fontWeight: "bold", margin: 10 },
-  link: { fontWeight: "bold", marginBottom: 10 },
-  mapContainer: { flex: 1 },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+
+  header: {
+    paddingTop: 45,
+    paddingBottom: 8,
+    paddingHorizontal: 16,
+    backgroundColor: "#fff",
+    zIndex: 2,
+  },
+
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+
+  mapContainer: {
+    flex: 1,
+  },
+
+  rentPanel: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#fff",
+    padding: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    elevation: 8,
+  },
+
+  rentTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 6,
+  },
+
+  rentButton: {
+    marginTop: 10,
+    padding: 12,
+    backgroundColor: "#0a7",
+    color: "#fff",
+    textAlign: "center",
+    borderRadius: 8,
+    fontWeight: "bold",
+  },
+
+  cancel: {
+    marginTop: 8,
+    textAlign: "center",
+    color: "#666",
+  },
 });

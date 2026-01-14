@@ -54,7 +54,7 @@ router.put('/:id/battery/:value', async (req, res) => {
       `
       UPDATE scooter
       SET battery = LEAST(100, GREATEST(0, battery + $1))
-      WHERE scooter_id = $2
+      WHERE id = $2
       RETURNING battery;
       `,
       [delta, id]

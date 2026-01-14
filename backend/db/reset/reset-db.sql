@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS users CASCADE;
 \i tables/04-repair.sql
 \i tables/05-parking.sql
 \i tables/06-charging.sql
+\i tables/07-rental.sql
 
 -- ==================================
 -- INSERT MOCK DATA
