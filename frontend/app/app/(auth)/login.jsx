@@ -9,7 +9,7 @@ import ThemedView from '../../components/ThemedView' // basic style
 import ThemedLogo from '../../components/ThemedLogo' // logo style
 import ThemedInput from '../../components/ThemedInput' // input style
 
-// min dator, hemma
+// Cornelias dator
 const backendURL = "192.168.32.7"
 
 // min dator, hos mamma och pappa

@@ -1,17 +1,21 @@
 // app/(dashboard)/receipts.jsx
 import { StyleSheet, Text, Pressable, FlatList, Button, Alert, Keyboard } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getToken } from "../../components/Token.jsx";
 import ThemedView from "../../components/ThemedView";
+import { useFocusEffect } from "expo-router";
 
+//Cornelias dator
 const backendURL = "192.168.32.7";
 
 export default function Receipts({ onBalanceUpdate }) {
   const [receipts, setReceipts] = useState([]);
 
-  useEffect(() => {
-    loadReceipts();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadReceipts();
+    }, [])
+  );
 
   const loadReceipts = async () => {
     try {
@@ -65,35 +69,41 @@ export default function Receipts({ onBalanceUpdate }) {
   };
 
   const renderReceipt = ({ item }) => {
-    const remaining = item.cost - item.payment;
-    const paid = remaining <= 0;
+    const paid = item.payment >= item.cost;
 
     return (
       <Pressable style={styles.card}>
         <Text style={styles.cardTitle}>Kvitto #{item.id}</Text>
         <Text>Belopp: {item.cost} kr</Text>
-        <Text>Betalt: {item.payment} kr</Text>
-        {!paid && <Text>Återstående: {remaining} kr</Text>}
-        <Text style={[styles.status, { color: paid ? "#2e7d32" : "#c62828" }]}>
-          {paid ? "✔ Betald" : "⏳ Obetald / Delvis betald"}
+
+        <Text
+          style={[
+            styles.status,
+            { color: paid ? "#2e7d32" : "#c62828" },
+          ]}
+        >
+          {paid ? "✔ Betald" : "⏳ Obetald"}
         </Text>
+
         {!paid && (
-          <Button title={`Betala ${remaining} kr`} onPress={() => payReceipt(item.id)} />
+          <Button
+            title={`Betala ${item.cost} kr`}
+            onPress={() => payReceipt(item.id)}
+          />
         )}
       </Pressable>
     );
   };
 
-  const sortedReceipts = [...receipts].sort((a, b) => (a.payment < a.cost ? -1 : 1));
-
   return (
     <ThemedView style={styles.container}>
       <Text style={styles.title}>📄 Kvitton</Text>
-      {sortedReceipts.length === 0 ? (
+
+      {receipts.length === 0 ? (
         <Text>Inga kvitton!</Text>
       ) : (
         <FlatList
-          data={sortedReceipts}
+          data={receipts}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderReceipt}
           contentContainerStyle={{ paddingBottom: 20 }}
@@ -102,7 +112,6 @@ export default function Receipts({ onBalanceUpdate }) {
     </ThemedView>
   );
 }
-
 const styles = StyleSheet.create({
   container: { flex: 1, paddingTop: 50, paddingHorizontal: 16 },
   title: { fontSize: 22, fontWeight: "bold", marginBottom: 16 },
