@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { WebSocketServer } from "ws";
 
 const backend_url = process.env.BACKEND_URL || "http://localhost:3000"
 let users = []
@@ -7,6 +8,16 @@ const rented = new Map()
 
 
 console.log("bike simulator successfully started!")
+
+// starta websocket
+const wss = new WebSocketServer({ port: 8080 })
+wss.on("connection", (ws) => {
+    console.log("Websocket is connected!")
+
+    ws.on("close", () => {
+        console.log("Websocket is disconnected")
+    })
+})
 
 // hämta användare
 async function getUsers() {
@@ -119,6 +130,26 @@ Hastighet: ${speed.toFixed(1)} km/h`)
                 
             }   
         }
+
+        // spara data, förbered för websocket
+        const payload = scooters.map(s => ({
+            id: s.id,
+            position_lat: s.position_lat,
+            position_long: s.position_long,
+            battery: s.battery,
+            status: s.status,
+            is_available: s.is_available
+        }))
+
+        // skicka
+        wss.clients.forEach(client => {
+            if (client.readyState === 1) {
+                client.send(JSON.stringify({
+                    type: "scooter_update",
+                    data: payload
+                }))
+            }
+        })
      } catch (err) {
         console.error("Simulator error:", err.message)
     }
