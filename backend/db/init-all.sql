@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS charging CASCADE;
 \i /docker-entrypoint-initdb.d/tables/04-repair.sql
 \i /docker-entrypoint-initdb.d/tables/05-parking.sql
 \i /docker-entrypoint-initdb.d/tables/06-charging.sql
-\i /docker-entrypoint-initdb.d/tables/07-rental.sql
+\i /docker-entrypoint-initdb.d/tables/08-rental.sql
 
 \i /docker-entrypoint-initdb.d/mock/01-users.sql
 \i /docker-entrypoint-initdb.d/mock/02-scooter.sql
