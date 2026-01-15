@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS history CASCADE;
 \i tables/04-repair.sql
 \i tables/05-parking.sql
 \i tables/06-charging.sql
+\i tables/08-rental.sql
 \i tables/07-history.sql
 
 -- ==================================
