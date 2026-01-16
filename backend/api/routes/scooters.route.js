@@ -118,7 +118,7 @@ router.put('/update/:id', async (req, res) => {
 });
 
 //UPDATE STATUS
-router.put('/:id/repairs/status', async (req, res) => {
+router.put('/:id/status', async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;

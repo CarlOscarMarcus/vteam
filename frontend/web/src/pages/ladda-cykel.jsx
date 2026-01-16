@@ -17,6 +17,10 @@ export default function parkScooter() {
     const [chargers, setChargers] = useState([])
     const [chargingspot, setChargingspot] = useState(null)
 
+    const currentCharger = chargers.find(
+    c => c.scooter_id === Number(id)
+    )
+
     // spara ny position (parkering) i cykeln
 
     // hämta information om cykeln som ska flyttas
@@ -61,7 +65,7 @@ export default function parkScooter() {
 
         }
     getChargers()
-    })
+    },[] )
 
     async function moveBike(e) {
       e.preventDefault();
@@ -73,6 +77,7 @@ export default function parkScooter() {
         // skicka till backend, uppdatera position på cykeln
         // ladda batteriet
         try {
+            // uppdatera cykelns position
             const move = await fetch(`${API_URL}/api/scooters/update/${id}`,
                 { 
                     method: "PUT",
@@ -82,6 +87,7 @@ export default function parkScooter() {
                 )
                 if (!move.ok) throw new Error ("kunda inte flytta cykeln.")
 
+                // uppdatera batteri
                 const value = 100
                 const charge = await fetch(`${API_URL}/api/scooters/${id}/battery/${value}`,
                     {
@@ -90,12 +96,23 @@ export default function parkScooter() {
                 )
                 if (!charge.ok) throw new Error ("kunda inte ladda cykeln.")
 
+                // koppla till specifik laddare
                 const result = await fetch(`${API_URL}/api/charging/update/${chargingspot.id}/${id}`,
                     {
                         method: "PUT",
                     }
                 )
                 if (!result.ok) throw new Error ("kunda inte uppdatera laddare med scooter_id.")
+                // uppdatera status till charging
+                const res = await fetch(`${API_URL}/api/scooters/${id}/status`,
+                    {
+                        method: "PUT",
+                        headers: { "content-type": "application/json"},
+                        body: JSON.stringify({status: "charging"})
+                    }
+                )
+                if (!res.ok) throw new Error ("kunda inte uppdatera status.")
+                setStatus("charging")
 
                 navigate("/admin-cyklar")
 
@@ -106,6 +123,25 @@ export default function parkScooter() {
 
     }
 
+    async function stopCharging() {
+        try {
+            await fetch(`${API_URL}/api/charging/free/${currentCharger.id}`,
+                {method: "PUT"}
+            )
+
+            await fetch(`${API_URL}/api/scooters/${id}/status`, {
+                method: "PUT",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ status: "ok" })
+            })
+            setStatus("ok")
+            navigate("/admin-cyklar")
+
+        } catch (err) {
+            console.error(err)
+        }
+    } 
+
     function handleChange(e) {
         const parkingId = e.target.value
         const chosenCharger = chargers.find(p => p.id.toString() === parkingId)
@@ -114,29 +150,47 @@ export default function parkScooter() {
 
   return (
     <>
-      <div>
-        <h1> Flytta cykel till laddare.</h1>
+    <div>
+      <h1>Flytta cykel till laddare</h1>
+
+      <p>
+        Scooter-id: {id}<br />
+        Batteri: {battery}%<br />
+        Status: {status}<br />
+        Position: {position_lat}, {position_long}<br />
+        Användar-id: {user}
+      </p>
+
+      {status !== "charging" && (
         <form onSubmit={moveBike}>
-            <p>Scooter-id: {id}<br></br>
-            Batteri: {battery}%<br></br>
-            Status: {status}<br></br>
-            Position: {position_lat}, {position_long}<br></br>
-            Användar-id: {user}</p>
-            <br></br>
-            <label>Välj laddare:</label><br></br>
-            <select name="laddare" onChange={handleChange}>
-                <option>Välj...</option>
-                {chargers
-                .filter(charger => charger.scooter_id === null)
-                .map((charger) => (
-                    <option value={charger.id} key={charger.id}>Ladd-ID: {charger.id} Position: {charger.position_lat}, {charger.position_long} </option>
-                ))}
-            </select><br></br>
-            <br></br>
-            <button type="submit">Spara</button>
-            </form><br></br>
-            <br></br>
-      </div>
+          <label>Välj laddare:</label><br />
+          <select onChange={handleChange} required>
+            <option value="">Välj...</option>
+            {chargers
+              .filter(c => c.scooter_id === null)
+              .map(c => (
+                <option key={c.id} value={c.id}>
+                  Laddare #{c.id}
+                </option>
+              ))}
+          </select>
+          <br /><br />
+          <button type="submit">Starta laddning</button>
+        </form>
+      )}
+
+      {status === "charging" && currentCharger && (
+        <>
+          <p>Laddar vid laddare #{currentCharger.id}</p>
+          <button
+            onClick={stopCharging}
+            style={{ background: "darkred", color: "white" }}
+          >
+            Avsluta laddning
+          </button>
+        </>
+      )}
+    </div>
     </>
   )
 }

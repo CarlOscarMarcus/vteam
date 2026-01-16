@@ -55,7 +55,7 @@ export default function service() {
                 setMessage(`Serviceärende för cykel med id: ${id} startat.`)
                 // ändra status till "service"
                 const status = "service"
-                const res = await fetch(`${API_URL}/api/scooters/${id}/repairs/status`,
+                const res = await fetch(`${API_URL}/api/scooters/${id}/status`,
                 {
                     method: "PUT",
                     headers: { "content-type": "application/json"},
@@ -83,7 +83,7 @@ export default function service() {
 
                 // ändra status till "ok"
                 const status = "ok"
-                const res = await fetch(`${API_URL}/api/scooters/${id}/repairs/status`,
+                const res = await fetch(`${API_URL}/api/scooters/${id}/status`,
                 {
                     method: "PUT",
                     headers: { "content-type": "application/json"},
@@ -129,17 +129,24 @@ export default function service() {
             Position: {position_lat}, {position_long}<br></br>
             Användar-id: {user}</p>
             <br></br>
-            <button onClick={startrepair}>Starta serviceärende</button>
-            <br></br>
-            <br></br>
-            <button onClick={endrepair}>Avsluta serviceärende</button>
+{status !== "service" && (
+  <button onClick={startrepair}>
+    Starta serviceärende
+  </button>
+)}
+
+{status === "service" && (
+  <button onClick={endrepair}>
+    Avsluta serviceärende
+  </button>
+)}
             <br></br>
             <p>{message}</p>
             {repairs.length === 0 ? (
                 <p>Ingen pågående service</p>
             ) : (
                 repairs.map((repair) => ( 
-                    <div key={repair.id}>
+                    <div key={repair.id}> 
                     <p>
                         Service-id: {repair.id} <br />
                         Påbörjad: {new Date(repair.start_day).toLocaleString()} <br />
