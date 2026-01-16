@@ -43,54 +43,58 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-// PAY (full or partial, depending on remaining amount)
+// PAY
 router.post("/:id/pay", auth, async (req, res) => {
   const userId = req.user.id;
   const receiptId = req.params.id;
 
   try {
     // Hämta kvitto
-    const { rows: receiptRows } = await pool.query(
+    const { rows } = await pool.query(
       "SELECT cost, payment FROM receipt WHERE id = $1 AND user_id = $2",
       [receiptId, userId]
     );
-    if (!receiptRows.length)
+
+    if (!rows.length)
       return res.status(404).json({ error: "Receipt not found" });
 
-    const receipt = receiptRows[0];
-    const remaining = receipt.cost - receipt.payment;
+    const receipt = rows[0];
 
-    if (remaining <= 0)
+    if (receipt.payment >= receipt.cost)
       return res.status(400).json({ error: "Receipt already paid" });
 
-    // Hämta användarens saldo
+    // Hämta saldo
     const { rows: userRows } = await pool.query(
       "SELECT balance FROM users WHERE id = $1",
       [userId]
     );
-    const userBalance = userRows[0].balance;
 
-    if (userBalance < remaining)
+    const balance = userRows[0].balance;
+
+    if (balance < receipt.cost)
       return res.status(400).json({ error: "Insufficient balance" });
 
-    // Dra av saldo
+    // Transaktion
+    await pool.query("BEGIN");
+
     await pool.query(
       "UPDATE users SET balance = balance - $1 WHERE id = $2",
-      [remaining, userId]
+      [receipt.cost, userId]
     );
 
-    // Uppdatera kvitto
-    const { rows: updatedRows } = await pool.query(
-      "UPDATE receipt SET payment = payment + $1 WHERE id = $2 RETURNING *",
-      [remaining, receiptId]
+    await pool.query(
+      "UPDATE receipt SET payment = cost WHERE id = $1",
+      [receiptId]
     );
+
+    await pool.query("COMMIT");
 
     res.json({
       message: "Payment successful",
-      paid: remaining,
-      receipt: updatedRows[0],
+      paid: receipt.cost,
     });
   } catch (err) {
+    await pool.query("ROLLBACK");
     console.error(err);
     res.status(500).json({ error: "Payment failed" });
   }

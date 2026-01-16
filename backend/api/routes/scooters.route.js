@@ -105,7 +105,7 @@ router.put('/update/:id', async (req, res) => {
     const { position_lat, position_long } = req.body;
     const { id } = req.params;
 
-    const result = await pool.query(`UPDATE scooter set position_long = $1, position_lat = $2 WHERE id = $3 RETURNING *`, [position_lat, position_long, id]);
+    const result = await pool.query(`UPDATE scooter set position_lat = $1, position_long = $2 WHERE id = $3 RETURNING *`, [position_lat, position_long, id]);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ error: "scooter not found" });

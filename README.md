@@ -12,7 +12,7 @@ Enligt vår SDS ska applikationen:
 - Hantera miljöer via Docker Compose (dev/production)
 
 ## Struktur
-
+```
 VTEAM/
 ├─ backend/
 │  ├─ api/           # Backend-kod (t.ex. Node/Express eller annan backend)
@@ -38,7 +38,7 @@ VTEAM/
 ├─ package.json      # Root-config (monorepo eller arbetsyta?)
 ├─ package-lock.json
 └─ README.md         # Projektets huvud-README
-
+```
 
 ## Kom igång
 
