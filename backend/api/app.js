@@ -36,8 +36,12 @@ app.use('/api/history', historyRoute)
 
 // --- Starta server ---
 // 0.0.0.0 gör att servern lyssnar på alla nätverksadresser
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on http://0.0.0.0:${PORT}`);
-});
+// inte köra när man testar
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
+  });
+}
+
 
 export default app;
