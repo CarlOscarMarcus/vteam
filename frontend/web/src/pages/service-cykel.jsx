@@ -64,6 +64,7 @@ export default function service() {
                 console.log(res)
                 if (!res.ok) throw new Error ("kunde inte sätta cykel i service-läge")
                 setStatus("service")
+                repairstatus()
             
         } catch (err) {
             console.error(err)
@@ -92,29 +93,31 @@ export default function service() {
                 )
                 if (!res.ok) throw new Error ("kunde inte ta cykel ur service")
                 setStatus("ok")
+                repairstatus()
         } catch (err) {
             console.error(err)
         }
         console.log(`Ended repair for scooter with id: ${id}`)
     }
 
-    useEffect(() => {
-        async function repairstatus() {
-            try {
-                const status = await fetch(`${API_URL}/api/scooters/${id}/repairs`,
-                    {
-                        method: "GET"
-                    }
-                )
-                // console.log(status)
-                if (!status.ok) throw new Error ("Kunde inte hämta servicestatus.")
-                const data = await status.json()
-                setRepairs(data)
-                
-            } catch(err) {
-                console.error(err)
+    async function repairstatus() {
+    try {
+        const status = await fetch(`${API_URL}/api/scooters/${id}/repairs`,
+            {
+                method: "GET"
             }
-        }
+        )
+        // console.log(status)
+        if (!status.ok) throw new Error ("Kunde inte hämta servicestatus.")
+        const data = await status.json()
+        setRepairs(data)
+        
+    } catch(err) {
+        console.error(err)
+    }
+}
+
+    useEffect(() => {
         repairstatus()
     }, [id])
 
@@ -129,17 +132,17 @@ export default function service() {
             Position: {position_lat}, {position_long}<br></br>
             Användar-id: {user}</p>
             <br></br>
-{status !== "service" && (
-  <button onClick={startrepair}>
-    Starta serviceärende
-  </button>
-)}
+            {status !== "service" && (
+            <button onClick={startrepair}>
+                Starta serviceärende
+            </button>
+            )}
 
-{status === "service" && (
-  <button onClick={endrepair}>
-    Avsluta serviceärende
-  </button>
-)}
+            {status === "service" && (
+            <button onClick={endrepair}>
+                Avsluta serviceärende
+            </button>
+            )}
             <br></br>
             <p>{message}</p>
             {repairs.length === 0 ? (
