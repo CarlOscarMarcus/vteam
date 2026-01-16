@@ -9,11 +9,11 @@ import ThemedView from '../../components/ThemedView' // basic style
 import ThemedLogo from '../../components/ThemedLogo' // logo style
 import Spacer from '../../components/Spacer' // space
 
-//Cornelias dator
-const backendURL = "192.168.32.7"
+// Cornelias dator
+// const backendURL = "192.168.32.7"
 
-// min dator, hos mamma och pappa
-// const backendURL = "192.168.1.103"
+// min dator
+const backendURL = "192.168.68.107"
 
 
 export default function User() {

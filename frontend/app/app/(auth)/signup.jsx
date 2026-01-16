@@ -11,10 +11,10 @@ import ThemedInput from '../../components/ThemedInput' // input style
 
 
 // Cornelias dator
-const backendURL = "192.168.32.7"
+// const backendURL = "192.168.32.7"
 
-// min dator, hos mamma och pappa
-//const backendURL = "192.168.1.103"
+// min dator
+const backendURL = "192.168.68.107"
 
 async function SignupBackend(name, email, password) {
       const result = await fetch(`http://${backendURL}:3000/api/auth/signup`, {

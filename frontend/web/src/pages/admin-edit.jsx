@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/UserContext";
 // Hantera användare
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -46,7 +45,7 @@ export default function AdminEdit() {
       e.preventDefault();
 
       try {
-        const res = await fetch(`http://${backendURL}:3000/api/users/update/${id}`,
+        const res = await fetch(`${API_URL}/api/users/update/${id}`,
           {
             method: "PUT",
             headers: { "content-type": "application/json"},

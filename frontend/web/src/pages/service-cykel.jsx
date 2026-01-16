@@ -53,6 +53,17 @@ export default function service() {
                 )
                 if (!repair.ok) throw new Error ("kunda inte starta serviceärende.")
                 setMessage(`Serviceärende för cykel med id: ${id} startat.`)
+                // ändra status till "service"
+                const status = "service"
+                const res = await fetch(`${API_URL}/api/scooters/${id}/repairs/status`,
+                {
+                    method: "PUT",
+                    headers: { "content-type": "application/json"},
+                    body: JSON.stringify({ status })
+                })
+                console.log(res)
+                if (!res.ok) throw new Error ("kunde inte sätta cykel i service-läge")
+                setStatus("service")
             
         } catch (err) {
             console.error(err)
@@ -69,7 +80,18 @@ export default function service() {
                 )
                 if (!repair.ok) throw new Error ("kunda inte avsluta serviceärende.")
                 setMessage(`Serviceärende för cykel med id: ${id} avslutat.`)
-            
+
+                // ändra status till "ok"
+                const status = "ok"
+                const res = await fetch(`${API_URL}/api/scooters/${id}/repairs/status`,
+                {
+                    method: "PUT",
+                    headers: { "content-type": "application/json"},
+                    body: JSON.stringify({ status })
+                }
+                )
+                if (!res.ok) throw new Error ("kunde inte ta cykel ur service")
+                setStatus("ok")
         } catch (err) {
             console.error(err)
         }

@@ -5,6 +5,7 @@ The simulator will show scooters moving on the map in the webclient. Keep a cons
 ### To get the simulator working:
 - run ```docker compose up --build```
 
-### Or if you want to have a separate terminal to view console.log-messages
+### Option 2
+To get information from all the bikes computers
 - in one window run ```docker compose up --build api db frontend```
 - in another window run ```docker compose up --build simulator```

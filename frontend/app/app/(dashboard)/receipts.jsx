@@ -4,9 +4,11 @@ import { useEffect, useState, useCallback } from "react";
 import { getToken } from "../../components/Token.jsx";
 import ThemedView from "../../components/ThemedView";
 import { useFocusEffect } from "expo-router";
+// Cornelias dator
+// const backendURL = "192.168.32.7"
 
-//Cornelias dator
-const backendURL = "192.168.32.7";
+// min dator
+const backendURL = "192.168.68.107"
 
 export default function Receipts({ onBalanceUpdate }) {
   const [receipts, setReceipts] = useState([]);

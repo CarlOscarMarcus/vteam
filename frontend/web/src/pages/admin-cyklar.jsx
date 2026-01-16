@@ -20,7 +20,7 @@ export default function AdminBikes() {
     })
 
     const data = await result.json()
-    // console.log(data)
+    // console.log(data[0])
     setBikes(data)
 
   } catch (err) {
@@ -29,7 +29,7 @@ export default function AdminBikes() {
 
   }
   getBikes()
-  })
+  }, [])
 
   // Om det finns många cyklar så kommer bara några i taget visas.
   const visibleBikes = bikes.slice(0, visibleCount)
@@ -67,7 +67,8 @@ export default function AdminBikes() {
             <p>Batteri: {bike.battery}%<br></br>
             Position:  {bike.position_lat}, {bike.position_long}<br></br>
             Status: {bike.status}<br></br>
-            AnvändarID: {bike.user_id}</p>
+            AnvändarID: {bike.user_id}<br/>
+            Ledig: {bike.is_available ? "Ja" : "Nej" }</p>
             {!bike.user_id
             ? (
               <>

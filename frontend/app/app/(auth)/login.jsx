@@ -10,10 +10,10 @@ import ThemedLogo from '../../components/ThemedLogo' // logo style
 import ThemedInput from '../../components/ThemedInput' // input style
 
 // Cornelias dator
-const backendURL = "192.168.32.7"
+// const backendURL = "192.168.32.7"
 
-// min dator, hos mamma och pappa
-//const backendURL = "192.168.1.103"
+// min dator
+const backendURL = "192.168.68.107"
 
 
 async function loginData(email, password) {

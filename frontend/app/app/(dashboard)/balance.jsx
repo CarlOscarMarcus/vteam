@@ -6,8 +6,11 @@ import { useFocusEffect } from "expo-router";
 import ThemedView from "../../components/ThemedView";
 import { getToken } from "../../components/Token.jsx";
 
-//Cornelias dator
-const backendURL = "192.168.32.7";
+// Cornelias dator
+// const backendURL = "192.168.32.7"
+
+// min dator
+const backendURL = "192.168.68.107"
 
 export default function Balance() {
   const [balance, setBalance] = useState(0);

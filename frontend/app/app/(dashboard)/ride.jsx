@@ -4,9 +4,11 @@ import { getToken } from "../../components/Token.jsx";
 import ThemedView from "../../components/ThemedView";
 import { useLocalSearchParams } from "expo-router";
 import { router } from "expo-router";
+// Cornelias dator
+// const backendURL = "192.168.32.7"
 
-//Cornelias dator
-const backendURL = "192.168.32.7";
+// min dator
+const backendURL = "192.168.68.107"
 const PRICE_PER_MINUTE = 2;
 
 export default function Ride() {
