@@ -4,7 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 export default function MapPage() {
-  const markersRef = useRef(new Map()) 
+  const markersRef = useRef(new Map()); // håller alla markörer
   const mapRef = useRef(null);
   const wsRef = useRef(null);
   const [scooters, setScooters] = useState([]);
@@ -16,12 +16,10 @@ export default function MapPage() {
     iconUrl: "https://cdn-icons-png.flaticon.com/512/4357/4357585.png",
     iconSize: [35, 35],
   });
-
   const chargerIcon = L.icon({
     iconUrl: "https://cdn-icons-png.flaticon.com/512/4430/4430952.png",
     iconSize: [35, 35],
   });
-
   const parkingIcon = L.icon({
     iconUrl: "https://cdn-icons-png.flaticon.com/512/608/608690.png",
     iconSize: [35, 35],
@@ -29,167 +27,139 @@ export default function MapPage() {
 
   // --- Skapa kartan en gång ---
   useEffect(() => {
-    if (mapRef.current) return; // skapa bara en gång
-
-    const leafletMap = L.map("leaflet-map").setView([59.334, 18.063], 13);
+    if (mapRef.current) return;
+    const map = L.map("leaflet-map").setView([59.334, 18.063], 13);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
-    }).addTo(leafletMap);
+    }).addTo(map);
 
-    mapRef.current = leafletMap;
+    mapRef.current = map;
   }, []);
 
-  // --- WebSocket ---
-  useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080")
-    wsRef.current = ws
-
-    ws.onopen = () => {
-      console.log("websocket connected!")
-    }
-
-    ws.onmessage = (event) => {
-      const msg = JSON.parse(event.data)
-      if (msg.type === "scooter_update") {
-        setScooters(msg.data)
-      }
-    }
-
-    ws.onclose = () => {
-      console.log("Websocket disconnected!")
-    }
-
-    return () => ws.close()
-  }, [])
-  // --- Hämta API-data ---
+  // --- Hämta laddare och parkeringar en gång ---
   useEffect(() => {
     const fetchData = async () => {
-      // try {
-        const [sRes, cRes, pRes] = await Promise.all([
-        // const [cRes, pRes] = await Promise.all([
+      const [cRes, pRes, sRes] = await Promise.all([
+        fetch("http://localhost:3000/api/charging"),
+        fetch("http://localhost:3000/api/parking"),
+        fetch("http://localhost:3000/api/scooters"),
 
-          fetch("http://localhost:3000/api/scooters"),
-          fetch("http://localhost:3000/api/charging"),
-          fetch("http://localhost:3000/api/parking"),
-        ]);
+      ]);
 
-        // const scootersData = await sRes.json();
-        // const chargersData = await cRes.json();
-        // const parkingsData = await pRes.json();
+      const chargers = await cRes.json();
+      const parkings = await pRes.json();
+      const scooters = await sRes.json();
 
-        // console.log("Scooters:", scootersData);
-        // console.log("Chargers:", chargersData);
-        // console.log("Parkings:", parkingsData);
 
-        setScooters(await sRes.json());
-        setChargers(await cRes.json());
-        setParkings(await pRes.json());
-      // } catch (err) {
-      //   console.error("API fetch error:", err);
-      // }
+      setChargers(chargers);
+      setParkings(parkings);
+      setScooters(scooters);
+
+
+      const map = mapRef.current;
+      if (!map) return;
+
+      // scooters
+      scooters.forEach(s => {
+        if (!s.position_lat || !s.position_long) return;
+        const id = `scooter-${s.id}`;
+        const lat = Number(s.position_lat);
+        const long = Number(s.position_long);
+        if (isNaN(lat) || isNaN(long)) return;
+
+        const marker = L.marker([lat, long], { icon: scooterIcon })
+          .addTo(map)
+          .bindPopup(
+            `<strong>Scooter ${s.id}</strong><br/>
+            Batteri: ${s.battery}%<br/>`
+          );
+
+        markersRef.current.set(id, marker);
+      });
+    
+
+      // --- Rita laddare ---
+      chargers.forEach((c) => {
+        if (!c.position_lat || !c.position_long) return;
+        const id = `charger-${c.id}`;
+        if (markersRef.current.has(id)) return;
+
+        const marker = L.marker([Number(c.position_lat), Number(c.position_long)], { icon: chargerIcon })
+          .addTo(map)
+          .bindPopup("Laddstation");
+
+        markersRef.current.set(id, marker);
+      });
+
+      // --- Rita parkeringar ---
+      parkings.forEach((p) => {
+        if (!p.position_lat || !p.position_long) return;
+        const id = `parking-${p.id}`;
+        if (markersRef.current.has(id)) return;
+
+        const marker = L.marker([Number(p.position_lat), Number(p.position_long)], { icon: parkingIcon })
+          .addTo(map)
+          .bindPopup("Parkering");
+
+        markersRef.current.set(id, marker);
+      });
     };
 
     fetchData();
   }, []);
 
-  // --- Rendera markörer ---
+  // --- WebSocket för scooters ---
   useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
+    const ws = new WebSocket("ws://localhost:8080");
+    wsRef.current = ws;
 
+    ws.onopen = () => console.log("WebSocket connected!");
 
-    // // Ta bort gamla markörer (men inte tileLayer)
-    // map.eachLayer((layer) => {
-    //   if (layer instanceof L.Marker) map.removeLayer(layer);
-    // });
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+      if (msg.type === "scooter_update") {
+        const map = mapRef.current;
+        if (!map) return;
 
-    scooters.forEach((s) => {
-      if (!s.position_lat || !s.position_long) return
+        msg.data.forEach((s) => {
+          if (!s.position_lat || !s.position_long) return;
+          const id = `scooter-${s.id}`;
+          const lat = Number(s.position_lat);
+          const long = Number(s.position_long);
+          if (isNaN(lat) || isNaN(long)) return;
 
-      const id = `scooter: ${s.id}`
-      const lat = parseFloat(s.position_lat)
-      const long = parseFloat(s.position_long)
+          if (markersRef.current.has(id)) {
+            // uppdatera position och popup
+            const marker = markersRef.current.get(id);
+            marker.setLatLng([lat, long]);
+            marker.setPopupContent(
+              `<strong>Scooter ${s.id}</strong><br/>
+               Batteri: ${s.battery}%<br/>
+                Status: ${s.status}<br/>
+                 Tillgänglig: ${s.is_available ? "Ja" : "Nej"}`
+            );
+          } else {
+            // ny scooter
+            const marker = L.marker([lat, long], { icon: scooterIcon })
+              .addTo(map)
+              .bindPopup(
+                `<strong>Scooter ${s.id}</strong><br/>
+                 Batteri: ${s.battery}%<br/>
+                                  Status: ${s.status}<br/>
+                 Tillgänglig: ${s.is_available ? "Ja" : "Nej"}`
+              );
+            markersRef.current.set(id, marker);
+          }
+        });
 
-      if (markersRef.current.has(id)) {
-        markersRef.current.get(id).setLatLng([lat, long])
-      } else {
-        const marker = L.marker([lat, long], {
-          icon: scooterIcon,
-        })
-          .addTo(map)
-          .bindPopup(
-            `<strong>Scooter ${s.id}</strong><br />
-            Batteri: ${s.battery}% <br/>
-            Status: ${s.status}`
-          )
-          markersRef.current.set(id, marker)
+        setScooters(msg.data);
       }
-    })
-    // // Scooters
-    // scooters.forEach((s) => {
-    //   if (s.position_lat && s.position_long) {
-    //     L.marker([parseFloat(s.position_lat), parseFloat(s.position_long)], {
-    //       icon: scooterIcon,
-    //     }).addTo(map);
-    //   } else {
-    //     console.warn("Invalid scooter coords:", s);
-    //   }
-    // });
+    };
 
-    // Chargers
-    // chargers.forEach((c) => {
-    //   if (c.position_lat && c.position_long) {
-    //     L.marker([parseFloat(c.position_lat), parseFloat(c.position_long)], {
-    //       icon: chargerIcon,
-    //     }).addTo(map);
-    //   } else {
-    //     console.warn("Invalid charger coords:", c);
-    //   }
-    // });
-    chargers.forEach((c) => {
-      if (!c.position_lat || !c.position_long) return
-
-      const id = `charger-${c.id}`
-      if (markersRef.current.has(id)) return
-
-      const marker = L.marker(
-        [parseFloat(c.position_lat), parseFloat(c.position_long)],
-        { icon: chargerIcon }
-      )
-        .addTo(map)
-        .bindPopup("Laddstation")
-
-      markersRef.current.set(id, marker)
-    })
-
-    // Parkings
-  //   parkings.forEach((p) => {
-  //     if (p.position_lat && p.position_long) {
-  //       L.marker([parseFloat(p.position_lat), parseFloat(p.position_long)], {
-  //         icon: parkingIcon,
-  //       }).addTo(map);
-  //     } else {
-  //       console.warn("Invalid parking coords:", p);
-  //     }
-  //   });
-  // }, [scooters, chargers, parkings]);
-      parkings.forEach((p) => {
-      if (!p.position_lat || !p.position_long) return
-
-      const id = `parking-${p.id}`
-      if (markersRef.current.has(id)) return
-
-      const marker = L.marker(
-        [parseFloat(p.position_lat), parseFloat(p.position_long)],
-        { icon: parkingIcon }
-      )
-        .addTo(map)
-        .bindPopup("Parkering")
-
-      markersRef.current.set(id, marker)
-    })
-  }, [scooters, chargers, parkings])
+    ws.onclose = () => console.log("WebSocket disconnected!");
+    return () => ws.close();
+  }, []);
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>

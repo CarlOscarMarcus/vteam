@@ -15,4 +15,17 @@ router.get('/', async (req, res) => {
   }
 });
 
+// POST add parking spots
+router.post('/add', async (req, res) => {
+  try {
+    const {position_lat, position_long} = req.body
+
+    const result = await pool.query('INSERT INTO parking (position_lat, position_long) VALUES ($1, $2) RETURNING *', [position_lat, position_long]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching parking spots:', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;
