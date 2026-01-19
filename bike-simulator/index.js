@@ -5,7 +5,7 @@ const backend_url = process.env.BACKEND_URL || "http://localhost:3000"
 let users = []
 // const currentUsers = new Set()
 const rented = new Map()
-
+let max_users = 0;
 
 console.log("bike simulator successfully started!")
 
@@ -30,6 +30,24 @@ async function getUsers() {
     }
 }
 
+// ev sätt ett maxtak för användare som är aktiva
+// max_users =  Math.floor(users.length * 0.2)
+
+// skapa mockanvändare
+function createUsers(count = 20) {
+    const mockUsers = [];
+
+    for (let i = 0; i < count; i++) {
+        mockUsers.push({
+            id: 1000 + i,
+            name: `MockUser_${i}`
+        })
+    }
+    users = [...users, ...mockUsers]
+    console.log(`Totalt antal användare (mock + db): ${users.length}`)
+}
+
+
 // slumpa användare
 function getUser() {
     return users[Math.floor(Math.random() * users.length)]
@@ -40,7 +58,7 @@ async function simulateBikes() {
     try {
         const res = await fetch(`${backend_url}/api/scooters`)
         const scooters = await res.json()
-
+        // console.log(scooters)
         for (const scooter of scooters) {
             if (!scooter.position_lat || !scooter.position_long) continue;
 
@@ -61,10 +79,21 @@ async function simulateBikes() {
                 newLat = parseFloat(scooter.position_lat) + ((Math.random() - 0.5) * 0.001)
                 newLong = parseFloat(scooter.position_long) + ((Math.random() - 0.5) * 0.001)
                 
-                scooter.position_lat = newLat;
-                scooter.position_long = newLong;
-                scooter.battery -= 2;
+
+                if (newLat < 30 && newLong > 30) {
+                    [newLat, newLong] = [newLong, newLat]
+                }
+
+                if (isNaN(newLat) || isNaN(newLong)) continue
                 
+                scooter.position_lat = parseFloat(newLat.toFixed(6));
+                scooter.position_long = parseFloat(newLong.toFixed(6));
+                scooter.battery -= 2;
+
+                if (!scooter.position_lat || !scooter.position_long) {
+                    console.warn(`Scooter ${scooter.id} saknar position, hoppar update.`);
+                    continue;
+                }
                 // uppdatera scooterns position och batteri
                 await updateValues(scooter.id, newLat, newLong)
 
@@ -84,7 +113,7 @@ async function simulateBikes() {
                 }
                 
                 console.log(`Scooter med id: ${scooter.id}, status: ${bikeStatus}
-Reste till ${scooter.position_lat.toFixed(4)}, ${scooter.position_long.toFixed(4)}.
+Reste till ${scooter.position_lat}, ${scooter.position_long}.
 Batteri: ${scooter.battery}%.
 Hastighet: ${speed.toFixed(1)} km/h`)
                 // console.log(trip)
@@ -98,10 +127,7 @@ Hastighet: ${speed.toFixed(1)} km/h`)
                 
             // någonting med hyran ....
             } else {
-
-                startRental(scooter)
-
-                
+                await startRental(scooter)
             }
 
 
@@ -134,8 +160,8 @@ Hastighet: ${speed.toFixed(1)} km/h`)
         // spara data, förbered för websocket
         const payload = scooters.map(s => ({
             id: s.id,
-            position_lat: s.position_lat,
-            position_long: s.position_long,
+            position_lat: Number(s.position_lat),
+            position_long: Number(s.position_long),
             battery: s.battery,
             status: s.status,
             is_available: s.is_available
@@ -180,10 +206,11 @@ async function updateValues(id, lat, long) {
     }
 }
 
-function startRental(scooter) {
+async function startRental(scooter) {
     // starta hyra av cykel
     if (!scooter.is_available || scooter.status !== "ok") return
-    if (Math.random() > 0.8) return
+    if (Math.random() > 0.5) return
+    // if (rented.size >= max_users) return
     
     const user = getUser()
     if ([...rented.values()].some(r => r.user_id === user.id)) return;
@@ -199,6 +226,14 @@ function startRental(scooter) {
     }
     rented.set(scooter.id, trip)
     scooter.is_available = false
+
+    await fetch(`${backend_url}/api/scooters/update/${scooter.id}`, {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+        is_available: false
+    })
+});
     // currentUsers.add(user.id)
     console.log(`Scooter ${scooter.id} hyrs nu av användare ${user.id}`)
     
@@ -254,6 +289,14 @@ async function endRental(scooter, trip) {
         } catch (err) {
             console.error("Kunde inte avsluta resa.", err.message)
         }
+
+        await fetch(`${backend_url}/api/scooters/update/${scooter.id}`, {
+            method: "PUT",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+                is_available: false
+            })
+            });
     // }
 }
 
@@ -310,5 +353,6 @@ async function chargeScooter(scooter) {
 
 (async () => {
     await getUsers()
+    createUsers()
     setInterval(simulateBikes, 5000)
 })()

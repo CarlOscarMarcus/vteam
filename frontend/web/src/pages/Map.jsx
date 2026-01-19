@@ -53,6 +53,7 @@ export default function MapPage() {
       const msg = JSON.parse(event.data)
       if (msg.type === "scooter_update") {
         setScooters(msg.data)
+        console.log(msg.data)
       }
     }
 
@@ -65,29 +66,18 @@ export default function MapPage() {
   // --- Hämta API-data ---
   useEffect(() => {
     const fetchData = async () => {
-      // try {
         const [sRes, cRes, pRes] = await Promise.all([
-        // const [cRes, pRes] = await Promise.all([
 
           fetch("http://localhost:3000/api/scooters"),
           fetch("http://localhost:3000/api/charging"),
           fetch("http://localhost:3000/api/parking"),
         ]);
 
-        // const scootersData = await sRes.json();
-        // const chargersData = await cRes.json();
-        // const parkingsData = await pRes.json();
-
-        // console.log("Scooters:", scootersData);
-        // console.log("Chargers:", chargersData);
-        // console.log("Parkings:", parkingsData);
 
         setScooters(await sRes.json());
         setChargers(await cRes.json());
         setParkings(await pRes.json());
-      // } catch (err) {
-      //   console.error("API fetch error:", err);
-      // }
+
     };
 
     fetchData();
@@ -107,9 +97,18 @@ export default function MapPage() {
     scooters.forEach((s) => {
       if (!s.position_lat || !s.position_long) return
 
-      const id = `scooter: ${s.id}`
+      const id = `scooter-${s.id}`
       const lat = parseFloat(s.position_lat)
       const long = parseFloat(s.position_long)
+
+      if (isNaN(lat) || isNaN(long)) return;
+
+          console.log(
+      "Scooter",
+      s.id,
+      "LAT:", lat,
+      "LONG:", long
+    );
 
       if (markersRef.current.has(id)) {
         markersRef.current.get(id).setLatLng([lat, long])
@@ -126,27 +125,7 @@ export default function MapPage() {
           markersRef.current.set(id, marker)
       }
     })
-    // // Scooters
-    // scooters.forEach((s) => {
-    //   if (s.position_lat && s.position_long) {
-    //     L.marker([parseFloat(s.position_lat), parseFloat(s.position_long)], {
-    //       icon: scooterIcon,
-    //     }).addTo(map);
-    //   } else {
-    //     console.warn("Invalid scooter coords:", s);
-    //   }
-    // });
 
-    // Chargers
-    // chargers.forEach((c) => {
-    //   if (c.position_lat && c.position_long) {
-    //     L.marker([parseFloat(c.position_lat), parseFloat(c.position_long)], {
-    //       icon: chargerIcon,
-    //     }).addTo(map);
-    //   } else {
-    //     console.warn("Invalid charger coords:", c);
-    //   }
-    // });
     chargers.forEach((c) => {
       if (!c.position_lat || !c.position_long) return
 
@@ -163,17 +142,6 @@ export default function MapPage() {
       markersRef.current.set(id, marker)
     })
 
-    // Parkings
-  //   parkings.forEach((p) => {
-  //     if (p.position_lat && p.position_long) {
-  //       L.marker([parseFloat(p.position_lat), parseFloat(p.position_long)], {
-  //         icon: parkingIcon,
-  //       }).addTo(map);
-  //     } else {
-  //       console.warn("Invalid parking coords:", p);
-  //     }
-  //   });
-  // }, [scooters, chargers, parkings]);
       parkings.forEach((p) => {
       if (!p.position_lat || !p.position_long) return
 

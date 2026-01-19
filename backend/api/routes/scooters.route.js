@@ -15,6 +15,24 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Lägg till scooter
+router.post('/add', async (req, res) => {
+  try {
+    const {battery, position_lat, position_long, status = 'ok', is_avaliable = true} = req.body;
+    if (position_lat == null || position_long == null) {
+      return res.status(400).json({ error: 'position is missing.'})
+    }
+    const result = await pool.query(`INSERT INTO scooter (battery, position_long, position_lat, status, is_available) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [battery, position_lat, position_long, status, is_avaliable]
+     );
+     res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error when creating scooter:', err.message)
+    res.status(500).json({ error: 'Internal server error' });
+
+  }
+})
+
 // GET selected scooter
 router.get('/:id', async (req, res) => {
   try {
