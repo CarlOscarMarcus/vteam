@@ -50,7 +50,7 @@ router.post('/add', async (req, res) => {
   try {
     const {position_lat, position_long} = req.body
 
-    const result = await pool.query('INSERT INTO parking position_lat, position_long VALUES ($1. $2) RETURNING *', [position_lat, position_long]);
+    const result = await pool.query('INSERT INTO charging (position_lat, position_long) VALUES ($1, $2) RETURNING *', [position_lat, position_long]);
     res.json(result.rows);
   } catch (err) {
     console.error('Error fetching parking spots:', err.message);

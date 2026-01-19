@@ -60,7 +60,7 @@ async function newParkings() {
         const lat = city.lat + (Math.random() - 0.5) * 0.05.toFixed(6)
         const long = city.long + (Math.random() - 0.5) * 0.05.toFixed(6)
 
-        await fetch (`${backend_url}/api/parkings/add`, {
+        await fetch (`${backend_url}/api/parking/add`, {
             method: "POST",
             headers: {"content-type": "application/json"},
             body: JSON.stringify({
@@ -80,7 +80,7 @@ async function newChargers() {
         const lat = city.lat + (Math.random() - 0.5) * 0.05.toFixed(6)
         const long = city.long + (Math.random() - 0.5) * 0.05.toFixed(6)
 
-        await fetch (`${backend_url}/api/parkings/add`, {
+        await fetch (`${backend_url}/api/charging/add`, {
             method: "POST",
             headers: {"content-type": "application/json"},
             body: JSON.stringify({

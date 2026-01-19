@@ -65,7 +65,9 @@ async function simulateBikes() {
             let newLat = parseFloat(scooter.position_lat)
             let newLong = parseFloat(scooter.position_long)
 
-
+            // if (isNaN(newLat) || isNaN(newLong)) {
+            //     continue
+            // }
 
             if (rented.has(scooter.id)) {
                 const trip = rented.get(scooter.id)
@@ -79,16 +81,18 @@ async function simulateBikes() {
                 newLat = parseFloat(scooter.position_lat) + ((Math.random() - 0.5) * 0.001)
                 newLong = parseFloat(scooter.position_long) + ((Math.random() - 0.5) * 0.001)
                 
+                if (isNaN(newLat) || isNaN(newLong)) {
+                    continue
+                }
 
                 if (newLat < 30 && newLong > 30) {
                     [newLat, newLong] = [newLong, newLat]
                 }
-
-                if (isNaN(newLat) || isNaN(newLong)) continue
                 
                 scooter.position_lat = parseFloat(newLat.toFixed(6));
                 scooter.position_long = parseFloat(newLong.toFixed(6));
                 scooter.battery -= 2;
+                scooter.is_available = false;
 
                 if (!scooter.position_lat || !scooter.position_long) {
                     console.warn(`Scooter ${scooter.id} saknar position, hoppar update.`);
@@ -158,13 +162,13 @@ Hastighet: ${speed.toFixed(1)} km/h`)
         }
 
         // spara data, förbered för websocket
-        const payload = scooters.map(s => ({
+        const payload = scooters.map((s) => ({
             id: s.id,
             position_lat: Number(s.position_lat),
             position_long: Number(s.position_long),
             battery: s.battery,
             status: s.status,
-            is_available: s.is_available
+            is_available: !!s.is_available
         }))
 
         // skicka
@@ -184,6 +188,7 @@ Hastighet: ${speed.toFixed(1)} km/h`)
 async function updateValues(id, lat, long) {
     // uppdatera scooter med ny position
     // uppdatera batteri med nytt värde
+    if (lat == null || long == null || isNaN(lat) || isNaN(long)) return;
     try {
         await fetch(`${backend_url}/api/scooters/update/${id}`, {
             method: "PUT",
@@ -226,6 +231,22 @@ async function startRental(scooter) {
     }
     rented.set(scooter.id, trip)
     scooter.is_available = false
+
+        wss.clients.forEach(client => {
+        if (client.readyState === 1) {
+            client.send(JSON.stringify({
+                type: "scooter_update",
+                data: [{
+                    id: scooter.id,
+                    position_lat: Number(scooter.position_lat),
+                    position_long: Number(scooter.position_long),
+                    battery: scooter.battery,
+                    status: scooter.status,
+                    is_available: scooter.is_available
+                }]
+            }))
+        }
+    })
 
     await fetch(`${backend_url}/api/scooters/update/${scooter.id}`, {
     method: "PUT",
@@ -285,16 +306,36 @@ async function endRental(scooter, trip) {
                 await chargeScooter(scooter)
 
             }
+                wss.clients.forEach(client => {
+            if (client.readyState === 1) {
+                client.send(JSON.stringify({
+                    type: "scooter_update",
+                    data: [{
+                        id: scooter.id,
+                        position_lat: Number(scooter.position_lat),
+                        position_long: Number(scooter.position_long),
+                        battery: scooter.battery,
+                        status: scooter.status,
+                        is_available: scooter.is_available
+                    }]
+                }));
+            }
+        });
             console.log(`Scooter ${scooter.id} tillbakalämnad av användare ${trip.user_id}`)
         } catch (err) {
             console.error("Kunde inte avsluta resa.", err.message)
         }
-
+        console.log(
+        "END RENTAL",
+        scooter.id,
+        "memory:",
+        scooter.is_available
+        )
         await fetch(`${backend_url}/api/scooters/update/${scooter.id}`, {
             method: "PUT",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({
-                is_available: false
+                is_available: true
             })
             });
     // }
