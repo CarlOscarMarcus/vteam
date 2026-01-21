@@ -3,6 +3,8 @@ import { useEffect, useState, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+const socketURL = import.meta.env.VITE_WS_URL;
+
 export default function MapPage() {
   const markersRef = useRef(new Map()); // håller alla markörer
   const mapRef = useRef(null);
@@ -111,7 +113,7 @@ export default function MapPage() {
 
   // --- WebSocket för scooters ---
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080");
+    const ws = new WebSocket(socketURL);
     wsRef.current = ws;
 
     ws.onopen = () => console.log("WebSocket connected!");
