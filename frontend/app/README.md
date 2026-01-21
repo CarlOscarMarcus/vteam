@@ -4,12 +4,12 @@ Den här appen är skapad med React Native och testas med Expo. Nedan är instru
 
 ## För att få fart på appen:
 
-### On your computer
+### 1. På din dator
 - Ställ dig i mappen frontend/app
 - kör ```npx expo start```
 - din terminal borde nu visa en QR-kod.
 
-### On your phone
+### 2. I din telefon
 - Ladda ner appen 'Expo Go' i din telefon
 - skapa ett konto
 - Öppna kameran och skanna QR-koden i terminalen på datorn
