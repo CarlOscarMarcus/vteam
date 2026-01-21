@@ -1,16 +1,18 @@
-# Bike simulator
+# Cykelsimulator
 
-The simulator will show scooters moving on the map in the webclient. Keep a console open for messages from all the scooters, the scooters will tell their position, speed, battery status and when they are rented/returned by a user.
+Här finns instruktioner för hu du kommer igång med simulatorn. Simulatorn skriver ut meddelanden (loggar) och visas även på kartan i webbklienten. 
 
-### best way
-If you are interested in reading the logs from the simulator and look at the map, we recommend you do it this way since the logs will be in a separate window. If you just want to view the simulation on the map. The way below is easier/quicker.
+### Alternativ 1
+Om du vill kika på loggarna och kartan, är detta det lättaste sättet. Man kan starta igång allting samtidigt med docker compose i samma terminalfönster men det kan bli lite rörigt att följa med i loggarna då på grund av att det är många olika services som startar igång.
 
-- in one window run ```docker compose up --build api db frontend```
-- in another window, run ```docker compose up --build bike-simulator```
+- I ett fönster, skriv: ```docker compose up --build api db frontend```
+- I ett separat fönster: ```docker compose up --build bike-simulator```
+- Öppna webbläsaren och gå in på localhost:5173. Logga in och gå till kartan.
 
-### You can also do it all at once
+### Alternativ 2
+Om du vill starta igång allt så snabbt och så enkelt som möjligt:
 - ```docker compose up --build``` 
 
-You can adjust the amount of bikes, parkings, chargers in the file bike-simulator -> createScooters.js
+Du kan justera mängden cyklar, parkeringsplatser och laddare i filen bike-simulator -> createScooters.js
 
-To adjust the amount of users, go to bike-simulator -> index.js
+Du kan justera mängden användare i filen bike-simulator -> index.js.
