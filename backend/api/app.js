@@ -11,6 +11,8 @@ import chargingRouter from './routes/charging.route.js';
 import receiptRouter from './routes/receipt.route.js';
 import rentRoutes from './routes/rent.route.js';
 import historyRoute from './routes/history.route.js'
+import health from './routes/health.js'
+
 
 dotenv.config();
 
@@ -33,6 +35,8 @@ app.use('/api/charging', chargingRouter);
 app.use('/api/receipts', receiptRouter);
 app.use('/api/rent', rentRoutes);
 app.use('/api/history', historyRoute)
+app.use('/api/health', health)
+
 
 // --- Starta server ---
 // 0.0.0.0 gör att servern lyssnar på alla nätverksadresser
