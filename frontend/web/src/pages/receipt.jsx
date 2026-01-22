@@ -114,5 +114,5 @@ export default function Receipts({ onBalanceUpdate }) {
 }
 
 Receipts.propTypes = {
-    onBalanceUpdate: PropTypes.node.isRequired,
+  onBalanceUpdate: PropTypes.func.isRequired,
 };
