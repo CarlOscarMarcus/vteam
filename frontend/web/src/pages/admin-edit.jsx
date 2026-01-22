@@ -1,3 +1,4 @@
+import React, { Component }  from 'react';
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom";
 // Hantera användare

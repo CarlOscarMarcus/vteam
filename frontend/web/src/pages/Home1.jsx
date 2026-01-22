@@ -1,5 +1,5 @@
 // Hem
-
+import React, { Component }  from 'react';
 import elsparkcykel from "../assets/img/elsparkcykel.jpg";
 import scooter from "../assets/img/scooter.jpg";
 import money from "../assets/img/money.jpg.avif";

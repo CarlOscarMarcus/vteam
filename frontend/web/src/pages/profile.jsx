@@ -1,5 +1,5 @@
 // användarprofil med information om kundens konto
-
+import React, { Component }  from 'react';
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../context/UserContext"

@@ -1,4 +1,5 @@
 // web/src/pages/Map.jsx
+import React, { Component }  from 'react';
 import { useEffect, useState, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";

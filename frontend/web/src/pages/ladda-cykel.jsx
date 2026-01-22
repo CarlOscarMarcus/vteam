@@ -1,3 +1,4 @@
+import React, { Component }  from 'react';
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 // flytta cykel till valfri laddare.
