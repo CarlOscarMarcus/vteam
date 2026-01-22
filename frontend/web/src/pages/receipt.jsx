@@ -1,4 +1,5 @@
 import React, { Component }  from 'react';
+import PropTypes from 'prop-types';
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/UserContext";
 
@@ -111,3 +112,7 @@ export default function Receipts({ onBalanceUpdate }) {
     </main>
   );
 }
+
+Receipts.propTypes = {
+    onBalanceUpdate: PropTypes.node.isRequired,
+};
