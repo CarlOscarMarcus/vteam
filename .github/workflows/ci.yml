@@ -42,6 +42,27 @@ jobs:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/appdb
         run: npm test
 
+  web-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install web deps
+        working-directory: ./frontend/web
+        run: npm install
+
+      - name: Run web tests
+        working-directory: ./frontend/web
+        run: npm run test:ci
+
+      - name: Lint web
+        working-directory: ./frontend/web
+        run: npm run lint
 
   mobile-app:
     runs-on: ubuntu-latest
@@ -54,7 +75,7 @@ jobs:
           node-version: 18
 
       - name: Install app deps
-        working-directory: ./app
+        working-directory: ./frontend/app
         run: npm install
 
       # - name: Run app tests
@@ -62,6 +83,6 @@ jobs:
       #   run: npm test -- --watchAll=false
 
       - name: Lint app
-        working-directory: ./app
+        working-directory: ./frontend/app
         run: npm run lint
 
