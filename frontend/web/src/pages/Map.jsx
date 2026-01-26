@@ -1,33 +1,33 @@
-// web/src/pages/Map.jsx
 import { useEffect, useState, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 const socketURL = import.meta.env.VITE_WS_URL;
 
+// --- Ikoner utanför komponenten ---
+const scooterIcon = L.icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/4357/4357585.png",
+  iconSize: [35, 35],
+});
+const chargerIcon = L.icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/4430/4430952.png",
+  iconSize: [35, 35],
+});
+const parkingIcon = L.icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/608/608690.png",
+  iconSize: [35, 35],
+});
+
 export default function MapPage() {
-  const markersRef = useRef(new Map()); // håller alla markörer
+  const markersRef = useRef(new Map());
   const mapRef = useRef(null);
   const wsRef = useRef(null);
-  const [scooters, setScooters] = useState([]);
-  const [chargers, setChargers] = useState([]);
-  const [parkings, setParkings] = useState([]);
 
-  // --- Ikoner ---
-  const scooterIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/4357/4357585.png",
-    iconSize: [35, 35],
-  });
-  const chargerIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/4430/4430952.png",
-    iconSize: [35, 35],
-  });
-  const parkingIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/608/608690.png",
-    iconSize: [35, 35],
-  });
+  // prefix _ för att ESLint inte ska klaga
+  const [_scooters, setScooters] = useState([]);
+  const [_chargers, setChargers] = useState([]);
+  const [_parkings, setParkings] = useState([]);
 
-  // --- Skapa kartan en gång ---
   useEffect(() => {
     if (mapRef.current) return;
     const map = L.map("leaflet-map").setView([59.334, 18.063], 13);
@@ -39,31 +39,26 @@ export default function MapPage() {
     mapRef.current = map;
   }, []);
 
-  // --- Hämta laddare och parkeringar en gång ---
   useEffect(() => {
     const fetchData = async () => {
       const [cRes, pRes, sRes] = await Promise.all([
         fetch("http://localhost:3000/api/charging"),
         fetch("http://localhost:3000/api/parking"),
         fetch("http://localhost:3000/api/scooters"),
-
       ]);
 
       const chargers = await cRes.json();
       const parkings = await pRes.json();
       const scooters = await sRes.json();
 
-
       setChargers(chargers);
       setParkings(parkings);
       setScooters(scooters);
 
-
       const map = mapRef.current;
       if (!map) return;
 
-      // scooters
-      scooters.forEach(s => {
+      scooters.forEach((s) => {
         if (!s.position_lat || !s.position_long) return;
         const id = `scooter-${s.id}`;
         const lat = Number(s.position_lat);
@@ -72,16 +67,11 @@ export default function MapPage() {
 
         const marker = L.marker([lat, long], { icon: scooterIcon })
           .addTo(map)
-          .bindPopup(
-            `<strong>Scooter ${s.id}</strong><br/>
-            Batteri: ${s.battery}%<br/>`
-          );
+          .bindPopup(`<strong>Scooter ${s.id}</strong><br/>Batteri: ${s.battery}%<br/>`);
 
         markersRef.current.set(id, marker);
       });
-    
 
-      // --- Rita laddare ---
       chargers.forEach((c) => {
         if (!c.position_lat || !c.position_long) return;
         const id = `charger-${c.id}`;
@@ -94,7 +84,6 @@ export default function MapPage() {
         markersRef.current.set(id, marker);
       });
 
-      // --- Rita parkeringar ---
       parkings.forEach((p) => {
         if (!p.position_lat || !p.position_long) return;
         const id = `parking-${p.id}`;
@@ -111,7 +100,6 @@ export default function MapPage() {
     fetchData();
   }, []);
 
-  // --- WebSocket för scooters ---
   useEffect(() => {
     const ws = new WebSocket(socketURL);
     wsRef.current = ws;
@@ -132,23 +120,21 @@ export default function MapPage() {
           if (isNaN(lat) || isNaN(long)) return;
 
           if (markersRef.current.has(id)) {
-            // uppdatera position och popup
             const marker = markersRef.current.get(id);
             marker.setLatLng([lat, long]);
             marker.setPopupContent(
               `<strong>Scooter ${s.id}</strong><br/>
                Batteri: ${s.battery}%<br/>
-                Status: ${s.status}<br/>
-                 Tillgänglig: ${s.is_available ? "Ja" : "Nej"}`
+               Status: ${s.status}<br/>
+               Tillgänglig: ${s.is_available ? "Ja" : "Nej"}`
             );
           } else {
-            // ny scooter
             const marker = L.marker([lat, long], { icon: scooterIcon })
               .addTo(map)
               .bindPopup(
                 `<strong>Scooter ${s.id}</strong><br/>
                  Batteri: ${s.battery}%<br/>
-                                  Status: ${s.status}<br/>
+                 Status: ${s.status}<br/>
                  Tillgänglig: ${s.is_available ? "Ja" : "Nej"}`
               );
             markersRef.current.set(id, marker);

@@ -10,7 +10,7 @@ export default function AdminEdit() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState("");
-    // const [loading, setLoading] = useState(true)
+    const [_loading, setLoading] = useState(true)
     const navigate = useNavigate()
 
     
