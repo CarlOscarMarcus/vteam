@@ -185,8 +185,7 @@ export default function parkScooter() {
           <button
             onClick={stopCharging}
             style={{ background: "darkred", color: "white" }}
-          >
-            Avsluta laddning
+          >avsluta laddning
           </button>
         </>
       )}

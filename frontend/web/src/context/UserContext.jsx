@@ -1,18 +1,8 @@
 import { useContext, createContext, useState, useEffect } from "react";
 
 const AuthContext = createContext()
-// min dator, hemma
-// const backendURL = "192.168.32.7"
 
-// min dator, hos mamma och pappa
-// const backendURL = "192.168.1.103"
-
-const backendURL = "localhost"
-
-//const backendURL = "192.168.1.103"
-
-//Cornelias dator
-//const backendURL = "192.168.32.7";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export function UserProvider({ children }) {
     const [token, setToken] = useState(sessionStorage.getItem("token"))
@@ -40,7 +30,7 @@ export function UserProvider({ children }) {
 
         async function getUser () {
             try{
-                const res = await fetch(`http://${backendURL}:3000/api/auth/me`, {
+                const res = await fetch(`${API_URL}/api/auth/me`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
