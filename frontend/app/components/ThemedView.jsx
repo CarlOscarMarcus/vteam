@@ -1,3 +1,4 @@
+import React from 'react'
 import { View } from 'react-native'
 import { Colors } from '../style/colors'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'

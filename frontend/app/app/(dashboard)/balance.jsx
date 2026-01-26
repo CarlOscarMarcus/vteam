@@ -1,4 +1,5 @@
 // app/(dashboard)/balance.jsx
+import React from 'react'
 import { StyleSheet, Text, TextInput, Button, Alert, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 
 import { useState, useEffect, useCallback } from "react";

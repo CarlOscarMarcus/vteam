@@ -1,3 +1,4 @@
+import React from 'react'
 import { StyleSheet, TextInput } from 'react-native'
 
 const ThemedInput = ({ style, ...props }) => {
