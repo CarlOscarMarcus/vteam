@@ -1,9 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { describe, it, vi, beforeEach, global, expect } from "vitest";
+import { describe, it, vi, beforeEach, expect } from "vitest";
 import Login from "./Login";
 
-
-// mocka
 const mockLogIn = vi.fn();
 vi.mock("../context/UserContext", () => ({
     useAuth: () => ({
@@ -24,56 +22,60 @@ vi.mock("@react-oauth/google", () => ({
   useGoogleLogin: vi.fn(),
 }));
 
-global.fetch = vi.fn();
+
+vi.stubGlobal('fetch', vi.fn());
 
 describe("tester för login-page", () => {
     beforeEach(() => {
         vi.restoreAllMocks();
         mockNavigate.mockReset();
         mockLogIn.mockReset();
-    })
+    });
 
-    // kolla att form funkar, alla inputs + loginknappt ska finnas
     it("form skapas enligt plan", () => {
         render(<Login />);
         expect(screen.getByPlaceholderText(/E-post/i)).toBeInTheDocument();
         expect(screen.getByPlaceholderText(/Lösenord/i)).toBeInTheDocument();
         expect(screen.getByRole("button", { name: /Logga in/i })).toBeInTheDocument();
-    })
-
-    // login och backend länkade med submit
-    it("anropar backend och LogIn vid submit", async () => {
-        const fakeToken = "bananer-i-pyjamas-123";
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => ({ token: fakeToken }),
     });
 
-    render(<Login />);
+    it("anropar backend och LogIn vid submit", async () => {
+        const fakeToken = "bananer-i-pyjamas-123";
 
-    fireEvent.change(screen.getByPlaceholderText(/E-post/i), { target: { value: "test@test.com" }});
-    fireEvent.change(screen.getByPlaceholderText(/Lösenord/i), { target: { value: "password123" }});
-    fireEvent.click(screen.getByRole("button", { name: /Logga in/i }));
+        // Mocka fetch specifikt för detta test
+        vi.stubGlobal('fetch', vi.fn(() =>
+            Promise.resolve({
+                ok: true,
+                json: async () => ({ token: fakeToken })
+            })
+        ));
 
-    await waitFor(() => {
-        expect(mockLogIn).toHaveBeenCalledWith(fakeToken);
+        render(<Login />);
+
+        fireEvent.change(screen.getByPlaceholderText(/E-post/i), { target: { value: "test@test.com" }});
+        fireEvent.change(screen.getByPlaceholderText(/Lösenord/i), { target: { value: "password123" }});
+        fireEvent.click(screen.getByRole("button", { name: /Logga in/i }));
+
+        await waitFor(() => {
+            expect(mockLogIn).toHaveBeenCalledWith(fakeToken);
         });
     });
 
-    // kolla att man skickas till /profile om inloggad
     it("navigera till /profile om loggedIn är true", async () => {
-        vi.mock("../context/UserContext", ()=> ({
+
+        vi.mock("../context/UserContext", () => ({
             useAuth: () => ({
                 LogIn: mockLogIn,
                 isAdmin: false,
                 loggedIn: true,
-                loadingUser: false,
+                loadingUser: false
             })
         }));
+
         render(<Login />);
+
         await waitFor(() => {
             expect(mockNavigate).toHaveBeenCalledWith("/profile");
-
-        })
-    })
-})
+        });
+    });
+});
