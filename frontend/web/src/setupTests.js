@@ -1,8 +1,15 @@
-import "@testing-library/jest-dom"
+import '@testing-library/jest-dom';
 import { beforeEach, vi } from 'vitest';
 
 beforeEach(() => {
   vi.stubGlobal('fetch', vi.fn((url) => {
+    if (!url) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => [],
+      });
+    }
+
     // Mocka laddstationer
     if (url.endsWith('/api/charging')) {
       return Promise.resolve({
@@ -53,3 +60,4 @@ beforeEach(() => {
     });
   }));
 });
+
