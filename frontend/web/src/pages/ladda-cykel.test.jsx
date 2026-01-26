@@ -1,5 +1,5 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, global } from "vitest";
 import ParkScooter from "./ladda-cykel";
 import { MemoryRouter } from "react-router-dom";
 

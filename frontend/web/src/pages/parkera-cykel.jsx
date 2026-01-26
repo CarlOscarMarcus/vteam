@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const API_URL = import.meta.env.VITE_API_URL;
 
 
-export default function parkScooter() {
+export default function ParkScooter() {
     const navigate = useNavigate()
     const { id } = useParams()
     const [battery, setBattery] = useState("")

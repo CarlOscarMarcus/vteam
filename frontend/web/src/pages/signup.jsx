@@ -34,7 +34,7 @@ export default function Signup() {
 
     const SignupUser = async () => {
         try {
-            const token = await SignupBackend(name, email, password)
+            await SignupBackend(name, email, password)
             // sessionStorage.setItem("token", token);
             // SignUp(token) // behövs detta?
             navigate("/login")

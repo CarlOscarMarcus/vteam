@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 // flytta cykel till service
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 
-export default function service() {
-    const navigate = useNavigate()
+export default function Service() {
+    // const navigate = useNavigate()
     const { id } = useParams()
     const [battery, setBattery] = useState("")
     const [position_lat, setPositionLat] = useState("")
     const [position_long, setPositionLong] = useState("")
     const [status, setStatus] = useState("")
     const [user, setUser] = useState("")
-    const [loading, setLoading] = useState(true)
+    // const [loading, setLoading] = useState(true)
     const [message, setMessage] = useState("")
     const [repairs, setRepairs] = useState([])
 
