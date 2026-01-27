@@ -3,7 +3,7 @@ import { StyleSheet, Text, Button, TouchableWithoutFeedback, Keyboard } from 're
 import { Link, router } from 'expo-router'
 import Logo from '../../assets/img/scooter.jpg'
 import { useState } from 'react'
-
+import { signupBackend } from './signupBackend';
 
 // komponenter som fixar rätt style
 import ThemedView from '../../components/ThemedView' // basic style
@@ -12,10 +12,11 @@ import ThemedInput from '../../components/ThemedInput' // input style
 
 
 // Cornelias dator
-// const backendURL = "192.168.32.7"
+ const backendURL = "192.168.32.7"
 
 // min dator
-const backendURL = "192.168.68.107"
+//const backendURL = "192.168.68.107"
+
 
 async function SignupBackend(name, email, password) {
       const result = await fetch(`http://${backendURL}:3000/api/auth/signup`, {
@@ -43,16 +44,12 @@ const SkapaKonto = () => {
     const [Email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-
     const SignupUser = async () => {
     try {
-        await SignupBackend(Name, Email, password)
-        // sessionStorage.setItem("token", token);
-        // SignUp(token) // behövs detta?
-        console.log(`${Email} skapade ett konto.`)
-        router.replace("/login")
+        await signupBackend(Name, Email, password);
+        router.replace("/login");
     } catch (err) {
-        console.error(err)
+        console.error(err);
     }
 }
     return (

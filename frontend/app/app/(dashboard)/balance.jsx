@@ -1,6 +1,10 @@
 // app/(dashboard)/balance.jsx
 import React from 'react'
 import { StyleSheet, Text, TextInput, Button, Alert, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
+import {
+  fetchBalanceBackend,
+  topUpBalanceBackend,
+} from "./balanceBackend";
 
 import { useState, useEffect, useCallback } from "react";
 import { useFocusEffect } from "expo-router";
@@ -8,10 +12,10 @@ import ThemedView from "../../components/ThemedView";
 import { getToken } from "../../components/Token.jsx";
 
 // Cornelias dator
-// const backendURL = "192.168.32.7"
+const backendURL = "192.168.32.7"
 
 // min dator
-const backendURL = "192.168.68.107"
+//const backendURL = "192.168.68.107"
 
 export default function Balance() {
   const [balance, setBalance] = useState(0);
@@ -25,14 +29,8 @@ export default function Balance() {
 
   const fetchBalance = async () => {
     try {
-      const token = await getToken();
-      const res = await fetch(`http://${backendURL}:3000/api/users/balance`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (!res.ok) throw new Error("Kunde inte hämta saldo");
-      const data = await res.json();
-      setBalance(data.balance);
+      const newBalance = await fetchBalanceBackend();
+      setBalance(newBalance);
     } catch (err) {
       console.error(err);
       Alert.alert("Fel", err.message);
@@ -40,28 +38,11 @@ export default function Balance() {
   };
 
   const topUpBalance = async () => {
-    const parsedAmount = parseFloat(amount);
-    if (isNaN(parsedAmount) || parsedAmount <= 0) {
-      return Alert.alert("Fel", "Ange ett giltigt belopp att fylla på");
-    }
-
     try {
-      const token = await getToken();
-      const res = await fetch(`http://${backendURL}:3000/api/users/balance/topup`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ amount: parsedAmount }),
-      });
-
-      if (!res.ok) throw new Error("Påfyllning misslyckades");
-
-      const data = await res.json();
-      setBalance(data.balance);
+      const newBalance = await topUpBalanceBackend(amount);
+      setBalance(newBalance);
       setAmount("");
-      Alert.alert("Klart!", `Ditt nya saldo är ${data.balance} kr`);
+      Alert.alert("Klart!", `Ditt nya saldo är ${newBalance} kr`);
     } catch (err) {
       console.error(err);
       Alert.alert("Fel", err.message);
@@ -93,7 +74,6 @@ export default function Balance() {
     </KeyboardAvoidingView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

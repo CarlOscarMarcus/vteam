@@ -92,10 +92,10 @@ export default function Map() {
   const [chargers, setChargers] = useState([]);
   const [parkings, setParkings] = useState([]);
 // Cornelias dator
-// const backendURL = "192.168.32.7"
+const backendURL = "192.168.32.7"
 
 // min dator
-const backendURL = "192.168.68.107"
+//const backendURL = "192.168.68.107"
 
   const loadScooters = async () => {
     try {

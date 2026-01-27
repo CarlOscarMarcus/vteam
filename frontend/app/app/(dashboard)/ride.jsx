@@ -1,15 +1,15 @@
 import React from 'react'
 import { StyleSheet, Text, Button, View } from "react-native";
 import { useEffect, useState } from "react";
-import { getToken } from "../../components/Token.jsx";
+import { endRideBackend } from "./rideBackend";
 import ThemedView from "../../components/ThemedView";
 import { useLocalSearchParams } from "expo-router";
 import { router } from "expo-router";
 // Cornelias dator
-// const backendURL = "192.168.32.7"
+const backendURL = "192.168.32.7"
 
 // min dator
-const backendURL = "192.168.68.107"
+//const backendURL = "192.168.68.107"
 const PRICE_PER_MINUTE = 2;
 
 export default function Ride() {
@@ -29,23 +29,9 @@ export default function Ride() {
 
 const endRide = async () => {
   try {
-    const token = await getToken();
-
-    const res = await fetch(`http://${backendURL}:3000/api/rent/end`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ scooterId }),
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
-
+    const receipt = await endRideBackend(scooterId);
     setActive(false);
-    setLastReceipt(data.receipt);
-
+    setLastReceipt(receipt);
   } catch (err) {
     alert(err.message);
   }
