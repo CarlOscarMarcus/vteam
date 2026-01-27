@@ -1,3 +1,4 @@
+import React from 'react'
 import { StyleSheet, Text, View } from "react-native";
 import { Link, router, useFocusEffect } from "expo-router";
 import { WebView } from "react-native-webview";

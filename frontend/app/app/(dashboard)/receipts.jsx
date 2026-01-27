@@ -1,4 +1,5 @@
 // app/(dashboard)/receipts.jsx
+import React from 'react'
 import { StyleSheet, Text, Pressable, FlatList, Button, Alert, Keyboard } from "react-native";
 import { useEffect, useState, useCallback } from "react";
 import { getToken } from "../../components/Token.jsx";

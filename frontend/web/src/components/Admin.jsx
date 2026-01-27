@@ -1,3 +1,4 @@
+import React, { Component }  from 'react';
 import { useAuth } from "../context/UserContext";
 import { Navigate, Outlet } from "react-router-dom";
 

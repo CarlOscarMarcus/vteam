@@ -1,4 +1,5 @@
 // Skapa formulär för att skapa konto. Namn, e-post och lösenord.
+import React, { Component }  from 'react';
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/UserContext';

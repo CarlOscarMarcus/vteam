@@ -1,5 +1,5 @@
 // historik över kundens resor
-
+import React, { Component }  from 'react';
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/UserContext";
 
