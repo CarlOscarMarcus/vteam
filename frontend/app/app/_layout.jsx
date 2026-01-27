@@ -1,3 +1,4 @@
+import React from 'react'
 import { StatusBar, StyleSheet, Text, View } from 'react-native'
 import { Stack } from 'expo-router'
 import { Colors } from '../style/colors'

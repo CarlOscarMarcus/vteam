@@ -2,6 +2,7 @@
 
 # run node
 FROM node:18-alpine
+RUN apk add --no-cache curl
 
 WORKDIR /app
 
@@ -11,4 +12,6 @@ RUN npm install
 
 COPY . .
 
-CMD ["npm", "start"]
+RUN chmod +x sim.sh
+
+CMD ["./sim.sh"]

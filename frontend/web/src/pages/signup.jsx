@@ -1,18 +1,15 @@
 // Skapa formulär för att skapa konto. Namn, e-post och lösenord.
+import React, { Component }  from 'react';
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import { useAuth } from '../context/UserContext';
-// min dator, hemma
-// const backendURL = "192.168.32.7"
+import { useAuth } from '../context/AuthContext';
 
-// min dator, hos mamma och pappa
-// const backendURL = "192.168.1.103"
 
-const backendURL = "localhost"
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 async function SignupBackend(name, email, password) {
-      const result = await fetch(`http://${backendURL}:3000/api/auth/signup`, {
+      const result = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({name, email, password}),
@@ -39,7 +36,7 @@ export default function Signup() {
 
     const SignupUser = async () => {
         try {
-            const token = await SignupBackend(name, email, password)
+            await SignupBackend(name, email, password)
             // sessionStorage.setItem("token", token);
             // SignUp(token) // behövs detta?
             navigate("/login")

@@ -1,18 +1,16 @@
 # App
 
-This is an app created with React Native and Expo. Down below are instructions on how to view and try the app.
+Den här appen är skapad med React Native och testas med Expo. Nedan är instruktioner hur du kommer igång och testar. I appen kan du logga in/skapa konto, se detaljer om ditt konto samt hyra cykel för att resa.
 
-## How to get the app up and running
+## För att få fart på appen:
 
-### On your computer
-- Go to the folder frontend/app in your terminal
-- run ```npx expo start```
-- your terminal should now show a QR-code
+### 1. På din dator
+- Ställ dig i mappen frontend/app
+- kör ```npx expo start```
+- din terminal borde nu visa en QR-kod.
 
-### On your phone
-- Download the app 'Expo Go' on your phone
-- Create an account
-- Open the camera on your phone and scan the QR-code from the terminal on your computer
-- Expo go should now have opened the app on your phone
-- Go ahead and try it out!
-
+### 2. I din telefon
+- Ladda ner appen 'Expo Go' i din telefon
+- skapa ett konto
+- Öppna kameran och skanna QR-koden i terminalen på datorn
+- Expo borde nu öppna appen i din telefon

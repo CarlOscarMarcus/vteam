@@ -1,3 +1,4 @@
+import React, { Component }  from 'react';
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 // flytta cykel till valfri laddare.
@@ -5,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const API_URL = import.meta.env.VITE_API_URL;
 
 
-export default function parkScooter() {
+export default function ChargeScooter() {
     const navigate = useNavigate()
     const { id } = useParams()
     const [battery, setBattery] = useState("")
@@ -13,7 +14,7 @@ export default function parkScooter() {
     const [position_long, setPositionLong] = useState("")
     const [status, setStatus] = useState("")
     const [user, setUser] = useState("")
-    const [loading, setLoading] = useState(true)
+    const [_loading, setLoading] = useState(true)
     const [chargers, setChargers] = useState([])
     const [chargingspot, setChargingspot] = useState(null)
 
@@ -185,8 +186,7 @@ export default function parkScooter() {
           <button
             onClick={stopCharging}
             style={{ background: "darkred", color: "white" }}
-          >
-            Avsluta laddning
+          >avsluta laddning
           </button>
         </>
       )}

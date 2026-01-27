@@ -1,9 +1,8 @@
 // Parkeringsöversikt
+import React, { Component }  from 'react';
 import { useEffect, useState } from "react"
 // Cykelöversikt
 const API_URL = import.meta.env.VITE_API_URL;
-
-
 
 export default function AdminParkings() {
   const [visibleCount, setVisibleCount] = useState(5)

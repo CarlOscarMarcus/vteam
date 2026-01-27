@@ -1,11 +1,9 @@
 import fetch from "node-fetch";
 import { WebSocketServer } from "ws";
 
-const backend_url = process.env.BACKEND_URL || "http://localhost:3000"
+const backend_url = process.env.BACKEND_URL || (process.env.IS_DOCKER ? "http://api:3000" : "http://localhost:3000");
 let users = []
-// const currentUsers = new Set()
 const rented = new Map()
-let max_users = 0;
 
 console.log("bike simulator successfully started!")
 
@@ -19,6 +17,7 @@ wss.on("connection", (ws) => {
     })
 })
 
+
 // hämta användare
 async function getUsers() {
     try {
@@ -30,10 +29,7 @@ async function getUsers() {
     }
 }
 
-// ev sätt ett maxtak för användare som är aktiva
-// max_users =  Math.floor(users.length * 0.2)
-
-// skapa mockanvändare
+// skapa mockanvändare. Ändra om du vill testa med fler!
 function createUsers(count = 20) {
     const mockUsers = [];
 
@@ -60,10 +56,22 @@ async function simulateBikes() {
         const scooters = await res.json()
         // console.log(scooters)
         for (const scooter of scooters) {
-            if (!scooter.position_lat || !scooter.position_long) continue;
+            // if (!scooter.position_lat || !scooter.position_long || scooter.position_lat == null || scooter.position_long == null) continue;
 
-            let newLat = parseFloat(scooter.position_lat)
-            let newLong = parseFloat(scooter.position_long)
+            const lat = Number(scooter.position_lat);
+            const long = Number(scooter.position_long);
+
+            if (
+                scooter.position_lat == null ||
+                scooter.position_long == null ||
+                Number.isNaN(lat) ||
+                Number.isNaN(long)
+            ) {
+                continue;
+            }
+
+            let newLat = lat;
+            let newLong = long;
 
             // if (isNaN(newLat) || isNaN(newLong)) {
             //     continue
@@ -99,6 +107,7 @@ async function simulateBikes() {
                     continue;
                 }
                 // uppdatera scooterns position och batteri
+                if (Number.isNaN(newLat) || Number.isNaN(newLong)) continue;
                 await updateValues(scooter.id, newLat, newLong)
 
                 // beräkna distans den åkt plus hastighet
@@ -188,7 +197,8 @@ Hastighet: ${speed.toFixed(1)} km/h`)
 async function updateValues(id, lat, long) {
     // uppdatera scooter med ny position
     // uppdatera batteri med nytt värde
-    if (lat == null || long == null || isNaN(lat) || isNaN(long)) return;
+    // console.log(id, lat, long)
+    if (lat == null || long == null || Number.isNaN(lat) || Number.isNaN(long)) return;
     try {
         await fetch(`${backend_url}/api/scooters/update/${id}`, {
             method: "PUT",

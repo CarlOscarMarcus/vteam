@@ -1,3 +1,4 @@
+import React from 'react'
 import { StyleSheet, Text, Button, View } from "react-native";
 import { useEffect, useState } from "react";
 import { endRideBackend } from "./rideBackend";

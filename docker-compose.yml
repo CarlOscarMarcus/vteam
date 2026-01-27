@@ -1,13 +1,4 @@
 services:
-  api:
-    build: ./backend/api
-    container_name: api
-    ports:
-      - "3000:3000"
-    env_file: ./backend/api/.env
-    depends_on:
-      - db
-
   db:
     image: postgres:16
     container_name: db
@@ -19,6 +10,26 @@ services:
       - "5432:5432"
     volumes:
       - ./backend/db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vteam_user -d vteam_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./backend/api
+    container_name: api
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./backend/api/.env
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/check || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   frontend:
     build:
@@ -32,13 +43,15 @@ services:
       - /app/node_modules
     depends_on:
       - api
+    environment:
+      - HOST=0.0.0.0
 
-#  simulator:
-#    build: ./bike-simulator
-#    container_name: bike-simulator
-#    depends_on: 
-#      - api
-#    environment:
-#      BACKEND_URL: http://api:3000
-#      WS_URL: ws://api:8080
-#    restart: unless-stopped
+  bike-simulator:
+    ports:
+      - "8080:8080"
+    build: ./bike-simulator
+    container_name: bike-simulator
+    environment:
+      - BACKEND_URL=http://api:3000
+    depends_on:
+      - api

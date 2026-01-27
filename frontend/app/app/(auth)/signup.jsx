@@ -1,3 +1,4 @@
+import React from 'react'
 import { StyleSheet, Text, Button, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import { Link, router } from 'expo-router'
 import Logo from '../../assets/img/scooter.jpg'

@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -12,3 +14,7 @@ export function Authentication({children}) {
 
     return token ? children : null
 }
+
+Authentication.propTypes = {
+    children: PropTypes.node.isRequired,
+};

@@ -1,3 +1,4 @@
+import React, { Component }  from 'react';
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom";
 // Hantera användare
@@ -10,7 +11,7 @@ export default function AdminEdit() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState("");
-    const [loading, setLoading] = useState(true)
+    const [_loading, setLoading] = useState(true)
     const navigate = useNavigate()
 
     

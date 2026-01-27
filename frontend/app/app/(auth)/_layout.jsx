@@ -1,3 +1,4 @@
+import React from 'react'
 import { Stack } from 'expo-router'
 
 // headerShown: false på options om man ska ta bort rubriken

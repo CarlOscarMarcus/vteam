@@ -1,16 +1,9 @@
+import React, { Component }  from 'react';
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/UserContext";
+import { useAuth } from '../context/AuthContext';
+
 import { useNavigate } from "react-router-dom";
-// import { useState, useEffect } from "react";
 
-// min dator, hemma
-// const backendURL = "192.168.32.7"
-
-// min dator, hos mamma och pappa
-//const backendURL = "192.168.1.103"
-
-//Cornelias dator
-const backendURL = "192.168.32.7";
 
 export default function Navbar() {
   const { loggedIn, LogOut, isAdmin, loadingUser } = useAuth();

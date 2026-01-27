@@ -1,19 +1,20 @@
-import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom";
+import React, { Component }  from 'react';
+import { useEffect, useState, useCallback } from "react"
+import { useParams } from "react-router-dom";
 // flytta cykel till service
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 
-export default function service() {
-    const navigate = useNavigate()
+export default function Service() {
+    // const navigate = useNavigate()
     const { id } = useParams()
     const [battery, setBattery] = useState("")
     const [position_lat, setPositionLat] = useState("")
     const [position_long, setPositionLong] = useState("")
     const [status, setStatus] = useState("")
     const [user, setUser] = useState("")
-    const [loading, setLoading] = useState(true)
+    const [_loading, setLoading] = useState(true)
     const [message, setMessage] = useState("")
     const [repairs, setRepairs] = useState([])
 
@@ -100,7 +101,7 @@ export default function service() {
         console.log(`Ended repair for scooter with id: ${id}`)
     }
 
-    async function repairstatus() {
+    const repairstatus = useCallback(async () => {
     try {
         const status = await fetch(`${API_URL}/api/scooters/${id}/repairs`,
             {
@@ -115,11 +116,11 @@ export default function service() {
     } catch(err) {
         console.error(err)
     }
-}
+}, [id]);
 
     useEffect(() => {
         repairstatus()
-    }, [id])
+    }, [id, repairstatus])
 
 
   return (

@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../context/UserContext";
+import React, { Component }  from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useState, useCallback } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -7,12 +9,7 @@ export default function Receipts({ onBalanceUpdate }) {
   const { token } = useAuth();
   const [receipts, setReceipts] = useState([]);
 
-  useEffect(() => {
-    if (!token) return;
-    loadReceipts();
-  }, [token]);
-
-  const loadReceipts = async () => {
+  const loadReceipts = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/receipts`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -26,7 +23,12 @@ export default function Receipts({ onBalanceUpdate }) {
       console.error("Failed to load receipts", err);
       alert(err.message);
     }
-  };
+  }, [token]);
+
+    useEffect(() => {
+    if (!token) return;
+    loadReceipts();
+  }, [token, loadReceipts]);
 
   const payReceipt = async (id) => {
     try {
@@ -64,9 +66,16 @@ export default function Receipts({ onBalanceUpdate }) {
     }
   };
 
-  const sortedReceipts = [...receipts].sort((a, b) =>
-    a.payment < a.cost ? -1 : 1
-  );
+  // const sortedReceipts = [...receipts].sort((a, _b) =>
+  //   a.payment < a.cost ? -1 : 1
+  // );
+
+  const sortedReceipts = [...receipts].sort((a, b) => {
+  const aRemaining = a.cost - a.payment;
+  const bRemaining = b.cost - b.payment;
+  return aRemaining - bRemaining; 
+});
+
 
   return (
     <main style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
@@ -110,3 +119,7 @@ export default function Receipts({ onBalanceUpdate }) {
     </main>
   );
 }
+
+Receipts.propTypes = {
+  onBalanceUpdate: PropTypes.func.isRequired,
+};
