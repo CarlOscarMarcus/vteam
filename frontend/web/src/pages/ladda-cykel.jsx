@@ -14,7 +14,7 @@ export default function ChargeScooter() {
     const [position_long, setPositionLong] = useState("")
     const [status, setStatus] = useState("")
     const [user, setUser] = useState("")
-    const [loading, setLoading] = useState(true)
+    const [_loading, setLoading] = useState(true)
     const [chargers, setChargers] = useState([])
     const [chargingspot, setChargingspot] = useState(null)
 

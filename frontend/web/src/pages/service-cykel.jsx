@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useParams } from "react-router-dom";
 // flytta cykel till service
 
@@ -14,7 +14,7 @@ export default function Service() {
     const [position_long, setPositionLong] = useState("")
     const [status, setStatus] = useState("")
     const [user, setUser] = useState("")
-    // const [loading, setLoading] = useState(true)
+    const [_loading, setLoading] = useState(true)
     const [message, setMessage] = useState("")
     const [repairs, setRepairs] = useState([])
 
@@ -101,7 +101,7 @@ export default function Service() {
         console.log(`Ended repair for scooter with id: ${id}`)
     }
 
-    async function repairstatus() {
+    const repairstatus = useCallback(async () => {
     try {
         const status = await fetch(`${API_URL}/api/scooters/${id}/repairs`,
             {
@@ -116,11 +116,11 @@ export default function Service() {
     } catch(err) {
         console.error(err)
     }
-}
+}, [id]);
 
     useEffect(() => {
         repairstatus()
-    }, [id])
+    }, [id, repairstatus])
 
 
   return (

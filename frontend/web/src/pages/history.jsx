@@ -1,6 +1,6 @@
 // historik över kundens resor
 import React, { Component }  from 'react';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "../context/UserContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -12,9 +12,9 @@ export default function History() {
   useEffect(() => {
     if (!token) return;
     loadHistory();
-  }, [token]);
+  }, [token, loadHistory]);
 
-  const loadHistory = async () => {
+  const loadHistory = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/history`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -28,7 +28,7 @@ export default function History() {
       console.error("Failed to load history", err);
       alert(err.message);
     }
-  };
+  }, [token]);
 
   // Sortera senaste resan först
   const sortedHistory = [...history].sort((a, b) => 

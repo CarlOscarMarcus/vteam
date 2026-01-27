@@ -1,6 +1,6 @@
 import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "../context/UserContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -12,9 +12,9 @@ export default function Receipts({ onBalanceUpdate }) {
   useEffect(() => {
     if (!token) return;
     loadReceipts();
-  }, [token]);
+  }, [token, loadReceipts]);
 
-  const loadReceipts = async () => {
+  const loadReceipts = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/receipts`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -28,7 +28,7 @@ export default function Receipts({ onBalanceUpdate }) {
       console.error("Failed to load receipts", err);
       alert(err.message);
     }
-  };
+  }, [token]);
 
   const payReceipt = async (id) => {
     try {
@@ -66,7 +66,7 @@ export default function Receipts({ onBalanceUpdate }) {
     }
   };
 
-  const sortedReceipts = [...receipts].sort((a, b) =>
+  const sortedReceipts = [...receipts].sort((a, _b) =>
     a.payment < a.cost ? -1 : 1
   );
 

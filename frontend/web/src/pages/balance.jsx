@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "../context/UserContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -12,9 +12,9 @@ export default function Balance() {
   useEffect(() => {
     if (!token) return;
     fetchBalance();
-  }, [token]);
+  }, [token, fetchBalance]);
 
-  const fetchBalance = async () => {
+  const fetchBalance = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/users/balance`, {
         headers: {
@@ -30,7 +30,7 @@ export default function Balance() {
       console.error(err);
       alert(err.message);
     }
-  };
+  }, [token]);
 
   const topUpBalance = async () => {
     const parsedAmount = parseFloat(amount);
