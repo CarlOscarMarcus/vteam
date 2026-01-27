@@ -9,10 +9,7 @@ export default function History() {
   const { token } = useAuth();
   const [history, setHistory] = useState([]);
 
-  useEffect(() => {
-    if (!token) return;
-    loadHistory();
-  }, [token, loadHistory]);
+
 
   const loadHistory = useCallback(async () => {
     try {
@@ -30,6 +27,11 @@ export default function History() {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (!token) return;
+    loadHistory();
+  }, [token, loadHistory]);
+  
   // Sortera senaste resan först
   const sortedHistory = [...history].sort((a, b) => 
     new Date(b.date) - new Date(a.date)
