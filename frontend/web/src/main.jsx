@@ -5,6 +5,7 @@ import './assets/styles/main.scss'
 import 'leaflet/dist/leaflet.css';
 import { BrowserRouter } from 'react-router-dom'
 import { UserProvider } from './context/UserContext';
+import { useAuth } from './context/AuthContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 ReactDOM.createRoot(document.getElementById("root")).render(

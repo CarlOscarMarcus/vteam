@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import { useAuth } from '../context/UserContext';
+import { useAuth } from '../context/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
 
 const API_URL = import.meta.env.VITE_API_URL;

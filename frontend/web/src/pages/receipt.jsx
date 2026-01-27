@@ -1,18 +1,13 @@
 import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
 import { useEffect, useState, useCallback } from "react";
-import { useAuth } from "../context/UserContext";
+import { useAuth } from "../context/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Receipts({ onBalanceUpdate }) {
   const { token } = useAuth();
   const [receipts, setReceipts] = useState([]);
-
-  useEffect(() => {
-    if (!token) return;
-    loadReceipts();
-  }, [token, loadReceipts]);
 
   const loadReceipts = useCallback(async () => {
     try {
@@ -29,6 +24,11 @@ export default function Receipts({ onBalanceUpdate }) {
       alert(err.message);
     }
   }, [token]);
+
+    useEffect(() => {
+    if (!token) return;
+    loadReceipts();
+  }, [token, loadReceipts]);
 
   const payReceipt = async (id) => {
     try {

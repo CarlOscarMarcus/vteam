@@ -2,7 +2,8 @@
 import React, { Component }  from 'react';
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAuth } from "../context/UserContext"
+import { useAuth } from '../context/AuthContext';
+
 
 export default function Profile() {
   const navigate = useNavigate()
