@@ -66,9 +66,16 @@ export default function Receipts({ onBalanceUpdate }) {
     }
   };
 
-  const sortedReceipts = [...receipts].sort((a, _b) =>
-    a.payment < a.cost ? -1 : 1
-  );
+  // const sortedReceipts = [...receipts].sort((a, _b) =>
+  //   a.payment < a.cost ? -1 : 1
+  // );
+
+  const sortedReceipts = [...receipts].sort((a, b) => {
+  const aRemaining = a.cost - a.payment;
+  const bRemaining = b.cost - b.payment;
+  return aRemaining - bRemaining; 
+});
+
 
   return (
     <main style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
