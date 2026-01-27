@@ -1,13 +1,14 @@
 import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
 import { useContext, createContext, useState, useEffect } from "react";
+import { API_URL } from "../config";
 
 const AuthContext = createContext()
 
 
 
 export function UserProvider({ children }) {
-    const API_URL = import.meta.env.VITE_API_URL;
+    
     const [token, setToken] = useState(sessionStorage.getItem("token"))
     const [loadingUser, setLoadingUser] = useState(true)
     const [user, setUser] = useState(null)
