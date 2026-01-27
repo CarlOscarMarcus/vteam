@@ -1,14 +1,11 @@
-// app/(dashboard)/receipts.jsx
 import { StyleSheet, Text, Pressable, FlatList, Button, Alert, Keyboard } from "react-native";
-import { useEffect, useState, useCallback } from "react";
-import { getToken } from "../../components/Token.jsx";
-import ThemedView from "../../components/ThemedView";
+import { useState, useCallback } from "react";
 import { useFocusEffect } from "expo-router";
-// Cornelias dator
-// const backendURL = "192.168.32.7"
-
-// min dator
-const backendURL = "192.168.68.107"
+import ThemedView from "../../components/ThemedView";
+import {
+  fetchReceipts,
+  payReceiptBackend,
+} from "./receiptsBackend";
 
 export default function Receipts({ onBalanceUpdate }) {
   const [receipts, setReceipts] = useState([]);
@@ -21,50 +18,30 @@ export default function Receipts({ onBalanceUpdate }) {
 
   const loadReceipts = async () => {
     try {
-      const token = await getToken();
-      const res = await fetch(`http://${backendURL}:3000/api/receipts`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
+      const data = await fetchReceipts();
       setReceipts(data);
     } catch (err) {
-      console.error("Failed to load receipts", err);
+      console.error(err);
     }
   };
 
-  const payReceipt = async (id) => {
-    Keyboard.dismiss(); // Stänger tangentbordet om öppet
+  const payReceipt = async (id, cost) => {
+    Keyboard.dismiss();
+
     try {
-      const token = await getToken();
-      const res = await fetch(`http://${backendURL}:3000/api/receipts/${id}/pay`, {
-        method: "POST",
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Betalning misslyckades");
-      }
-
-      const data = await res.json();
+      const paid = await payReceiptBackend(id);
 
       Alert.alert("Betalning genomförd", `Kvitto #${id} är nu betalt.`);
 
-      // Uppdatera kvitton i state
-      setReceipts((prev) =>
-        prev.map((r) =>
-          r.id === id ? { ...r, payment: r.cost } : r
+      setReceipts(prev =>
+        prev.map(r =>
+          r.id === id ? { ...r, payment: cost } : r
         )
       );
 
-      // Uppdatera saldo i förälder / global state om callback finns
       if (onBalanceUpdate) {
-        onBalanceUpdate(prev => prev - data.paid);
+        onBalanceUpdate(prev => prev - paid);
       }
-
     } catch (err) {
       Alert.alert("Fel", err.message);
     }
@@ -78,19 +55,17 @@ export default function Receipts({ onBalanceUpdate }) {
         <Text style={styles.cardTitle}>Kvitto #{item.id}</Text>
         <Text>Belopp: {item.cost} kr</Text>
 
-        <Text
-          style={[
-            styles.status,
-            { color: paid ? "#2e7d32" : "#c62828" },
-          ]}
-        >
+        <Text style={[
+          styles.status,
+          { color: paid ? "#2e7d32" : "#c62828" }
+        ]}>
           {paid ? "✔ Betald" : "⏳ Obetald"}
         </Text>
 
         {!paid && (
           <Button
             title={`Betala ${item.cost} kr`}
-            onPress={() => payReceipt(item.id)}
+            onPress={() => payReceipt(item.id, item.cost)}
           />
         )}
       </Pressable>
@@ -101,16 +76,14 @@ export default function Receipts({ onBalanceUpdate }) {
     <ThemedView style={styles.container}>
       <Text style={styles.title}>📄 Kvitton</Text>
 
-      {receipts.length === 0 ? (
-        <Text>Inga kvitton!</Text>
-      ) : (
-        <FlatList
-          data={receipts}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderReceipt}
-          contentContainerStyle={{ paddingBottom: 20 }}
-        />
-      )}
+      {receipts.length === 0
+        ? <Text>Inga kvitton!</Text>
+        : <FlatList
+            data={receipts}
+            keyExtractor={item => item.id.toString()}
+            renderItem={renderReceipt}
+          />
+      }
     </ThemedView>
   );
 }

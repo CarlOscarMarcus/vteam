@@ -1,7 +1,7 @@
 import { StyleSheet, Text } from 'react-native'
 import { Link, router } from 'expo-router'
 import Logo from '../../assets/img/scooter.jpg'
-import { getToken } from '../../components/Token.jsx'
+import { fetchCurrentUser } from './userBackend'
 import { useEffect, useState } from 'react'
 
 // komponenter som fixar rätt style
@@ -10,39 +10,27 @@ import ThemedLogo from '../../components/ThemedLogo' // logo style
 import Spacer from '../../components/Spacer' // space
 
 // Cornelias dator
-// const backendURL = "192.168.32.7"
+const backendURL = "192.168.32.7"
 
 // min dator
-const backendURL = "192.168.68.107"
+//const backendURL = "192.168.68.107"
 
 
 export default function User() {
     const [user, setUser] = useState(null)
     // kollar om användaren är inloggad, om inte redirect till inloggning.
-    useEffect (() => {
-        async function checkToken() {
-            const token = await getToken()
-            if (!token) {
-                router.replace("/login")
-            } else {
-                
-                const res = await fetch(`http://${backendURL}:3000/api/users/me`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                })
-
-                if (!res.ok) throw new Error('Kunde inte hämta användaren.')
-                const data = await res.json()
-                console.log(data)
-                setUser(data)
-                
+        useEffect(() => {
+        async function loadUser() {
+            try {
+            const data = await fetchCurrentUser();
+            setUser(data);
+            } catch (err) {
+            router.replace("/login");
             }
         }
-        checkToken()
-    }, [])
+
+        loadUser();
+        }, []);
     // hämta namn och epost om användare
     if (!user) {
     return (
@@ -66,18 +54,6 @@ export default function User() {
             <Text>{user.email}</Text>
             <Spacer />
 
-            <Text>🛴 Resor</Text>
-            <Spacer />
-
-            <Text>💰 Saldo</Text>
-            <Spacer />
-
-            <Text>💸 Betala</Text>
-            <Spacer />
-
-            {/* ta bort sen, user kan vara "förstasida" som inloggad? */}
-            <Link style={styles.link} href="/">Hem</Link> 
-            
         </ThemedView>
     )
 }
