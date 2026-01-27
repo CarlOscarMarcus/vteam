@@ -4,9 +4,10 @@ import { useContext, createContext, useState, useEffect } from "react";
 
 const AuthContext = createContext()
 
-const API_URL = import.meta.env.VITE_API_URL;
+
 
 export function UserProvider({ children }) {
+    const API_URL = import.meta.env.VITE_API_URL;
     const [token, setToken] = useState(sessionStorage.getItem("token"))
     const [loadingUser, setLoadingUser] = useState(true)
     const [user, setUser] = useState(null)

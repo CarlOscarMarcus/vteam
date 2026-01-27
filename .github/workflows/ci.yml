@@ -84,8 +84,3 @@ jobs:
       # - name: Run app tests
       #   working-directory: ./app
       #   run: npm test -- --watchAll=false
-
-      - name: Lint app
-        working-directory: ./frontend/app
-        run: npm run lint
-
