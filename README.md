@@ -49,9 +49,13 @@ git clone https://github.com/CarlOscarMarcus/vteam
 cd vteam
 
 3. Starta utvecklingsmiljön med Docker Compose
-docker-compose up --build
+```docker-compose up --build```
+
+(Om du vill starta utan att simulatorn kör i bakgrunden)
+``` docker compose up --build frontend```
 
 4. Öppna projektet i webbläsaren
+E-postadresser som slutar på "@admin.se" kommer att loggas in som administratör och få en annan meny med andra funktioner. Övriga e-postadresser loggas in som vanlig användare.
 
 Databasuppgifter (default)
     User: admin
