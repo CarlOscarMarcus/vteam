@@ -28,11 +28,9 @@ VTEAM/
 │  ├─ app/           # React-appen (src, public etc beroende på setup)
 │  └─ web/           # Eventuell separat web/router/build-mapp
 │
-├─ infrastructure/
-│  └─ README.md      # Dokumentation för infrastruktur, devops, docker-compose, miljöer
-│
-├─ shared/
-│  └─ README.md      # Gemensamma resurser (t.ex utils, typer, modeller)
+├─ bike-simulator/   # Filerna som krävs för simulering
+│  
+docker-compose, miljöer
 │
 ├─ .gitignore
 ├─ package.json      # Root-config (monorepo eller arbetsyta?)
