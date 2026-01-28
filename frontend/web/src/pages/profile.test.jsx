@@ -10,11 +10,11 @@ vi.mock("react-router-dom", () => ({
 }));
 
 // context
-vi.mock("../context/UserContext", () => ({
+vi.mock("../context", () => ({
     useAuth: vi.fn()
 }))
 
-import { useAuth } from "../context/UserContext";
+import { useAuth } from "../context";
 
 describe("test för profilsidan", () => {
 

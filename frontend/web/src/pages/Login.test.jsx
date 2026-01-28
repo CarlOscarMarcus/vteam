@@ -3,7 +3,7 @@ import { describe, it, vi, beforeEach, expect } from "vitest";
 import Login from "./Login";
 
 const mockLogIn = vi.fn();
-vi.mock("../context/UserContext", () => ({
+vi.mock("../context", () => ({
     useAuth: () => ({
         LogIn: mockLogIn,
         isAdmin: false,
@@ -63,7 +63,7 @@ describe("tester för login-page", () => {
 
     it("navigera till /profile om loggedIn är true", async () => {
 
-        vi.mock("../context/UserContext", () => ({
+        vi.mock("../context", () => ({
             useAuth: () => ({
                 LogIn: mockLogIn,
                 isAdmin: false,

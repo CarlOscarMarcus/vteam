@@ -1,7 +1,7 @@
 // historik över kundens resor
 import React, { Component }  from 'react';
 import { useEffect, useState, useCallback } from "react";
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context';
 
 
 const API_URL = import.meta.env.VITE_API_URL;

@@ -4,7 +4,7 @@ import App from './App'
 import './assets/styles/main.scss'
 import 'leaflet/dist/leaflet.css';
 import { BrowserRouter } from 'react-router-dom'
-import { UserProvider } from './context/UserContext';
+import { UserProvider } from './context';
 import { useAuth } from './context/AuthContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 

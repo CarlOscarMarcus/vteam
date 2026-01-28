@@ -4,10 +4,10 @@ import { MemoryRouter } from "react-router-dom";
 import Navbar from "./Navbar";
 
 // mocka usercontext
-vi.mock("../context/UserContext", () => ({
+vi.mock("../context", () => ({
     useAuth: vi.fn()
 }));
-const { useAuth } = await import("../context/UserContext");
+const { useAuth } = await import("../context");
 
 describe("tester för navbar", () => {
 

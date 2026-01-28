@@ -3,11 +3,11 @@ import { describe, it, expect, vi } from "vitest";
 import History from "./history";
 
 // mocka context
-vi.mock("../context/UserContext", () => ({
+vi.mock("../context", () => ({
     useAuth: vi.fn()
 }));
 
-const { useAuth } = await import("../context/UserContext");
+const { useAuth } = await import("../context");
 
 describe("tester för history-page", () => {
     it("visa 'ingen historik' när historik inte finns", async () => {

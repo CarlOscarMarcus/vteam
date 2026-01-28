@@ -4,7 +4,7 @@ import Signup from "./signup"
 import { MemoryRouter } from "react-router-dom";
 
 // mocka usercontext
-vi.mock("../context/UserContext", () => ({
+vi.mock("../context", () => ({
     useAuth: () => ({
         SignUp: vi.fn()
     })
