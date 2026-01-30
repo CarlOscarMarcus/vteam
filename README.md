@@ -48,16 +48,40 @@ Docker Desktop (inkl. Docker Compose)
 git clone https://github.com/CarlOscarMarcus/vteam
 cd vteam
 
-3. Starta utvecklingsmiljön med Docker Compose
+3. Skapa filerna backend/api/.env och /frontend/web/.env
+```
+touch test
+cat <<EOF > backend/api/.env
+DB_USER=vteam_user
+DB_PASSWORD=osay21
+DB_HOST=db  
+DB_NAME=vteam_db
+DB_PORT=5432
+JWT_SECRET=supersecretjwtkeygoeshere
+EOF
+```
+
+```
+touch frontend/web/.env
+cat <<EOF > frontend/web/.env
+VITE_API_URL="http://localhost:3000"
+VITE_WS_URL="ws://localhost:8080"
+VITE_GOOGLE_CLIENT_ID="575657435258-l6uhcvhphg45pqqmios1qd0hgj9ck7ir.apps.googleusercontent.com"
+EOF
+```
+
+4. Starta utvecklingsmiljön med Docker Compose
 ```docker-compose up --build```
 
 (Om du vill starta utan att simulatorn kör i bakgrunden)
 ``` docker compose up --build frontend```
 
-4. Öppna projektet i webbläsaren
+5. Öppna projektet i webbläsaren
 E-postadresser som slutar på "@admin.se" kommer att loggas in som administratör och få en annan meny med andra funktioner. Övriga e-postadresser loggas in som vanlig användare.
 
 Databasuppgifter (default)
     User: admin
     Password: hoci1234
     Database: appdb
+
+
