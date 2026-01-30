@@ -10,7 +10,7 @@ const backendURL = "192.168.32.7"
 
 // min dator
 //const backendURL = "192.168.68.107"
-const PRICE_PER_MINUTE = 2;
+const PRICE_PER_MINUTE = 5;
 
 export default function Ride() {
   const [active, setActive] = useState(false);
@@ -53,7 +53,6 @@ const endRide = async () => {
           <Text>Tid: {lastReceipt.minutes} min</Text>
           <Text>Kostnad: {lastReceipt.cost} kr</Text>
           <Text>Batteri kvar: {lastReceipt.batteryLeft}%</Text>
-          <Text>Avslutad: {lastReceipt.endedAt}</Text>
 
           <Button
             title="OK"
