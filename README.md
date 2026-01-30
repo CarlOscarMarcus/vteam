@@ -50,7 +50,7 @@ cd vteam
 
 3. Skapa filerna backend/api/.env och /frontend/web/.env
 ```
-touch test
+touch backend/api/.env
 cat <<EOF > backend/api/.env
 DB_USER=vteam_user
 DB_PASSWORD=osay21
